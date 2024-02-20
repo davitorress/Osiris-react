@@ -47,10 +47,7 @@ module.exports = {
     "react/display-name": "off",
     "react/react-in-jsx-scope": "off",
     "react/no-unescaped-entities": "off",
-    // "simple-import-sort/imports": "error",
-    // "simple-import-sort/exports": "error",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-empty-function": "off",
-    // "@typescript-eslint/explicit-function-return-type": "off",
   },
 }
