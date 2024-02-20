@@ -1,0 +1,7 @@
+node_modules
+assets
+
+# Config files
+.eslintrc.js
+babel.config.js
+tailwind.config.js
