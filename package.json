@@ -13,6 +13,9 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "pre-commit": [
+    "format"
+  ],
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^6.0.2",
