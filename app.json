@@ -27,7 +27,23 @@
       "output": "static",
       "favicon": "./assets/images/osiris_icon.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            // Nunito
+            "node_modules/@expo-google-fonts/nunito/Nunito_400Regular.ttf",
+            "node_modules/@expo-google-fonts/nunito/Nunito_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/nunito/Nunito_700Bold.ttf",
+            // Ubuntu
+            "node_modules/@expo-google-fonts/ubuntu/Ubuntu_400Regular.ttf",
+            "node_modules/@expo-google-fonts/ubuntu/Ubuntu_700Bold.ttf"
+          ]
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }

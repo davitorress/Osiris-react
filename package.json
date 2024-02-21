@@ -17,6 +17,8 @@
     "format"
   ],
   "dependencies": {
+    "@expo-google-fonts/nunito": "^0.2.3",
+    "@expo-google-fonts/ubuntu": "^0.2.3",
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^6.0.2",
     "expo": "~50.0.7",

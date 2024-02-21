@@ -5,6 +5,18 @@ import { Stack } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 
+import {
+  useFonts as useUbuntuFonts,
+  Ubuntu_400Regular,
+  Ubuntu_700Bold,
+} from "@expo-google-fonts/ubuntu"
+import {
+  useFonts as useNunitoFonts,
+  Nunito_400Regular,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+} from "@expo-google-fonts/nunito"
+
 import { useColorScheme } from "@/components/useColorScheme"
 
 export {
@@ -22,22 +34,34 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
+  })
+
+  const [loadedUbuntu, errorUbuntu] = useUbuntuFonts({
+    Ubuntu_400Regular,
+    Ubuntu_700Bold,
+  })
+
+  const [loadedNunito, errorNunito] = useNunitoFonts({
+    Nunito_400Regular,
+    Nunito_600SemiBold,
+    Nunito_700Bold,
   })
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error
-  }, [error])
+    if (errorUbuntu) throw errorUbuntu
+    if (errorNunito) throw errorNunito
+  }, [error, errorUbuntu, errorNunito])
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && loadedUbuntu && loadedNunito) {
       SplashScreen.hideAsync()
     }
-  }, [loaded])
+  }, [loaded, loadedUbuntu, loadedNunito])
 
-  if (!loaded) {
+  if (!loaded || !loadedUbuntu || !loadedNunito) {
     return null
   }
 
