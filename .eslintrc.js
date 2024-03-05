@@ -37,10 +37,9 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "react", "prettier"],
   rules: {
-    semi: ["error", "never"],
     indent: ["error", 2, { SwitchCase: 1 }],
     quotes: ["error", "double", { avoidEscape: true }],
-    "prettier/prettier": ["error", {}, { usePrettierrc: true }],
+    "prettier/prettier": ["error", { bracketSameLine: false }, { usePrettierrc: true }],
 
     "react/prop-types": "off",
     "no-empty-function": "off",
