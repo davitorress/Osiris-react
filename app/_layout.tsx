@@ -70,6 +70,14 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={DefaultTheme}>
       <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: false,
+            navigationBarHidden: true,
+            presentation: "fullScreenModal",
+          }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
