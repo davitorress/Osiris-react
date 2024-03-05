@@ -4,7 +4,6 @@ import { twMerge } from "tailwind-merge"
 import { VariantProps, tv } from "tailwind-variants"
 
 const text = tv({
-  base: "m-0",
   variants: {
     color: {
       alert: "text-wine",

@@ -17,15 +17,17 @@ const WelcomeScreen = () => {
         source={require("../assets/images/osiris_logo_named_white.png")}
       />
 
-      <View
-        style={{ gap: 24 }}
-        className="w-full pt-10 pb-16 pr-4 pl-6 m-0 bg-white rounded-t-2xl rounded-r-2xl"
-      >
+      <View className="w-screen pt-10 pb-16 px-5 bg-white rounded-t-2xl rounded-r-2xl">
         <TextThemed font="nunitoBold" color="primary" size="h3" classes="mb-6">
           Seja bem-vindo(a) ao Osiris!
         </TextThemed>
 
-        <ButtonThemed color="primary" size="full" onClick={() => router.navigate("/login")}>
+        <ButtonThemed
+          color="primary"
+          size="full"
+          classes="mb-4"
+          onClick={() => router.navigate("/login")}
+        >
           <TextThemed color="white" font="nunitoSemiBold">
             Realizar login
           </TextThemed>

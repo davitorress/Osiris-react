@@ -4,7 +4,6 @@ import { TouchableOpacity } from "react-native"
 import { VariantProps, tv } from "tailwind-variants"
 
 const button = tv({
-  base: "m-0 flex justify-center items-center gap-1.5 text-center",
   variants: {
     color: {
       alert: "bg-wine",
@@ -52,7 +51,11 @@ export default function ButtonThemed({
     <TouchableOpacity
       onPress={onClick}
       activeOpacity={0.7}
-      className={twMerge(button({ color, size, shape, type }), classes)}
+      className={twMerge(
+        button({ color, size, shape, type }),
+        "flex flex-row justify-center items-center gap-1.5 m-0 text-center",
+        classes
+      )}
     >
       {children}
     </TouchableOpacity>

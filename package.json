@@ -3,10 +3,10 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "start": "expo start -c",
+    "android": "expo start -c --android",
+    "ios": "expo start -c --ios",
+    "web": "expo start -c --web",
     "test": "jest --watchAll",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix --cache && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write"
   },
