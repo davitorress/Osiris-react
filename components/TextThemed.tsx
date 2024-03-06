@@ -1,5 +1,6 @@
-import { PropsWithChildren } from "react"
 import { Text } from "react-native"
+import { Href, Link } from "expo-router"
+import { PropsWithChildren } from "react"
 import { twMerge } from "tailwind-merge"
 import { VariantProps, tv } from "tailwind-variants"
 
@@ -36,15 +37,33 @@ const text = tv({
 type TextVariants = VariantProps<typeof text>
 
 interface TextProps extends TextVariants {
+  type?: "text" | "link"
+  url?: Href<string>
   classes?: string
+  onClick?: () => void
 }
 
 export default function TextThemed({
-  children,
+  url,
+  onClick,
   classes,
+  children,
+  type = "text",
   size = "body1",
   color = "black",
   font = "nunitoRegular",
 }: PropsWithChildren<TextProps>) {
-  return <Text className={twMerge(text({ color, size, font }), classes)}>{children}</Text>
+  if (type === "link" && url) {
+    return (
+      <Link href={url} asChild className={twMerge(text({ color, size, font }), classes)}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <Text onPress={onClick} className={twMerge(text({ color, size, font }), classes)}>
+      {children}
+    </Text>
+  )
 }
