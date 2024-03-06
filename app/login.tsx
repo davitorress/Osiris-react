@@ -2,6 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import ImageWithPlaceholder from "@/components/ImageWithPlaceholder"
 import LoginForm from "@/components/forms/LoginForm"
+import { View } from "react-native"
 
 export default function LoginScreen() {
   return (
@@ -12,7 +13,9 @@ export default function LoginScreen() {
         source={require("../assets/images/osiris_logo.png")}
       />
 
-      <LoginForm />
+      <View className="w-full mt-8 px-6">
+        <LoginForm />
+      </View>
     </SafeAreaView>
   )
 }

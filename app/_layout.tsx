@@ -1,9 +1,9 @@
-import { Ionicons } from "@expo/vector-icons"
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native"
-import { useFonts } from "expo-font"
-import { Stack } from "expo-router"
-import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
+import { Stack } from "expo-router"
+import { useFonts } from "expo-font"
+import { Ionicons } from "@expo/vector-icons"
+import * as SplashScreen from "expo-splash-screen"
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native"
 
 import {
   useFonts as useUbuntuFonts,
@@ -17,17 +17,12 @@ import {
   Nunito_700Bold,
 } from "@expo-google-fonts/nunito"
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router"
+export { ErrorBoundary } from "expo-router"
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "(tabs)",
 }
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
@@ -46,7 +41,6 @@ export default function RootLayout() {
     Nunito_700Bold,
   })
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error
     if (errorUbuntu) throw errorUbuntu
@@ -78,6 +72,15 @@ function RootLayoutNav() {
             presentation: "fullScreenModal",
           }}
         />
+        <Stack.Screen
+          name="login"
+          options={{
+            headerShown: false,
+            navigationBarHidden: true,
+            presentation: "fullScreenModal",
+          }}
+        />
+
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
