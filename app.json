@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "osiris-react",
+    "slug": "osiris-react",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/osiris_logo.png",
+    "scheme": "osiris",
+    "userInterfaceStyle": "light",
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./assets/images/osiris_splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/osiris_icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/osiris_icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            // Nunito
+            "node_modules/@expo-google-fonts/nunito/Nunito_400Regular.ttf",
+            "node_modules/@expo-google-fonts/nunito/Nunito_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/nunito/Nunito_700Bold.ttf",
+            // Ubuntu
+            "node_modules/@expo-google-fonts/ubuntu/Ubuntu_400Regular.ttf",
+            "node_modules/@expo-google-fonts/ubuntu/Ubuntu_700Bold.ttf"
+          ]
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
