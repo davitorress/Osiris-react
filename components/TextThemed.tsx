@@ -1,7 +1,7 @@
 import { Text } from "react-native"
 import { Href, Link } from "expo-router"
-import { PropsWithChildren } from "react"
 import { twMerge } from "tailwind-merge"
+import { PropsWithChildren } from "react"
 import { VariantProps, tv } from "tailwind-variants"
 
 const text = tv({
@@ -25,7 +25,7 @@ const text = tv({
     },
     font: {
       nunitoRegular: "font-nunito",
-      nunitoSemiBold: "font-nunito_semiBold",
+      nunitoSemiBold: "font-nunito_semibold",
       nunitoBold: "font-nunito_bold",
 
       ubuntuRegular: "font-ubuntu",
@@ -55,8 +55,8 @@ export default function TextThemed({
 }: PropsWithChildren<TextProps>) {
   if (type === "link" && url) {
     return (
-      <Link href={url} asChild className={twMerge(text({ color, size, font }), classes)}>
-        {children}
+      <Link href={url} asChild>
+        <Text className={twMerge(text({ color, size, font }), classes)}>{children}</Text>
       </Link>
     )
   }
