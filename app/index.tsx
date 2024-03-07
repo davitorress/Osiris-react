@@ -2,9 +2,9 @@ import { View } from "react-native"
 import { useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import ImageWithPlaceholder from "@/components/ImageWithPlaceholder"
-import ButtonThemed from "@/components/ButtonThemed"
 import TextThemed from "@/components/TextThemed"
+import ButtonThemed from "@/components/ButtonThemed"
+import ImageWithPlaceholder from "@/components/ImageWithPlaceholder"
 
 const WelcomeScreen = () => {
   const router = useRouter()
@@ -29,7 +29,7 @@ const WelcomeScreen = () => {
           onClick={() => router.navigate("/login")}
         >
           <TextThemed color="white" font="nunitoSemiBold">
-            Realizar login
+            Entrar
           </TextThemed>
         </ButtonThemed>
 
