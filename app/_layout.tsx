@@ -80,6 +80,14 @@ function RootLayoutNav() {
             presentation: "fullScreenModal",
           }}
         />
+        <Stack.Screen
+          name="register"
+          options={{
+            headerShown: false,
+            navigationBarHidden: true,
+            presentation: "fullScreenModal",
+          }}
+        />
 
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
