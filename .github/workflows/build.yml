@@ -14,9 +14,12 @@ jobs:
         with:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
       - name: Install dependencies
         run: npm install
+      - name: Install expo-cli
+        run: npm install -g eas-cli
       - name: Build app
-        run: npm run build
+        env:
+          EAS_USERNAME: ${{ secrets.EAS_USERNAME }}
+          EAS_PASSWORD: ${{ secrets.EAS_PASSWORD }}
+        run: eas build -p android && eas build -p ios && eas build -p web
