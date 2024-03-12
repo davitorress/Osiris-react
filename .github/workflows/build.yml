@@ -16,6 +16,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm install
+      - name: Install expo-cli
+        run: npm install -g eas-cli
       - name: Build app
         env:
           EAS_USERNAME: ${{ secrets.EAS_USERNAME }}
