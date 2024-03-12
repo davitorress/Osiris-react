@@ -2,9 +2,9 @@ import { View } from "react-native"
 import { useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import TextThemed from "@/components/TextThemed"
-import ButtonThemed from "@/components/ButtonThemed"
-import ImageWithPlaceholder from "@/components/ImageWithPlaceholder"
+import TextThemed from "@/components/themed/TextThemed"
+import ButtonThemed from "@/components/themed/ButtonThemed"
+import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 const WelcomeScreen = () => {
   const router = useRouter()

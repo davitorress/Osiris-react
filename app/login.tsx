@@ -1,8 +1,8 @@
+import { View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import ImageWithPlaceholder from "@/components/ImageWithPlaceholder"
 import LoginForm from "@/components/forms/LoginForm"
-import { View } from "react-native"
+import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function LoginScreen() {
   return (

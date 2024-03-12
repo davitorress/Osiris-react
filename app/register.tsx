@@ -1,8 +1,8 @@
 import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import ImageWithPlaceholder from "@/components/ImageWithPlaceholder"
 import RegisterForm from "@/components/forms/RegisterForm"
+import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function RegisterScreen() {
   return (

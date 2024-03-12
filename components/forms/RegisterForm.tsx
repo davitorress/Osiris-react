@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
 import Input from "@/components/basic/Input"
-import TextThemed from "@/components/TextThemed"
-import ButtonThemed from "@/components/ButtonThemed"
+import TextThemed from "@/components/themed/TextThemed"
+import ButtonThemed from "@/components/themed/ButtonThemed"
 
 const registerSchema = z
   .object({
