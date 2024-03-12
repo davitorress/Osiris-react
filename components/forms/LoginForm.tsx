@@ -36,6 +36,7 @@ const LoginForm = React.forwardRef(() => {
 
   const onSubmit = (data: LoginData) => {
     console.log(data)
+    router.navigate("/(tabs)/")
   }
 
   return (

@@ -49,6 +49,7 @@ export default function RegisterForm() {
 
   const onSubmit = (data: RegisterData) => {
     console.log(data)
+    router.navigate("/(tabs)/")
   }
 
   return (

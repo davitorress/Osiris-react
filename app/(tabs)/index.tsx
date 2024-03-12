@@ -1,30 +1,12 @@
-import { StyleSheet, Text, View } from "react-native"
+import TextThemed from "@/components/TextThemed"
+import { SafeAreaView } from "react-native-safe-area-context"
 
-import EditScreenInfo from "@/components/EditScreenInfo"
-
-export default function TabOneScreen() {
+export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+    <SafeAreaView className="m-0 flex-1 bg-white">
+      <TextThemed color="primary" size="h1" font="nunitoBold" classes="text-center">
+        Home
+      </TextThemed>
+    </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-})
