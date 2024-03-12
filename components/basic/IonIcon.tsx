@@ -3,10 +3,12 @@ import { Ionicons } from "@expo/vector-icons"
 import Colors from "@/constants/Colors"
 
 const sizes = {
-  tiny: 12,
-  small: 20,
-  medium: 24,
-  large: 30,
+  micro: 12,
+  tiny: 16,
+  small: 18,
+  medium: 20,
+  large: 24,
+  huge: 28,
 }
 
 const colors = {
