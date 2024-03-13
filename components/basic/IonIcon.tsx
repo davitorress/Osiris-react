@@ -27,10 +27,26 @@ const colors = {
 
 interface IonIconProps {
   name: React.ComponentProps<typeof Ionicons>["name"]
+  onPress?: React.ComponentProps<typeof Ionicons>["onPress"]
+  classes?: string
   size?: keyof typeof sizes
   color?: keyof typeof colors
 }
 
-export default function IonIcon({ name, size = "medium", color = "primary" }: IonIconProps) {
-  return <Ionicons name={name} size={sizes[size]} color={colors[color]} />
+export default function IonIcon({
+  name,
+  onPress,
+  classes,
+  size = "medium",
+  color = "primary",
+}: IonIconProps) {
+  return (
+    <Ionicons
+      name={name}
+      size={sizes[size]}
+      color={colors[color]}
+      onPress={onPress}
+      className={classes}
+    />
+  )
 }
