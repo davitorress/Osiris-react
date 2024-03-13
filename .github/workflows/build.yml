@@ -22,4 +22,4 @@ jobs:
         env:
           EAS_USERNAME: ${{ secrets.EAS_USERNAME }}
           EAS_PASSWORD: ${{ secrets.EAS_PASSWORD }}
-        run: eas build -p android && eas build -p ios && eas build -p web
+        run: eas build -p android --non-interactive
