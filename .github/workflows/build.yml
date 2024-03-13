@@ -23,4 +23,4 @@ jobs:
         env:
           EAS_USERNAME: ${{ secrets.EAS_USERNAME }}
           EAS_PASSWORD: ${{ secrets.EAS_PASSWORD }}
-        run: eas build -p android --non-interactive
+        run: npx eas build -p android --non-interactive
