@@ -1,4 +1,4 @@
-name: Build React Native App w EAS
+name: Build React Native App
 on:
   push:
     branches:
