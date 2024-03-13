@@ -13,6 +13,9 @@ const text = tv({
       primary: "text-green-medium",
       secondary: "text-green-light",
       tertiary: "text-green-dark",
+      grayPrimary: "text-gray-medium",
+      graySecondary: "text-gray-light",
+      grayTertiary: "text-gray-dark",
     },
     size: {
       h1: "text-4xl",
@@ -40,6 +43,7 @@ interface TextProps extends TextVariants {
   type?: "text" | "link"
   url?: Href<string>
   classes?: string
+  numberOfLines?: number
   onClick?: () => void
 }
 
@@ -51,6 +55,7 @@ export default function TextThemed({
   type = "text",
   size = "body1",
   color = "black",
+  numberOfLines = 1,
   font = "nunitoRegular",
 }: PropsWithChildren<TextProps>) {
   if (type === "link" && url) {
@@ -62,7 +67,12 @@ export default function TextThemed({
   }
 
   return (
-    <Text onPress={onClick} className={twMerge(text({ color, size, font }), classes)}>
+    <Text
+      onPress={onClick}
+      ellipsizeMode="tail"
+      numberOfLines={numberOfLines}
+      className={twMerge(text({ color, size, font }), classes)}
+    >
       {children}
     </Text>
   )
