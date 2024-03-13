@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - devops/build-dev
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
