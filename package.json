@@ -7,7 +7,7 @@
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
-    "test": "jest --watchAll",
+    "test": "jest",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix --cache && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "build": "expo build:android && expo build:ios && expo build:web"
   },
