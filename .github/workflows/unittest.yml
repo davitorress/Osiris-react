@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run App Tests
 
 on: [push, pull_request]
 
@@ -16,5 +16,5 @@ jobs:
       - name: Install testing libraries
         run: npm install --save-dev @testing-library/react-native @types/jest @types/react @types/react-native
 
-      - name: Run tests
-        run: npm test
+      - name: Run unit tests
+        run: npm test -- --ci
