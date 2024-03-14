@@ -2,7 +2,7 @@ name: Build React Native App
 on:
   push:
     branches:
-      - develop
+      - devops/build-dev
   workflow_dispatch:
 jobs:
   build:
