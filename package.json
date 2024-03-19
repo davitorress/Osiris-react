@@ -3,12 +3,14 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start -c",
+    "start": "expo start -c --no-dev --minify",
+    "dev": "expo start -c",
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
-    "test": "jest --watchAll",
-    "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix --cache && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write"
+    "test": "jest",
+    "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix --cache && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
+    "build": "expo build:android && expo build:ios && expo build:web"
   },
   "jest": {
     "preset": "jest-expo"

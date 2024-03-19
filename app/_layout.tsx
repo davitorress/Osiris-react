@@ -3,7 +3,9 @@ import { Stack } from "expo-router"
 import { useFonts } from "expo-font"
 import { Ionicons } from "@expo/vector-icons"
 import * as SplashScreen from "expo-splash-screen"
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native"
+import { ThemeProvider } from "@react-navigation/native"
+
+import OsirisTheme from "@/config/Theme"
 
 import {
   useFonts as useUbuntuFonts,
@@ -62,7 +64,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <ThemeProvider value={OsirisTheme}>
       <Stack>
         <Stack.Screen
           name="index"
@@ -80,9 +82,15 @@ function RootLayoutNav() {
             presentation: "fullScreenModal",
           }}
         />
-
+        <Stack.Screen
+          name="register"
+          options={{
+            headerShown: false,
+            navigationBarHidden: true,
+            presentation: "fullScreenModal",
+          }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
   )

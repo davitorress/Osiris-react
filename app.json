@@ -34,11 +34,9 @@
         "expo-font",
         {
           "fonts": [
-            // Nunito
             "node_modules/@expo-google-fonts/nunito/Nunito_400Regular.ttf",
             "node_modules/@expo-google-fonts/nunito/Nunito_600SemiBold.ttf",
             "node_modules/@expo-google-fonts/nunito/Nunito_700Bold.ttf",
-            // Ubuntu
             "node_modules/@expo-google-fonts/ubuntu/Ubuntu_400Regular.ttf",
             "node_modules/@expo-google-fonts/ubuntu/Ubuntu_700Bold.ttf"
           ]

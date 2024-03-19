@@ -1,0 +1,20 @@
+name: Run App Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install testing libraries
+        run: npm install --save-dev @testing-library/react-native @types/jest @types/react @types/react-native
+
+      - name: Run unit tests
+        run: npm test -- --ci

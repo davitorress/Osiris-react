@@ -1,46 +1,60 @@
 import { z } from "zod"
-import { TextInput, View } from "react-native"
+import React from "react"
+import { useRouter } from "expo-router"
+import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
-import TextThemed from "@/components/TextThemed"
-import ButtonThemed from "@/components/ButtonThemed"
+import Input from "@/components/basic/Input"
+import TextThemed from "@/components/themed/TextThemed"
+import ButtonThemed from "@/components/themed/ButtonThemed"
 
 const loginSchema = z.object({
-  email: z.string().min(1, "O email é obrigatório!").email("Insira um email válido!"),
+  email: z
+    .string({ required_error: "O email é obrigatório!" })
+    .min(1, "O email é obrigatório!")
+    .email("Insira um email válido!"),
   password: z
-    .string()
+    .string({ required_error: "A senha é obrigatória!" })
     .min(1, "A senha é obrigatória!")
     .min(3, "A senha deve ter no mínimo 3 caracteres!"),
 })
 
 type LoginData = z.infer<typeof loginSchema>
 
-export default function LoginForm() {
+const LoginForm = React.forwardRef(() => {
+  const router = useRouter()
+
   const {
     control,
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   })
 
+  const onSubmit = (data: LoginData) => {
+    console.log(data)
+    router.navigate("/(tabs)/")
+  }
+
   return (
     <View className="w-full">
       <View className="w-full">
-        <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
+        <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
           E-mail:
         </TextThemed>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <Input
               value={value}
               onBlur={onBlur}
-              onChangeText={onChange}
+              onChange={onChange}
               autoComplete="email"
-              placeholder="email@email.com"
-              className="w-full p-2 rounded-lg bg-gray-medium text-white placeholder:text-gray-dark"
+              font="nunitoSemiBold"
+              placeholder="Digite o seu e-mail"
             />
           )}
           {...register("email")}
@@ -52,34 +66,40 @@ export default function LoginForm() {
         )}
       </View>
 
-      <View className="w-full mt-5">
+      <View className="w-full mt-7">
         <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
           Senha:
         </TextThemed>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <Input
               value={value}
               onBlur={onBlur}
-              onChangeText={onChange}
+              onChange={onChange}
               secureTextEntry
-              placeholder="********"
+              font="nunitoSemiBold"
               autoComplete="password"
-              className="w-full p-2 rounded-lg bg-gray-medium text-white placeholder:text-gray-dark"
+              placeholder="Digite a sua senha"
             />
           )}
-          {...register("email")}
+          {...register("password")}
         />
-        {errors.email && (
+        {errors.password && (
           <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.email.message}
+            {errors.password.message}
           </TextThemed>
         )}
       </View>
 
-      <View className="w-full mt-5">
-        <ButtonThemed type="button" color="primary" size="full" shape="rounded">
+      <View className="w-full mt-7">
+        <ButtonThemed
+          type="button"
+          color="primary"
+          size="full"
+          shape="rounded"
+          onClick={handleSubmit(onSubmit)}
+        >
           <TextThemed color="white" size="h4" font="nunitoBold">
             Entrar
           </TextThemed>
@@ -87,20 +107,17 @@ export default function LoginForm() {
       </View>
 
       <View className="w-full mt-3">
-        <TextThemed
-          type="link"
-          url="/register"
-          color="primary"
-          size="h4"
-          font="nunitoRegular"
-          classes="mt-2"
-        >
-          Não possui uma conta?{" "}
-          <TextThemed color="primary" size="h4" font="nunitoBold" classes="underline">
-            Crie aqui
+        <Pressable className="flex-row" onPress={() => router.navigate("/register")}>
+          <TextThemed color="primary" size="body2" font="nunitoRegular">
+            Não possui uma conta?
           </TextThemed>
-        </TextThemed>
+          <TextThemed color="alert" size="body2" font="nunitoBold" classes="underline ml-1">
+            Crie aqui!
+          </TextThemed>
+        </Pressable>
       </View>
     </View>
   )
-}
+})
+
+export default LoginForm
