@@ -1,10 +1,17 @@
 import { ScrollView, View } from "react-native"
+import { useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
-
 import RegisterForm from "@/components/forms/RegisterForm"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function RegisterScreen() {
+  const router = useRouter()
+
+  const handleFormSubmit = (data: unknown) => {
+    console.log(data)
+    router.navigate("/(tabs)/")
+  }
+
   return (
     <SafeAreaView className="m-0 flex-1 bg-white">
       <ScrollView>
@@ -16,7 +23,7 @@ export default function RegisterScreen() {
           />
 
           <View className="w-full mt-12 px-4">
-            <RegisterForm />
+            <RegisterForm onSubmit={handleFormSubmit} />
           </View>
         </View>
       </ScrollView>
