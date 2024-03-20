@@ -35,7 +35,7 @@ const registerSchema = z
 
 type RegisterData = z.infer<typeof registerSchema>
 
-export default function RegisterForm() {
+export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterData) => void }) {
   const router = useRouter()
 
   const {
@@ -46,11 +46,6 @@ export default function RegisterForm() {
   } = useForm<RegisterData>({
     resolver: zodResolver(registerSchema),
   })
-
-  const onSubmit = (data: RegisterData) => {
-    console.log(data)
-    router.navigate("/(tabs)/")
-  }
 
   return (
     <View className="w-full">
