@@ -35,6 +35,30 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="pancs"
+        options={{
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+          tabBarIcon: ({ focused }) => (
+            <IonIcon name={focused ? "leaf" : "leaf-outline"} size="large" color="tertiary" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="recipes"
+        options={{
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+          tabBarIcon: ({ focused }) => (
+            <IonIcon
+              name={focused ? "restaurant" : "restaurant-outline"}
+              size="large"
+              color="tertiary"
+            />
+          ),
+        }}
+      />
     </Tabs>
   )
 }
