@@ -1,10 +1,12 @@
-import { View } from "react-native"
+import { useRouter } from "expo-router"
+import { TouchableOpacity, View } from "react-native"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 interface ProductCardProps {
+  id: string
   name: string
   image: {
     uri: string
@@ -18,6 +20,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({
+  id,
   name,
   description,
   type = "panc",
@@ -26,10 +29,11 @@ export default function ProductCard({
   isFavorite = false,
   image: { uri: imgUrl, sizeClass: imgClasses },
 }: ProductCardProps) {
+  const router = useRouter()
   const iconName = type === "panc" ? "heart" : "bookmark"
 
   return (
-    <>
+    <TouchableOpacity onPress={() => router.push(`/(tabs)/${type}/${id}` as `${string}:${string}`)}>
       {mode === "simple" ? (
         <View>
           <ImageWithPlaceholder alt={name} className={imgClasses} source={imgUrl} />
@@ -71,6 +75,6 @@ export default function ProductCard({
           </View>
         </View>
       )}
-    </>
+    </TouchableOpacity>
   )
 }

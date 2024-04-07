@@ -30,6 +30,7 @@ export default function ProductShowcase({
         {products.map(({ id, name, image, description, type }, index) => (
           <View key={id} className={index === 0 ? "" : horizontal ? "ml-5" : "mt-5"}>
             <ProductCard
+              id={id}
               name={name}
               type={type}
               isFavorite={false}
