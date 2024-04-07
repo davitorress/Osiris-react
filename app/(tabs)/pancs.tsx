@@ -51,7 +51,7 @@ export default function PancsScreen() {
               Busque por pancs
             </TextThemed>
 
-            <IonIcon name="search" size="small" color="secondary" />
+            <IonIcon name="search" size="semi" color="secondary" />
           </View>
 
           <View className="w-full mt-8">

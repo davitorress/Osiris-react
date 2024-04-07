@@ -52,7 +52,7 @@ export default function RecipesScreen() {
               Busque por receitas
             </TextThemed>
 
-            <IonIcon name="search" size="small" color="secondary" />
+            <IonIcon name="search" size="semi" color="secondary" />
           </View>
 
           <View className="w-full mt-8">
@@ -61,7 +61,7 @@ export default function RecipesScreen() {
                 Postar uma receita
               </TextThemed>
 
-              <IonIcon name="add-circle-outline" size="medium" color="white" />
+              <IonIcon name="add-circle-outline" size="large" color="white" />
             </ButtonThemed>
           </View>
 

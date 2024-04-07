@@ -52,7 +52,7 @@ export default function RecipePage() {
               color="primary"
               onClick={() => router.back()}
             >
-              <IonIcon name="return-down-back" size="large" color="white" />
+              <IonIcon name="return-down-back" size="huge" color="white" />
             </ButtonThemed>
 
             <TextThemed
@@ -78,7 +78,7 @@ export default function RecipePage() {
                   Salvar
                 </TextThemed>
 
-                <IonIcon name="bookmark-outline" size="medium" color="primary" />
+                <IonIcon name="bookmark-outline" size="large" color="primary" />
               </TouchableOpacity>
             </View>
 
@@ -100,7 +100,7 @@ export default function RecipePage() {
             <View className="flex-row flex-wrap" style={{ gap: Sizes.tiny }}>
               {pancs.map((panc, index) => (
                 <View key={index} className="flex-row">
-                  <IonIcon name="leaf" size="medium" color="primary" />
+                  <IonIcon name="leaf" size="large" color="primary" />
 
                   <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="ml-1">
                     {panc}

@@ -60,7 +60,7 @@ export default function ProductCard({
 
               {toggleFavorite && (
                 <IonIcon
-                  size="large"
+                  size="huge"
                   onPress={toggleFavorite}
                   name={isFavorite ? iconName : `${iconName}-outline`}
                 />

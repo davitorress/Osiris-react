@@ -81,7 +81,7 @@ export default function HomeScreen() {
               Busque por plantas ou receitas
             </TextThemed>
 
-            <IonIcon name="search" size="small" color="secondary" />
+            <IonIcon name="search" size="semi" color="secondary" />
           </View>
 
           <View className="w-full mt-8">

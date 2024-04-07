@@ -37,7 +37,7 @@ export default function PancPage() {
               color="primary"
               onClick={() => router.back()}
             >
-              <IonIcon name="return-down-back" size="large" color="white" />
+              <IonIcon name="return-down-back" size="huge" color="white" />
             </ButtonThemed>
 
             <TextThemed
@@ -63,7 +63,7 @@ export default function PancPage() {
                   Favoritar
                 </TextThemed>
 
-                <IonIcon name="heart-outline" size="medium" color="primary" />
+                <IonIcon name="heart-outline" size="large" color="primary" />
               </TouchableOpacity>
             </View>
 

@@ -32,7 +32,7 @@ export default function TabLayout() {
           tabBarShowLabel: false,
           tabBarStyle: styles.tabBar,
           tabBarIcon: ({ focused }) => (
-            <IonIcon name={focused ? "home" : "home-outline"} size="large" color="tertiary" />
+            <IonIcon name={focused ? "home" : "home-outline"} size="huge" color="tertiary" />
           ),
         }}
       />
@@ -42,7 +42,7 @@ export default function TabLayout() {
           tabBarShowLabel: false,
           tabBarStyle: styles.tabBar,
           tabBarIcon: ({ focused }) => (
-            <IonIcon name={focused ? "leaf" : "leaf-outline"} size="large" color="tertiary" />
+            <IonIcon name={focused ? "leaf" : "leaf-outline"} size="huge" color="tertiary" />
           ),
         }}
       />
@@ -63,7 +63,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <IonIcon
               name={focused ? "restaurant" : "restaurant-outline"}
-              size="large"
+              size="huge"
               color="tertiary"
             />
           ),
