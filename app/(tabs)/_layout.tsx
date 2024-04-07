@@ -2,6 +2,7 @@ import React from "react"
 import { Tabs } from "expo-router"
 import { StyleSheet } from "react-native"
 
+import Sizes from "@/constants/Sizes"
 import Colors from "@/constants/Colors"
 import IonIcon from "@/components/basic/IonIcon"
 
@@ -10,8 +11,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1.5,
     borderLeftWidth: 1.5,
     borderRightWidth: 1.5,
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
+    borderTopLeftRadius: Sizes.semi,
+    borderTopRightRadius: Sizes.semi,
     borderTopColor: Colors.light.green.dark,
     borderLeftColor: Colors.light.green.dark,
     borderRightColor: Colors.light.green.dark,
@@ -46,6 +47,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="panc/[id]"
+        options={{
+          href: null,
+          tabBarIcon: undefined,
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+        }}
+      />
+      <Tabs.Screen
         name="recipes"
         options={{
           tabBarShowLabel: false,
@@ -57,6 +67,15 @@ export default function TabLayout() {
               color="tertiary"
             />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="recipe/[id]"
+        options={{
+          href: null,
+          tabBarIcon: undefined,
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
         }}
       />
     </Tabs>
