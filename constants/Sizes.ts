@@ -7,4 +7,5 @@ export default {
   large: 20,
   huge: 24,
   veryHuge: 28,
+  massive: 164,
 }
