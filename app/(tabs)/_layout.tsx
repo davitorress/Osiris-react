@@ -36,6 +36,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="pancs"
         options={{
@@ -55,6 +56,7 @@ export default function TabLayout() {
           tabBarStyle: styles.tabBar,
         }}
       />
+
       <Tabs.Screen
         name="recipes"
         options={{
@@ -76,6 +78,17 @@ export default function TabLayout() {
           tabBarIcon: undefined,
           tabBarShowLabel: false,
           tabBarStyle: styles.tabBar,
+        }}
+      />
+
+      <Tabs.Screen
+        name="user/index"
+        options={{
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+          tabBarIcon: ({ focused }) => (
+            <IonIcon name={focused ? "person" : "person-outline"} size="huge" color="tertiary" />
+          ),
         }}
       />
     </Tabs>
