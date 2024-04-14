@@ -18,15 +18,18 @@ const registerSchema = z
     email: z
       .string({ required_error: "O email é obrigatório!" })
       .min(1, "O email é obrigatório!")
-      .email("Insira um email válido!"),
+      .email("Insira um email válido!")
+      .transform((email) => email.trim()),
     password: z
       .string({ required_error: "A senha é obrigatória!" })
       .min(1, "A senha é obrigatória!")
-      .min(3, "A senha deve ter no mínimo 3 caracteres!"),
+      .min(3, "A senha deve ter no mínimo 3 caracteres!")
+      .transform((password) => password.trim()),
     confirmPassword: z
       .string({ required_error: "A confirmação de senha é obrigatória!" })
       .min(1, "A confirmação de senha é obrigatória!")
-      .min(3, "A confirmação de senha deve ter no mínimo 3 caracteres!"),
+      .min(3, "A confirmação de senha deve ter no mínimo 3 caracteres!")
+      .transform((confirmPassword) => confirmPassword.trim()),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
     message: "As senhas não coincidem!",
