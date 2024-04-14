@@ -1,6 +1,9 @@
+import { useCallback } from "react"
+import { useRouter } from "expo-router"
 import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import Sizes from "@/constants/Sizes"
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
@@ -37,50 +40,101 @@ const carouselMock: Array<{
   },
 ]
 
+const image =
+  "http://res.cloudinary.com/dvxkj7fwq/image/upload/v1699569417/34f93c4d-fc34-4a10-b908-82d67d61d358.png"
+
 export default function UserScreen() {
-  const image =
-    "http://res.cloudinary.com/dvxkj7fwq/image/upload/v1699569417/34f93c4d-fc34-4a10-b908-82d67d61d358.png"
+  const router = useRouter()
+
+  const editProfile = useCallback(() => {
+    router.push("/(tabs)/user/edit")
+  }, [router])
+
+  const handleLogout = useCallback(() => {
+    router.push("/")
+  }, [router])
 
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
         <View className="pt-6 px-6">
-          {/* Profile info */}
-          <View className="justify-center">
-            <View className="items-center justify-center size-48 rounded-full bg-gray-light overflow-hidden">
+          <View className="relative self-center w-fit">
+            <View className="items-center justify-center w-40 h-40 rounded-full bg-gray-light overflow-hidden">
               {image ? (
-                <ImageWithPlaceholder alt="nome" className="size-48 rounded-full" source={image} />
+                <ImageWithPlaceholder
+                  alt="nome"
+                  source={image}
+                  className="w-40 h-40 rounded-full"
+                />
               ) : (
                 <IonIcon name="person-outline" color="primary" size="massive" />
               )}
             </View>
-          </View>
 
-          <View className="w-full mt-8">
-            <TextThemed size="h1" color="black" font="nunitoRegular">
-              João da Silva
-            </TextThemed>
-
-            <View className="mt-4 flex-row items-center justify-between">
-              <View className="flex-row items-center">
-                <IonIcon name="mail-outline" color="primary" size="medium" />
-
-                <TextThemed size="body2" color="black" font="nunitoRegular" classes="ml-2">
-                  joao@gmail.com
-                </TextThemed>
-              </View>
-
-              <ButtonThemed>
-                <TextThemed size="body2" color="white" font="nunitoSemiBold" classes="mr-2">
-                  Sair
-                </TextThemed>
-
-                <IonIcon name="exit-outline" color="white" size="medium" />
+            <View className="absolute bottom-0 right-0">
+              <ButtonThemed shape="circle" onClick={editProfile}>
+                <IonIcon name="pencil-outline" color="white" size="veryHuge" />
               </ButtonThemed>
             </View>
           </View>
 
-          {/* Subscription */}
+          <View className="w-full mt-8">
+            <TextThemed size="h1" color="black" font="nunitoBold">
+              João da Silva
+            </TextThemed>
+
+            <View className="mt-1 flex-row items-center justify-between">
+              <View className="flex-row items-center">
+                <IonIcon name="mail-outline" color="primary" size="large" />
+
+                <TextThemed size="body1" color="black" font="nunitoRegular" classes="ml-2">
+                  joao@gmail.com
+                </TextThemed>
+              </View>
+
+              <ButtonThemed onClick={handleLogout}>
+                <TextThemed size="body1" color="white" font="nunitoSemiBold" classes="mr-2">
+                  Sair
+                </TextThemed>
+
+                <IonIcon name="exit-outline" color="white" size="large" />
+              </ButtonThemed>
+            </View>
+          </View>
+
+          <View className="w-full mt-8">
+            <View className="py-5 px-6 rounded-lg bg-gray-light" style={{ gap: Sizes.medium }}>
+              <TextThemed size="h3" font="nunitoSemiBold">
+                Assinatura premium
+              </TextThemed>
+
+              <View className="flex-row items-center">
+                <IonIcon name="star" color="primary" size="large" />
+
+                <TextThemed color="primary" font="nunitoSemiBold" classes="ml-2">
+                  Número ilimitado de fotos
+                </TextThemed>
+              </View>
+
+              <View className="flex-row items-center" style={{ gap: Sizes.micro }}>
+                <TextThemed>Por apenas</TextThemed>
+                <TextThemed color="tertiary" font="nunitoBold">
+                  R$29,99
+                </TextThemed>
+                <TextThemed>ao mês</TextThemed>
+              </View>
+
+              <ButtonThemed size="full">
+                <TextThemed color="white" font="nunitoSemiBold">
+                  Assinar agora
+                </TextThemed>
+              </ButtonThemed>
+
+              <TextThemed size="caption" numberOfLines={100} classes="italic">
+                Você será redirecionado para uma plataforma externa de pagamentos.
+              </TextThemed>
+            </View>
+          </View>
 
           <View className="w-full mt-8">
             <ProductShowcase title="PANCs favoritas" products={carouselMock} horizontal />

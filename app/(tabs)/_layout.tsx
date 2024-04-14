@@ -91,6 +91,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="user/edit"
+        options={{
+          href: null,
+          tabBarIcon: undefined,
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+        }}
+      />
     </Tabs>
   )
 }
