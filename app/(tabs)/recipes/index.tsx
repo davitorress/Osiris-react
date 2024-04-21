@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router"
 import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -43,6 +44,8 @@ const showcaseMock: Array<{
 ]
 
 export default function RecipesScreen() {
+  const router = useRouter()
+
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
@@ -56,7 +59,7 @@ export default function RecipesScreen() {
           </View>
 
           <View className="w-full mt-8">
-            <ButtonThemed type="button" size="full" color="primary" shape="rounded">
+            <ButtonThemed size="full" onClick={() => router.push("/(tabs)/recipes/new")}>
               <TextThemed size="body2" color="white" font="nunitoSemiBold" classes="mr-1.5">
                 Postar uma receita
               </TextThemed>

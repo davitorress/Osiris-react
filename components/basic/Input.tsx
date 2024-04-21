@@ -56,7 +56,11 @@ const input = tv({
 
 type InputVariants = VariantProps<typeof input>
 
-interface InputProps extends InputVariants, Pick<TextInputProps, "autoComplete"> {
+interface InputProps
+  extends InputVariants,
+    Pick<TextInputProps, "multiline">,
+    Pick<TextInputProps, "autoComplete">,
+    Pick<TextInputProps, "numberOfLines"> {
   value: string
   classes?: string
   placeholder?: string
@@ -80,16 +84,20 @@ export default function Input({
   onBlur,
   onChange,
   placeholder,
+  multiline = false,
   autoComplete = "off",
   secureTextEntry = false,
+  numberOfLines = undefined,
 }: InputProps) {
   return (
     <TextInput
       value={value}
       onBlur={onBlur}
+      multiline={multiline}
       onChangeText={onChange}
       placeholder={placeholder}
       autoComplete={autoComplete}
+      numberOfLines={numberOfLines}
       secureTextEntry={secureTextEntry}
       className={twMerge(
         input({

@@ -58,7 +58,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="recipes"
+        name="recipes/index"
         options={{
           tabBarShowLabel: false,
           tabBarStyle: styles.tabBar,
@@ -72,7 +72,25 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="recipe/[id]"
+        name="recipes/new"
+        options={{
+          href: null,
+          tabBarIcon: undefined,
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+        }}
+      />
+      <Tabs.Screen
+        name="recipe/[id]/index"
+        options={{
+          href: null,
+          tabBarIcon: undefined,
+          tabBarShowLabel: false,
+          tabBarStyle: styles.tabBar,
+        }}
+      />
+      <Tabs.Screen
+        name="recipe/[id]/edit"
         options={{
           href: null,
           tabBarIcon: undefined,
