@@ -50,8 +50,8 @@ export default function EditUserForm({ onSubmit }: EditUserFormProps) {
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              value={value}
               onBlur={onBlur}
+              value={value ?? ""}
               onChange={onChange}
               font="nunitoSemiBold"
               placeholder="Digite o seu nome completo"
@@ -74,8 +74,8 @@ export default function EditUserForm({ onSubmit }: EditUserFormProps) {
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              value={value}
               onBlur={onBlur}
+              value={value ?? ""}
               onChange={onChange}
               font="nunitoSemiBold"
               placeholder="Digite o seu email"
