@@ -11,13 +11,10 @@ import ButtonThemed from "@/components/themed/ButtonThemed"
 
 const editUserSchema = z.object({
   name: z
-    .string({ required_error: "O nome é obrigatório!" })
-    .min(1, "O nome é obrigatório!")
-    .transform((name) => name.trim()),
-  email: z
-    .string({ required_error: "O email é obrigatório!" })
-    .min(1, "O email é obrigatório!")
-    .email("Insira um email válido!"),
+    .string()
+    .transform((name) => name.trim())
+    .optional(),
+  email: z.string().email("Insira um email válido!").optional(),
   newPassword: z
     .string()
     .min(3, "A senha deve ter no mínimo 3 caracteres!")
