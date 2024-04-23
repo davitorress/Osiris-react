@@ -1,14 +1,15 @@
 import { z } from "zod"
 import { View } from "react-native"
 import { useRouter } from "expo-router"
-import { Controller, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Controller, useForm, useWatch } from "react-hook-form"
 
 import Sizes from "@/constants/Sizes"
 import Input from "@/components/basic/Input"
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
 const recipeSchema = z
   .object({
@@ -99,11 +100,7 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
           )}
           {...register("name")}
         />
-        {errors.name && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.name.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.name?.message} />
       </View>
 
       <View className="w-full">
@@ -127,11 +124,7 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
         <TextThemed size="body2" color="tertiary" font="nunitoSemiBold" classes="mt-1 text-right">
           {getValues("description")?.length ?? 0}/120 caracteres
         </TextThemed>
-        {errors.description && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.description.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.description?.message} />
       </View>
 
       <View className="w-full">
@@ -157,11 +150,7 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
           )}
           {...register("pancs")}
         />
-        {errors.pancs && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.pancs.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.pancs?.message} />
 
         <View className="w-full flex-row justify-end">
           <ButtonThemed size="fit" color="alert" onClick={removePanc}>
@@ -198,11 +187,7 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
           )}
           {...register("ingredients")}
         />
-        {errors.ingredients && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.ingredients.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.ingredients?.message} />
 
         <View className="w-full flex-row justify-end">
           <ButtonThemed size="fit" color="alert" onClick={undefined}>
@@ -242,11 +227,7 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
           )}
           {...register("prepair")}
         />
-        {errors.prepair && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.prepair.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.prepair?.message} />
 
         <View className="w-full flex-row justify-end">
           <ButtonThemed size="fit" color="alert" onClick={undefined}>

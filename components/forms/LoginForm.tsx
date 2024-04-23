@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form"
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
 const loginSchema = z.object({
   email: z
@@ -61,11 +62,7 @@ const LoginForm = React.forwardRef(() => {
           )}
           {...register("email")}
         />
-        {errors.email && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.email.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.email?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -87,11 +84,7 @@ const LoginForm = React.forwardRef(() => {
           )}
           {...register("password")}
         />
-        {errors.password && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.password.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.password?.message} />
       </View>
 
       <View className="w-full mt-7">

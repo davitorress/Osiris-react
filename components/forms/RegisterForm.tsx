@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form"
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
 const registerSchema = z
   .object({
@@ -69,11 +70,7 @@ export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterDa
           )}
           {...register("name")}
         />
-        {errors.name && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.name.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.name?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -94,11 +91,7 @@ export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterDa
           )}
           {...register("email")}
         />
-        {errors.email && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.email.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.email?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -120,11 +113,7 @@ export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterDa
           )}
           {...register("password")}
         />
-        {errors.password && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.password.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.password?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -146,11 +135,7 @@ export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterDa
           )}
           {...register("confirmPassword")}
         />
-        {errors.confirmPassword && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.confirmPassword.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.confirmPassword?.message} />
       </View>
 
       <View className="w-full mt-7">
