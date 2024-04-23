@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { View } from "react-native"
 import { useRouter } from "expo-router"
-import { Controller, useFieldArray, useForm } from "react-hook-form"
+import { Controller, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import Sizes from "@/constants/Sizes"
@@ -67,29 +67,17 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<RecipeData>({
-    defaultValues: data ?? {
-      name: "",
-      description: "",
-      pancs: ["Hibisco"],
-      ingredients: [""],
-      prepair: [""],
-    },
+    defaultValues: data,
     resolver: zodResolver(recipeSchema),
   })
 
-  const {
-    fields: pancsField,
-    append: pancsAppend,
-    remove: pancsRemove,
-  } = useFieldArray({
-    control,
-    name: "pancs" as never,
-  })
+  const pancs = useWatch({ control, name: "pancs", defaultValue: ["Hibisco"] })
+
   const addNewPanc = () => {
-    pancsAppend("Hibisco")
+    pancs.push("Hibisco")
   }
   const removePanc = () => {
-    pancsRemove(pancsField.length - 1)
+    pancs.pop()
   }
 
   return (
