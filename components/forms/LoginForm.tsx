@@ -5,6 +5,8 @@ import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
+import { useLogin } from "@/modules/user/queries"
+
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
@@ -26,6 +28,7 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>
 
 const LoginForm = React.forwardRef(() => {
+  const login = useLogin()
   const router = useRouter()
 
   const {
@@ -39,7 +42,17 @@ const LoginForm = React.forwardRef(() => {
 
   const onSubmit = (data: LoginData) => {
     console.log(data)
-    router.navigate("/(tabs)/")
+
+    login.mutate(data, {
+      onSuccess: (response: any) => {
+        console.log(response)
+        router.navigate("/(tabs)/")
+      },
+      onError: (error: any) => {
+        // TODO: handle error
+        console.error(error)
+      },
+    })
   }
 
   return (
