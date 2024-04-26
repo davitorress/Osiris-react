@@ -2,6 +2,16 @@ import { twMerge } from "tailwind-merge"
 import { VariantProps, tv } from "tailwind-variants"
 import { TextInput, TextInputProps } from "react-native"
 
+import Colors from "@/constants/Colors"
+
+const placeholderColors = {
+  black: Colors.light.black,
+  white: Colors.light.white,
+  primary: Colors.light.gray.medium,
+  secondary: Colors.light.gray.light,
+  tertiary: Colors.light.gray.dark,
+}
+
 const input = tv({
   variants: {
     size: {
@@ -32,13 +42,6 @@ const input = tv({
       secondary: "text-gray-light",
       tertiary: "text-gray-dark",
     },
-    placeholderColor: {
-      black: "placeholder:text-black",
-      white: "placeholder:text-white",
-      primary: "placeholder:text-gray-medium",
-      secondary: "placeholder:text-gray-light",
-      tertiary: "placeholder:text-gray-dark",
-    },
     padding: {
       none: "p-0",
       small: "p-1",
@@ -65,6 +68,7 @@ interface InputProps
   classes?: string
   placeholder?: string
   secureTextEntry?: boolean
+  placeholderColor?: keyof typeof placeholderColors
   onBlur?: () => void
   onChange?: (value: string) => void
 }
@@ -99,6 +103,7 @@ export default function Input({
       autoComplete={autoComplete}
       numberOfLines={numberOfLines}
       secureTextEntry={secureTextEntry}
+      placeholderTextColor={placeholderColors[placeholderColor]}
       className={twMerge(
         input({
           size,
@@ -108,7 +113,6 @@ export default function Input({
           textSize,
           textColor,
           background,
-          placeholderColor,
         }),
         classes
       )}
