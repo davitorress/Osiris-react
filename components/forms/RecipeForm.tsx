@@ -2,7 +2,7 @@ import { z } from "zod"
 import { View } from "react-native"
 import { useRouter } from "expo-router"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm, useWatch } from "react-hook-form"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
 
 import Sizes from "@/constants/Sizes"
 import Input from "@/components/basic/Input"
@@ -68,17 +68,30 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<RecipeData>({
-    defaultValues: data,
+    defaultValues: data ?? {
+      name: "",
+      description: "",
+      pancs: ["Hibisco"],
+      ingredients: [""],
+      prepair: [""],
+    },
     resolver: zodResolver(recipeSchema),
   })
 
-  const pancs = useWatch({ control, name: "pancs", defaultValue: ["Hibisco"] })
+  const {
+    append,
+    remove,
+    fields: pancs,
+  } = useFieldArray({
+    control,
+    name: "pancs" as never,
+  })
 
   const addNewPanc = () => {
-    pancs.push("Hibisco")
+    append("Hibisco")
   }
   const removePanc = () => {
-    pancs.pop()
+    if (pancs.length > 1) remove(pancs.length - 1)
   }
 
   return (
@@ -133,26 +146,30 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
         </TextThemed>
         <Controller
           control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              {/* TODO: Select input */}
-              {value.map((panc, index) => (
-                <Input
+          render={() => (
+            <View style={{ gap: Sizes.tiny }}>
+              {pancs.map((field, index) => (
+                <Controller
+                  key={field.id}
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      font="nunitoSemiBold"
+                    />
+                  )}
                   {...register(`pancs.${index}`)}
-                  key={`panc-${index}`}
-                  value={panc}
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  font="nunitoSemiBold"
                 />
               ))}
-            </>
+            </View>
           )}
           {...register("pancs")}
         />
         <InputErrorMessage message={errors.pancs?.message} />
 
-        <View className="w-full flex-row justify-end">
+        <View className="w-full flex-row justify-end mt-2" style={{ gap: Sizes.micro }}>
           <ButtonThemed size="fit" color="alert" onClick={removePanc}>
             <IonIcon name="remove-circle-outline" size="large" color="white" />
           </ButtonThemed>
