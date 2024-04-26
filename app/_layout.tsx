@@ -18,6 +18,7 @@ import {
   Nunito_600SemiBold,
   Nunito_700Bold,
 } from "@expo-google-fonts/nunito"
+import QueryClientProvider from "@/providers/queryClient"
 
 export { ErrorBoundary } from "expo-router"
 
@@ -64,34 +65,36 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={OsirisTheme}>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-            navigationBarHidden: true,
-            presentation: "fullScreenModal",
-          }}
-        />
-        <Stack.Screen
-          name="login"
-          options={{
-            headerShown: false,
-            navigationBarHidden: true,
-            presentation: "fullScreenModal",
-          }}
-        />
-        <Stack.Screen
-          name="register"
-          options={{
-            headerShown: false,
-            navigationBarHidden: true,
-            presentation: "fullScreenModal",
-          }}
-        />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <QueryClientProvider>
+      <ThemeProvider value={OsirisTheme}>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+              navigationBarHidden: true,
+              presentation: "fullScreenModal",
+            }}
+          />
+          <Stack.Screen
+            name="login"
+            options={{
+              headerShown: false,
+              navigationBarHidden: true,
+              presentation: "fullScreenModal",
+            }}
+          />
+          <Stack.Screen
+            name="register"
+            options={{
+              headerShown: false,
+              navigationBarHidden: true,
+              presentation: "fullScreenModal",
+            }}
+          />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }
