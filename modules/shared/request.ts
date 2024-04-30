@@ -6,7 +6,6 @@ export const request = async ({
   url,
   body,
   params,
-  stringifyBody = true,
   headers = new Headers(),
   method = HttpMethods.GET,
 }: RequestProps) => {
@@ -28,7 +27,7 @@ export const request = async ({
   const options: RequestInit = {
     method,
     headers,
-    body: body && stringifyBody ? JSON.stringify(body) : body,
+    body,
   }
 
   return await fetch(requestUrl.toString(), options)

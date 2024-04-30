@@ -14,5 +14,4 @@ export interface RequestProps {
   headers?: Headers
   params?: Record<string, any>
   body?: any
-  stringifyBody?: boolean
 }
