@@ -3,6 +3,11 @@ export interface LoginProps {
   password: string
 }
 
+export interface LoginResponse {
+  token: string
+  idUsuario: string
+}
+
 export interface RegisterProps {
   name: string
   email: string

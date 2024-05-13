@@ -41,18 +41,7 @@ const LoginForm = React.forwardRef(() => {
   })
 
   const onSubmit = (data: LoginData) => {
-    console.log(data)
-
-    login.mutate(data, {
-      onSuccess: (response: any) => {
-        console.log(response)
-        router.navigate("/(tabs)/")
-      },
-      onError: (error: any) => {
-        // TODO: handle error
-        console.error(error)
-      },
-    })
+    login.mutate(data)
   }
 
   return (

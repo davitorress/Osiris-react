@@ -1,47 +1,56 @@
+import { useRouter } from "expo-router"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 import { request } from "../shared/request"
 import { LoginProps, RegisterProps } from "./types"
+import { normalizeLogin, normalizeRegister } from "./normalizers"
 
 // TODO: error handling
 const login = async ({ email, password }: LoginProps) => {
   const response = await request({
     url: "/login",
     method: "POST",
-    body: { email, password },
+    body: { email, senha: password },
   })
 
-  return response
+  return normalizeLogin(response)
 }
 
 export const useLogin = () => {
+  const router = useRouter()
+
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       console.log(data)
+      router.navigate("/(tabs)/")
+      // TODO: save token in storage (localStorage/cookie and context)
     },
     onError: (error) => {
       console.error(error)
+      // TODO: show snackbar with error message
     },
   })
 }
 
 // TODO: error handling
-const register = async ({ name, email, password, confirmPassword }: RegisterProps) => {
+const register = async ({ name, email, password }: RegisterProps) => {
   const response = await request({
-    url: "/register",
+    url: "/usuarios",
     method: "POST",
-    body: { name, email, password, confirmPassword },
+    body: { nome: name, email, senha: password },
   })
 
-  return response
+  return normalizeRegister(response)
 }
 
 export const useRegister = () => {
+  const router = useRouter()
+
   return useMutation({
     mutationFn: register,
-    onSuccess: (data) => {
-      console.log(data)
+    onSuccess: () => {
+      router.navigate("/login")
     },
     onError: (error) => {
       console.error(error)

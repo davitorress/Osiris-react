@@ -1,15 +1,16 @@
 import { ScrollView, View } from "react-native"
-import { useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
+
+import { useRegister } from "@/modules/user/queries"
+
 import RegisterForm from "@/components/forms/RegisterForm"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function RegisterScreen() {
-  const router = useRouter()
+  const register = useRegister()
 
-  const handleFormSubmit = (data: unknown) => {
-    console.log(data)
-    router.navigate("/(tabs)/")
+  const handleFormSubmit = (data: any) => {
+    register.mutate(data)
   }
 
   return (
