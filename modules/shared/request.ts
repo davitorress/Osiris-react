@@ -6,10 +6,10 @@ export const request = async ({
   url,
   body,
   params,
+  stringifyBody = true,
   headers = new Headers(),
   method = HttpMethods.GET,
 }: RequestProps) => {
-  console.log("Constants.expoConfig", Constants.expoConfig)
   const baseUrl =
     Constants.expoConfig && Constants.expoConfig.hostUri
       ? `http://${Constants.expoConfig.hostUri.split(":").shift()}:8080`
@@ -27,7 +27,7 @@ export const request = async ({
   const options: RequestInit = {
     method,
     headers,
-    body,
+    body: body && stringifyBody ? JSON.stringify(body) : body,
   }
 
   return await fetch(requestUrl.toString(), options)
