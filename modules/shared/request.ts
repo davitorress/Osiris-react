@@ -5,6 +5,7 @@ import { HttpMethods, RequestProps } from "./types"
 export const request = async ({
   url,
   body,
+  token,
   params,
   stringifyBody = true,
   headers = new Headers(),
@@ -23,6 +24,10 @@ export const request = async ({
   }
 
   headers.append("Content-Type", "application/json")
+
+  if (token) {
+    headers.append("Authorization", token)
+  }
 
   const options: RequestInit = {
     method,
