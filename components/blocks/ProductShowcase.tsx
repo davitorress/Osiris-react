@@ -1,18 +1,14 @@
 import { ScrollView, View } from "react-native"
 
+import { NormalizedProduct } from "@/modules/product/types"
+
 import TextThemed from "@/components/themed/TextThemed"
 import ProductCard from "@/components/basic/ProductCard"
 
 interface ProductShowcaseProps {
   title: string
   horizontal?: boolean
-  products: Array<{
-    id: string
-    name: string
-    image: string
-    description?: string
-    type: "panc" | "recipe"
-  }>
+  products: NormalizedProduct[]
 }
 
 export default function ProductShowcase({
@@ -27,13 +23,13 @@ export default function ProductShowcase({
       </TextThemed>
 
       <ScrollView className="w-full" horizontal={horizontal}>
-        {products.map(({ id, name, image, description, type }, index) => (
+        {products.map(({ id, name, image, isFavorite, description, type }, index) => (
           <View key={id} className={index === 0 ? "" : horizontal ? "ml-5" : "mt-5"}>
             <ProductCard
               id={id}
               name={name}
               type={type}
-              isFavorite={false}
+              isFavorite={isFavorite}
               description={description}
               toggleFavorite={() => {}}
               mode={description ? "detailed" : "simple"}
