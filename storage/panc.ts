@@ -10,6 +10,8 @@ interface PancStoreProps {
 interface PancActions {
   setPancs: (pancs: NormalizedPanc[]) => void
   setFavorites: (ids: string[]) => void
+
+  getIsFavorite: (id: string) => boolean
 }
 
 type PancStore = PancStoreProps & {
@@ -34,6 +36,8 @@ const usePancStore = create<PancStore>((set, get) => ({
       const favorites = get().pancs.filter((panc) => ids.includes(panc.id))
       set({ favorites })
     },
+
+    getIsFavorite: (id) => get().favorites.some((favorite) => favorite.id === id),
   },
 }))
 

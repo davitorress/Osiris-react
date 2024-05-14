@@ -10,6 +10,8 @@ interface RecipeStoreProps {
 interface RecipeActions {
   setRecipes: (recipes: NormalizedRecipe[]) => void
   setSaved: (ids: string[]) => void
+
+  getIsSaved: (id: string) => boolean
 }
 
 type RecipeStore = RecipeStoreProps & {
@@ -34,6 +36,8 @@ const useRecipeStore = create<RecipeStore>((set, get) => ({
       const saved = get().recipes.filter((recipe) => ids.includes(recipe.id))
       set({ saved })
     },
+
+    getIsSaved: (id) => get().saved.some((save) => save.id === id),
   },
 }))
 
