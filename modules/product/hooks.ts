@@ -27,6 +27,7 @@ export const convertToProductList = (product: Product): NormalizedProduct => {
     type: product.type,
     name: product.name,
     image: product.image,
+    description: product.description,
     isFavorite:
       product.type === "panc"
         ? favorites.some((favorite) => favorite.id === product.id)
