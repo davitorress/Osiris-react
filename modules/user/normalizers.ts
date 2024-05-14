@@ -1,6 +1,6 @@
 import { AppError } from "../shared/types"
-import { LoginResponse, NormalizedUser, User } from "./types"
 import { normalizeError } from "../shared/normalizers"
+import { LoginResponse, NormalizedUser, User } from "./types"
 
 export const normalizeLogin = (response: LoginResponse): LoginResponse => {
   const error = normalizeError(response)
@@ -8,6 +8,10 @@ export const normalizeLogin = (response: LoginResponse): LoginResponse => {
   if (error.hasError) {
     switch (error.status) {
       case 400:
+        throw {
+          error: { key: "LOGIN_NOT_FOUND", msg: error.message },
+        } as AppError
+      case 403:
         throw {
           error: { key: "LOGIN_NOT_FOUND", msg: error.message },
         } as AppError
