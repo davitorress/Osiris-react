@@ -4,7 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import usePancStore from "@/storage/panc"
-import { useGetPanc } from "@/modules/panc/queries"
+import {
+  useAddPancToFavorites,
+  useGetPanc,
+  useRemovePancFromFavorites,
+} from "@/modules/panc/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
@@ -20,9 +24,20 @@ export default function PancPage() {
   }
 
   const { data: panc } = useGetPanc(id as string)
+  const addToFavorites = useAddPancToFavorites()
+  const removeFromFavorites = useRemovePancFromFavorites()
+
   const {
     actions: { getIsFavorite },
   } = usePancStore()
+
+  const handleAddToFavorites = () => {
+    addToFavorites.mutate(id as string)
+  }
+
+  const handleRemoveFromFavorites = () => {
+    removeFromFavorites.mutate(id as string)
+  }
 
   return (
     <SafeAreaView className="m-0 flex-1">
@@ -55,7 +70,12 @@ export default function PancPage() {
               <Image className="w-32 h-[132px] rounded-md" source={panc?.image} />
 
               {panc?.id && (
-                <TouchableOpacity className="mt-2 flex-row items-center">
+                <TouchableOpacity
+                  className="mt-2 flex-row items-center"
+                  onPress={
+                    getIsFavorite(panc.id) ? handleRemoveFromFavorites : handleAddToFavorites
+                  }
+                >
                   <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
                     {getIsFavorite(panc.id) ? "Favorito" : "Favoritar"}
                   </TextThemed>
