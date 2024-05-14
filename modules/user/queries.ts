@@ -1,10 +1,12 @@
 import { useRouter } from "expo-router"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import userStore from "@/storage/user"
+import useUserStore from "@/storage/user"
+import usePancStore from "@/storage/panc"
+
 import { request } from "../shared/request"
 import { LoginProps, RegisterProps } from "./types"
-import { normalizeLogin, normalizeRegister } from "./normalizers"
+import { normalizeLogin, normalizeRegister, normalizeUser } from "./normalizers"
 
 // TODO: error handling
 const login = async ({ email, password }: LoginProps) => {
@@ -21,7 +23,7 @@ export const useLogin = () => {
   const router = useRouter()
   const {
     actions: { setToken, setId },
-  } = userStore()
+  } = useUserStore()
 
   return useMutation({
     mutationFn: login,
@@ -64,7 +66,10 @@ export const useRegister = () => {
 }
 
 export const useCurrentUser = () => {
-  const { id, token } = userStore()
+  const { id, token } = useUserStore()
+  const {
+    actions: { setFavorites },
+  } = usePancStore()
 
   const query = async () => {
     const response = await request({
@@ -72,7 +77,11 @@ export const useCurrentUser = () => {
       token,
     })
 
-    return response
+    const user = normalizeUser(response)
+    setFavorites(user.favoritePancsId)
+    // TODO: set saved recipes
+
+    return user
   }
 
   return useQuery({

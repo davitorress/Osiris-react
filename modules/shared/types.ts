@@ -31,7 +31,13 @@ export interface NormalizedError {
   hasError?: boolean
 }
 
-type ERROR_KEYS = "UNIDENTIFIED" | "UNAUTHORIZED" | "INTERNAL_SERVER_ERROR" | "LOGIN_NOT_FOUND"
+type ERROR_KEYS =
+  | "UNIDENTIFIED"
+  | "UNAUTHORIZED"
+  | "INTERNAL_SERVER_ERROR"
+  | "LOGIN_NOT_FOUND"
+  | "USER_NOT_FOUND"
+  | "PANC_NOT_FOUND"
 
 export interface AppError {
   error: {

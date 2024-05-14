@@ -26,8 +26,17 @@ export interface User {
   nome: string
   email: string
   imagem: string
-  perfil?: string
   assinatura?: UserSignature
   pancsFavoritasId: string[]
   receitasSalvasId: string[]
+}
+
+export interface NormalizedUser {
+  id: string
+  name: string
+  email: string
+  image: string
+  signature?: UserSignature
+  favoritePancsId: string[]
+  savedRecipesId: string[]
 }

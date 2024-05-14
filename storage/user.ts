@@ -24,7 +24,7 @@ const initialState: UserStoreProps = {
   token: undefined,
 }
 
-const userStore = create<UserStore>((set, get) => ({
+const useUserStore = create<UserStore>((set, get) => ({
   ...initialState,
   actions: {
     setId: (id) => {
@@ -42,4 +42,4 @@ const userStore = create<UserStore>((set, get) => ({
   },
 }))
 
-export default userStore
+export default useUserStore
