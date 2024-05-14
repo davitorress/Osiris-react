@@ -13,8 +13,8 @@ export default function HomeScreen() {
   const { data: pancs } = useListPancs()
   const { data: recipes } = useListRecipes()
 
-  const carouselPancs = pancs?.map((panc) => convertToProductCarousel(panc))
-  const carouselRecipes = recipes?.map((recipe) => convertToProductCarousel(recipe))
+  const carouselPancs = pancs?.slice(0, 5).map((panc) => convertToProductCarousel(panc))
+  const carouselRecipes = recipes?.slice(0, 5).map((recipe) => convertToProductCarousel(recipe))
 
   return (
     <SafeAreaView className="m-0 flex-1 bg-white">
