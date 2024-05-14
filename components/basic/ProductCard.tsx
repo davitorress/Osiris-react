@@ -35,10 +35,16 @@ export default function ProductCard({
   return (
     <TouchableOpacity onPress={() => router.push(`/(tabs)/${type}/${id}` as `${string}:${string}`)}>
       {mode === "simple" ? (
-        <View>
+        <View className="w-32">
           <ImageWithPlaceholder alt={name} className={imgClasses} source={imgUrl} />
 
-          <TextThemed size="body1" color="tertiary" font="nunitoBold" classes="mt-3">
+          <TextThemed
+            size="body1"
+            color="tertiary"
+            font="nunitoBold"
+            classes="mt-3"
+            numberOfLines={10}
+          >
             {name}
           </TextThemed>
         </View>
