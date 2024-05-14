@@ -94,3 +94,29 @@ export const useCurrentUser = () => {
     enabled: !!id && !!token,
   })
 }
+
+export const updateUserPancs = async (id: string, token: string, pancs: string[]) => {
+  const response = await request({
+    url: `/usuarios/${id}`,
+    method: "PATCH",
+    token,
+    body: {
+      pancsFavoritasId: pancs,
+    },
+  })
+
+  return normalizeUser(response)
+}
+
+export const updateUserRecipes = async (id: string, token: string, recipes: string[]) => {
+  const response = await request({
+    url: `/usuarios/${id}`,
+    method: "PATCH",
+    token,
+    body: {
+      receitasSalvasId: recipes,
+    },
+  })
+
+  return normalizeUser(response)
+}
