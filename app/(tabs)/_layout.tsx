@@ -1,10 +1,11 @@
 import React from "react"
-import { Tabs } from "expo-router"
+import { Tabs, useRouter } from "expo-router"
 import { StyleSheet } from "react-native"
 
 import Sizes from "@/constants/Sizes"
 import Colors from "@/constants/Colors"
 import IonIcon from "@/components/basic/IonIcon"
+import { useCurrentUser } from "@/modules/user/queries"
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -20,6 +21,13 @@ const styles = StyleSheet.create({
 })
 
 export default function TabLayout() {
+  const router = useRouter()
+  const { data: currentUser, isLoading } = useCurrentUser()
+
+  if (!currentUser && !isLoading) {
+    router.navigate("/")
+  }
+
   return (
     <Tabs
       screenOptions={{
