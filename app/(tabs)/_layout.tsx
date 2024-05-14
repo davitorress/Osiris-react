@@ -1,6 +1,6 @@
 import React from "react"
-import { Tabs, useRouter } from "expo-router"
 import { StyleSheet } from "react-native"
+import { Tabs, Redirect } from "expo-router"
 
 import Sizes from "@/constants/Sizes"
 import Colors from "@/constants/Colors"
@@ -21,11 +21,10 @@ const styles = StyleSheet.create({
 })
 
 export default function TabLayout() {
-  const router = useRouter()
   const { data: currentUser, isLoading } = useCurrentUser()
 
   if (!currentUser && !isLoading) {
-    router.navigate("/")
+    return <Redirect href="/" />
   }
 
   return (
