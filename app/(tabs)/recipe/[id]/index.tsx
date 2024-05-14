@@ -4,7 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import useRecipeStore from "@/storage/recipe"
-import { useGetRecipe } from "@/modules/recipe/queries"
+import {
+  useAddRecipeToSaved,
+  useGetRecipe,
+  useRemoveRecipeFromSaved,
+} from "@/modules/recipe/queries"
 
 import Sizes from "@/constants/Sizes"
 import IonIcon from "@/components/basic/IonIcon"
@@ -23,9 +27,20 @@ export default function RecipePage() {
   }
 
   const { data: recipe } = useGetRecipe(id as string)
+  const addToSaved = useAddRecipeToSaved()
+  const removeFromSaved = useRemoveRecipeFromSaved()
+
   const {
     actions: { getIsSaved },
   } = useRecipeStore()
+
+  const handleAddToSaved = () => {
+    addToSaved.mutate(id as string)
+  }
+
+  const handleRemoveFromSaved = () => {
+    removeFromSaved.mutate(id as string)
+  }
 
   return (
     <SafeAreaView className="m-0 flex-1">
@@ -58,7 +73,10 @@ export default function RecipePage() {
               <Image className="w-32 h-[132px] rounded-md" source={recipe?.image} />
 
               {recipe?.id && (
-                <TouchableOpacity className="mt-2 flex-row items-center">
+                <TouchableOpacity
+                  className="mt-2 flex-row items-center"
+                  onPress={getIsSaved(recipe.id) ? handleRemoveFromSaved : handleAddToSaved}
+                >
                   <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
                     {getIsSaved(recipe.id) ? "Salvo" : "Salvar"}
                   </TextThemed>
