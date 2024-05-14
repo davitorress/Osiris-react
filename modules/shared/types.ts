@@ -38,6 +38,7 @@ type ERROR_KEYS =
   | "LOGIN_NOT_FOUND"
   | "USER_NOT_FOUND"
   | "PANC_NOT_FOUND"
+  | "RECIPE_NOT_FOUND"
 
 export interface AppError {
   error: {

@@ -2,6 +2,7 @@ import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { useListPancs } from "@/modules/panc/queries"
+import { useListRecipes } from "@/modules/recipe/queries"
 import { convertToProductCarousel } from "@/modules/product/hooks"
 
 import IonIcon from "@/components/basic/IonIcon"
@@ -10,8 +11,10 @@ import ProductShowcase from "@/components/blocks/ProductShowcase"
 
 export default function HomeScreen() {
   const { data: pancs } = useListPancs()
+  const { data: recipes } = useListRecipes()
 
   const carouselPancs = pancs?.map((panc) => convertToProductCarousel(panc))
+  const carouselRecipes = recipes?.map((recipe) => convertToProductCarousel(recipe))
 
   return (
     <SafeAreaView className="m-0 flex-1 bg-white">
@@ -32,6 +35,12 @@ export default function HomeScreen() {
           {carouselPancs && carouselPancs.length > 0 && (
             <View className="w-full mt-8">
               <ProductShowcase title="PANCs" products={carouselPancs} horizontal />
+            </View>
+          )}
+
+          {carouselRecipes && carouselRecipes.length > 0 && (
+            <View className="w-full mt-8">
+              <ProductShowcase title="Receitas" products={carouselRecipes} horizontal />
             </View>
           )}
         </View>

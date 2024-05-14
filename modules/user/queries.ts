@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
 import usePancStore from "@/storage/panc"
+import useRecipeStore from "@/storage/recipe"
 
 import { request } from "../shared/request"
 import { LoginProps, RegisterProps } from "./types"
@@ -70,6 +71,9 @@ export const useCurrentUser = () => {
   const {
     actions: { setFavorites },
   } = usePancStore()
+  const {
+    actions: { setSaved },
+  } = useRecipeStore()
 
   const query = async () => {
     const response = await request({
@@ -79,7 +83,7 @@ export const useCurrentUser = () => {
 
     const user = normalizeUser(response)
     setFavorites(user.favoritePancsId)
-    // TODO: set saved recipes
+    setSaved(user.savedRecipesId)
 
     return user
   }
