@@ -1,5 +1,5 @@
 import { Text } from "react-native"
-import { Href, Link } from "expo-router"
+import { Link } from "expo-router"
 import { twMerge } from "tailwind-merge"
 import { PropsWithChildren } from "react"
 import { VariantProps, tv } from "tailwind-variants"
@@ -41,7 +41,7 @@ type TextVariants = VariantProps<typeof text>
 
 interface TextProps extends TextVariants {
   type?: "text" | "link"
-  url?: Href<string>
+  url?: string
   classes?: string
   numberOfLines?: number
   onClick?: () => void
