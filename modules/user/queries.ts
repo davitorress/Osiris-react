@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+import userStore from "@/storage/user"
 import { request } from "../shared/request"
 import { LoginProps, RegisterProps } from "./types"
 import { normalizeLogin, normalizeRegister } from "./normalizers"
@@ -18,11 +19,15 @@ const login = async ({ email, password }: LoginProps) => {
 
 export const useLogin = () => {
   const router = useRouter()
+  const {
+    actions: { setToken, setId },
+  } = userStore()
 
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log(data)
+      setToken(data.token)
+      setId(data.idUsuario)
       router.navigate("/(tabs)/")
       // TODO: save token in storage (localStorage/cookie and context)
     },
@@ -58,20 +63,21 @@ export const useRegister = () => {
   })
 }
 
-// TODO: get ID from token
-export const useCurrentUser = (id: string) => {
+export const useCurrentUser = () => {
+  const { id, token } = userStore()
+
   const query = async () => {
     const response = await request({
-      url: `/user/${id}`,
-      // TODO: send auth token
+      url: `/usuarios/${id}`,
+      token,
     })
 
     return response
   }
 
   return useQuery({
-    queryKey: ["user", id],
+    queryKey: ["currentUser", id],
     queryFn: query,
-    enabled: !!id, // TODO: enable query by token
+    enabled: !!id && !!token,
   })
 }
