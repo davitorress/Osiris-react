@@ -1,29 +1,15 @@
-import { z } from "zod"
 import { View } from "react-native"
 import { useRouter } from "expo-router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
+
+import { EditUserData, editUserSchema } from "./types"
 
 import Sizes from "@/constants/Sizes"
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
-
-const editUserSchema = z.object({
-  name: z
-    .string()
-    .transform((name) => name.trim())
-    .optional(),
-  email: z.string().email("Insira um email válido!").optional(),
-  newPassword: z
-    .string()
-    .min(3, "A senha deve ter no mínimo 3 caracteres!")
-    .transform((password) => password.trim())
-    .optional(),
-})
-
-type EditUserData = z.infer<typeof editUserSchema>
 
 interface EditUserFormProps {
   onSubmit: (data: EditUserData) => void

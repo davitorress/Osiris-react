@@ -1,4 +1,3 @@
-import { z } from "zod"
 import { View } from "react-native"
 import { useRouter } from "expo-router"
 import { useLayoutEffect } from "react"
@@ -6,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 
 import usePancStore from "@/storage/panc"
+import { RecipeData, recipeSchema } from "./types"
 
 import Sizes from "@/constants/Sizes"
 import Input from "@/components/basic/Input"
@@ -14,40 +14,6 @@ import TextThemed from "@/components/themed/TextThemed"
 import SelectInput from "@/components/basic/SelectInput"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
-
-const recipeSchema = z
-  .object({
-    id: z.string().optional(),
-    name: z
-      .string({ required_error: "O nome da receita é obrigatório!" })
-      .min(1, "O nome da receita é obrigatório!")
-      .transform((name) => name.trim()),
-    description: z
-      .string({ required_error: "A descrição da receita é obrigatória!" })
-      .min(1, "A descrição da receita é obrigatória!")
-      .max(120, "A descrição da receita deve ter no máximo 120 caracteres!")
-      .transform((description) => description.trim()),
-    pancs: z.array(z.string()).min(1, "A receita deve ter pelo menos uma panc!"),
-    ingredients: z.array(z.string()).min(1, "A receita deve ter pelo menos um ingrediente!"),
-    preparation: z.array(z.string()).min(1, "A receita deve ter pelo menos um modo de preparo!"),
-  })
-  .refine(({ ingredients }) => ingredients[0].length > 0, {
-    message: "A receita deve ter pelo menos um ingrediente!",
-    path: ["ingredients"],
-  })
-  .refine(({ preparation }) => preparation[0].length > 0, {
-    message: "A receita deve ter pelo menos um modo de preparo!",
-    path: ["preparation"],
-  })
-  .transform(({ ingredients, preparation, ...rest }) => {
-    return {
-      ...rest,
-      ingredients: ingredients.filter((i) => i.length > 0),
-      preparation: preparation.filter((p) => p.length > 0),
-    }
-  })
-
-type RecipeData = z.infer<typeof recipeSchema>
 
 interface RecipeFormProps {
   data?: RecipeData

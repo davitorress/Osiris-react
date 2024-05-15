@@ -1,10 +1,10 @@
-import { z } from "zod"
 import React from "react"
 import { useRouter } from "expo-router"
 import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
+import { LoginData, loginSchema } from "./types"
 import { useLogin } from "@/modules/user/queries"
 
 import Input from "@/components/basic/Input"
@@ -12,22 +12,7 @@ import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
-const loginSchema = z.object({
-  email: z
-    .string({ required_error: "O email é obrigatório!" })
-    .min(1, "O email é obrigatório!")
-    .email("Insira um email válido!")
-    .transform((email) => email.trim()),
-  password: z
-    .string({ required_error: "A senha é obrigatória!" })
-    .min(1, "A senha é obrigatória!")
-    .min(3, "A senha deve ter no mínimo 3 caracteres!")
-    .transform((password) => password.trim()),
-})
-
-type LoginData = z.infer<typeof loginSchema>
-
-const LoginForm = React.forwardRef(() => {
+export default function LoginForm() {
   const login = useLogin()
   const router = useRouter()
 
@@ -115,6 +100,4 @@ const LoginForm = React.forwardRef(() => {
       </View>
     </View>
   )
-})
-
-export default LoginForm
+}

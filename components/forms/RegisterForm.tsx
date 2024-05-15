@@ -1,43 +1,15 @@
-import { z } from "zod"
 import React from "react"
 import { useRouter } from "expo-router"
 import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
+import { RegisterData, registerSchema } from "./types"
+
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
-
-const registerSchema = z
-  .object({
-    name: z
-      .string({ required_error: "O nome é obrigatório!" })
-      .min(1, "O nome é obrigatório!")
-      .transform((name) => name.trim()),
-    email: z
-      .string({ required_error: "O email é obrigatório!" })
-      .min(1, "O email é obrigatório!")
-      .email("Insira um email válido!")
-      .transform((email) => email.trim()),
-    password: z
-      .string({ required_error: "A senha é obrigatória!" })
-      .min(1, "A senha é obrigatória!")
-      .min(3, "A senha deve ter no mínimo 3 caracteres!")
-      .transform((password) => password.trim()),
-    confirmPassword: z
-      .string({ required_error: "A confirmação de senha é obrigatória!" })
-      .min(1, "A confirmação de senha é obrigatória!")
-      .min(3, "A confirmação de senha deve ter no mínimo 3 caracteres!")
-      .transform((confirmPassword) => confirmPassword.trim()),
-  })
-  .refine(({ password, confirmPassword }) => password === confirmPassword, {
-    message: "As senhas não coincidem!",
-    path: ["confirmPassword"],
-  })
-
-type RegisterData = z.infer<typeof registerSchema>
 
 export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterData) => void }) {
   const router = useRouter()
