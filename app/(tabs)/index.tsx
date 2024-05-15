@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -13,8 +14,10 @@ export default function HomeScreen() {
   const { data: pancs } = useListPancs()
   const { data: recipes } = useListRecipes()
 
-  const carouselPancs = pancs?.slice(0, 5).map((panc) => convertToProductCarousel(panc))
-  const carouselRecipes = recipes?.slice(0, 5).map((recipe) => convertToProductCarousel(recipe))
+  if (!pancs || !recipes) return null
+
+  const pancsSliced = useMemo(() => pancs.slice(0, 5), [pancs])
+  const recipesSliced = useMemo(() => recipes.slice(0, 5), [recipes])
 
   return (
     <SafeAreaView className="m-0 flex-1 bg-white">
@@ -32,15 +35,23 @@ export default function HomeScreen() {
             <ProductShowcase title="Itens encontrados" products={pancs} />
           </View> */}
 
-          {carouselPancs && carouselPancs.length > 0 && (
+          {pancsSliced && pancsSliced.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="PANCs" products={carouselPancs} horizontal />
+              <ProductShowcase
+                title="PANCs"
+                products={pancsSliced.map(convertToProductCarousel)}
+                horizontal
+              />
             </View>
           )}
 
-          {carouselRecipes && carouselRecipes.length > 0 && (
+          {recipesSliced && recipesSliced.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="Receitas" products={carouselRecipes} horizontal />
+              <ProductShowcase
+                title="Receitas"
+                products={recipesSliced.map(convertToProductCarousel)}
+                horizontal
+              />
             </View>
           )}
         </View>

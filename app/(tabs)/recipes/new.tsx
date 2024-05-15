@@ -12,7 +12,7 @@ export default function NewRecipesPage() {
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
-        <View className="pt-6 px-6">
+        <View className="p-6">
           <View className="w-full">
             <View className="w-fit flex-row absolute top-0 left-0">
               <ButtonThemed
