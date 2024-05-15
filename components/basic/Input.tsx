@@ -98,6 +98,7 @@ export default function Input({
       value={value}
       onBlur={onBlur}
       multiline={multiline}
+      textAlignVertical="top"
       onChangeText={onChange}
       placeholder={placeholder}
       autoComplete={autoComplete}
