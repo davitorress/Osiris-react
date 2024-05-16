@@ -1,32 +1,34 @@
 import { useRouter } from "expo-router"
+import { useMemo, useState } from "react"
 import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { useListRecipes } from "@/modules/recipe/queries"
-import { convertToProductList } from "@/modules/product/hooks"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
+import SearchInput from "@/components/basic/SearchInput"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import ProductShowcase from "@/components/blocks/ProductShowcase"
 
 export default function RecipesScreen() {
   const router = useRouter()
+  const [search, setSearch] = useState("")
   const { data: recipes } = useListRecipes()
 
-  const recipesList = recipes?.map(convertToProductList)
+  const searchRecipes = useMemo(() => {
+    if (!search || !recipes) return []
+
+    return recipes
+      .filter((recipe) => recipe.name.toLowerCase().includes(search.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }, [search, recipes])
 
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
         <View className="p-6">
-          <View className="w-full py-2 px-4 flex-row items-center justify-between border border-gray-medium rounded-full bg-white">
-            <TextThemed size="body2" color="grayPrimary" font="nunitoSemiBold">
-              Busque por receitas
-            </TextThemed>
-
-            <IonIcon name="search" size="semi" color="secondary" />
-          </View>
+          <SearchInput value={search} onChange={setSearch} placeholder="Pesquise por receitas" />
 
           <View className="w-full mt-8">
             <ButtonThemed size="full" onClick={() => router.push("/(tabs)/recipes/new")}>
@@ -38,13 +40,15 @@ export default function RecipesScreen() {
             </ButtonThemed>
           </View>
 
-          {/* <View className="w-full mt-8">
-            <ProductShowcase title="Itens encontrados" products={showcaseMock} />
-          </View> */}
-
-          {recipesList && recipesList.length > 0 && (
+          {searchRecipes && searchRecipes.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="Receitas" products={recipesList} />
+              <ProductShowcase title="Receitas encontradas" products={searchRecipes} />
+            </View>
+          )}
+
+          {recipes && recipes.length > 0 && (
+            <View className="w-full mt-8">
+              <ProductShowcase title="Receitas" products={recipes} />
             </View>
           )}
         </View>

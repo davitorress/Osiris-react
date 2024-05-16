@@ -105,6 +105,9 @@ export default function Input({
       numberOfLines={numberOfLines}
       secureTextEntry={secureTextEntry}
       placeholderTextColor={placeholderColors[placeholderColor]}
+      style={{
+        verticalAlign: multiline ? "top" : "middle",
+      }}
       className={twMerge(
         input({
           size,

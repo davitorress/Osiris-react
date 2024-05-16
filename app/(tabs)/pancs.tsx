@@ -1,37 +1,39 @@
+import { useMemo, useState } from "react"
 import { ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { useListPancs } from "@/modules/panc/queries"
-import { convertToProductList } from "@/modules/product/hooks"
 
-import IonIcon from "@/components/basic/IonIcon"
-import TextThemed from "@/components/themed/TextThemed"
+import SearchInput from "@/components/basic/SearchInput"
 import ProductShowcase from "@/components/blocks/ProductShowcase"
 
 export default function PancsScreen() {
   const { data: pancs } = useListPancs()
+  const [search, setSearch] = useState("")
 
-  const pancsList = pancs?.map(convertToProductList)
+  const searchPancs = useMemo(() => {
+    if (!search || !pancs) return []
+
+    return pancs
+      .filter((panc) => panc.name.toLowerCase().includes(search.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }, [search, pancs])
 
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
         <View className="p-6">
-          <View className="w-full py-2 px-4 flex-row items-center justify-between border border-gray-medium rounded-full bg-white">
-            <TextThemed size="body2" color="grayPrimary" font="nunitoSemiBold">
-              Busque por pancs
-            </TextThemed>
+          <SearchInput value={search} onChange={setSearch} placeholder="Pesquise por PANCs" />
 
-            <IonIcon name="search" size="semi" color="secondary" />
-          </View>
-
-          {/* <View className="w-full mt-8">
-            <ProductShowcase title="Itens encontrados" products={showcaseMock} />
-          </View> */}
-
-          {pancsList && pancsList.length > 0 && (
+          {searchPancs && searchPancs.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="PANCs" products={pancsList} />
+              <ProductShowcase title="PANCs encontradas" products={searchPancs} />
+            </View>
+          )}
+
+          {pancs && pancs.length > 0 && (
+            <View className="w-full mt-8">
+              <ProductShowcase title="PANCs" products={pancs} />
             </View>
           )}
         </View>

@@ -6,7 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
 import { useCurrentUser } from "@/modules/user/queries"
-import { convertToProductCarousel } from "@/modules/product/hooks"
 
 import Sizes from "@/constants/Sizes"
 import IonIcon from "@/components/basic/IonIcon"
@@ -115,31 +114,19 @@ export default function UserScreen() {
 
           {favorites.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase
-                title="PANCs favoritas"
-                products={favorites.map(convertToProductCarousel)}
-                horizontal
-              />
+              <ProductShowcase title="PANCs favoritas" products={favorites} horizontal />
             </View>
           )}
 
           {saved.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase
-                title="Receitas salvas"
-                products={saved.map(convertToProductCarousel)}
-                horizontal
-              />
+              <ProductShowcase title="Receitas salvas" products={saved} horizontal />
             </View>
           )}
 
           {myRecipes.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase
-                title="Suas receitas"
-                products={myRecipes.map(convertToProductCarousel)}
-                horizontal
-              />
+              <ProductShowcase title="Suas receitas" products={myRecipes} horizontal />
             </View>
           )}
         </View>
