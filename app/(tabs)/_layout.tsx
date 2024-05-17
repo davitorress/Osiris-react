@@ -29,15 +29,16 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      backBehavior="order"
       screenOptions={{
         headerShown: false,
+        tabBarStyle: styles.tabBar,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
           tabBarIcon: ({ focused }) => (
             <IonIcon name={focused ? "home" : "home-outline"} size="huge" color="tertiary" />
           ),
@@ -48,7 +49,6 @@ export default function TabLayout() {
         name="pancs"
         options={{
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
           tabBarIcon: ({ focused }) => (
             <IonIcon name={focused ? "leaf" : "leaf-outline"} size="huge" color="tertiary" />
           ),
@@ -60,7 +60,6 @@ export default function TabLayout() {
           href: null,
           tabBarIcon: undefined,
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
         }}
       />
 
@@ -68,7 +67,6 @@ export default function TabLayout() {
         name="recipes/index"
         options={{
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
           tabBarIcon: ({ focused }) => (
             <IonIcon
               name={focused ? "restaurant" : "restaurant-outline"}
@@ -84,7 +82,6 @@ export default function TabLayout() {
           href: null,
           tabBarIcon: undefined,
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
         }}
       />
       <Tabs.Screen
@@ -93,7 +90,6 @@ export default function TabLayout() {
           href: null,
           tabBarIcon: undefined,
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
         }}
       />
       <Tabs.Screen
@@ -102,7 +98,6 @@ export default function TabLayout() {
           href: null,
           tabBarIcon: undefined,
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
         }}
       />
 
@@ -110,7 +105,6 @@ export default function TabLayout() {
         name="user/index"
         options={{
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
           tabBarIcon: ({ focused }) => (
             <IonIcon name={focused ? "person" : "person-outline"} size="huge" color="tertiary" />
           ),
@@ -122,7 +116,6 @@ export default function TabLayout() {
           href: null,
           tabBarIcon: undefined,
           tabBarShowLabel: false,
-          tabBarStyle: styles.tabBar,
         }}
       />
     </Tabs>
