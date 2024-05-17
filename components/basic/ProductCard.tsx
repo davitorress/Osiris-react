@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router"
-import { TouchableOpacity, View } from "react-native"
+import { GestureResponderEvent, TouchableOpacity, View } from "react-native"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
@@ -14,9 +14,9 @@ interface ProductCardProps {
   }
   description?: string
   isFavorite?: boolean
-  toggleFavorite?: () => void
   type?: "panc" | "recipe"
   mode?: "simple" | "detailed"
+  toggleFavorite?: (event: GestureResponderEvent) => void
 }
 
 export default function ProductCard({
@@ -65,11 +65,9 @@ export default function ProductCard({
               </TextThemed>
 
               {toggleFavorite && (
-                <IonIcon
-                  size="huge"
-                  onPress={toggleFavorite}
-                  name={isFavorite ? iconName : `${iconName}-outline`}
-                />
+                <TouchableOpacity onPress={toggleFavorite} className="w-8 h-8">
+                  <IonIcon size="huge" name={isFavorite ? iconName : `${iconName}-outline`} />
+                </TouchableOpacity>
               )}
             </View>
 

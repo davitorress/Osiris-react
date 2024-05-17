@@ -4,6 +4,8 @@ import { NormalizedProduct, Product } from "@/modules/product/types"
 
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
+import { useAddRecipeToSaved, useRemoveRecipeFromSaved } from "@/modules/recipe/queries"
+import { useAddPancToFavorites, useRemovePancFromFavorites } from "@/modules/panc/queries"
 
 import TextThemed from "@/components/themed/TextThemed"
 import ProductCard from "@/components/basic/ProductCard"
@@ -21,6 +23,12 @@ export default function ProductShowcase({
 }: ProductShowcaseProps) {
   const { saved } = useRecipeStore()
   const { favorites } = usePancStore()
+
+  const addToFavorites = useAddPancToFavorites()
+  const removeFromFavorites = useRemovePancFromFavorites()
+
+  const addToSaved = useAddRecipeToSaved()
+  const removeFromSaved = useRemoveRecipeFromSaved()
 
   const normalizedProducts = products.map(
     (product) =>
@@ -52,7 +60,14 @@ export default function ProductShowcase({
               type={type}
               isFavorite={isFavorite}
               description={description}
-              toggleFavorite={() => {}}
+              toggleFavorite={(e) => {
+                e.preventDefault()
+                if (type === "panc") {
+                  isFavorite ? removeFromFavorites.mutate(id) : addToFavorites.mutate(id)
+                } else {
+                  isFavorite ? removeFromSaved.mutate(id) : addToSaved.mutate(id)
+                }
+              }}
               mode={description ? "detailed" : "simple"}
               image={{ uri: image, sizeClass: "w-32 h-32 rounded-md" }}
             />
