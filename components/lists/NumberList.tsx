@@ -11,7 +11,13 @@ export default function NumberList({ items }: { items: string[] }) {
             {index + 1}.
           </TextThemed>
 
-          <TextThemed size="caption" color="black" font="nunitoRegular" classes="ml-1">
+          <TextThemed
+            size="caption"
+            color="black"
+            font="nunitoRegular"
+            numberOfLines={100}
+            classes="ml-1 text-justify"
+          >
             {item}
           </TextThemed>
         </View>
