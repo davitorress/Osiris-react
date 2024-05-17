@@ -45,7 +45,7 @@ export default function RecipePage() {
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
-        <View className="pt-6 px-6">
+        <View className="p-6">
           <View className="flex-row items-start">
             <ButtonThemed
               type="icon"
@@ -94,8 +94,8 @@ export default function RecipePage() {
               size="caption"
               color="black"
               font="nunitoRegular"
-              numberOfLines={7}
-              classes="ml-4 pr-6 w-[65%]"
+              numberOfLines={8}
+              classes="ml-4 pr-6 w-[65%] text-justify"
             >
               {recipe?.description}
             </TextThemed>

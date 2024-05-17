@@ -14,6 +14,7 @@ import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import ContentSection from "@/components/blocks/ContentSection"
+import BulletList from "@/components/lists/BulletList"
 
 export default function PancPage() {
   const router = useRouter()
@@ -42,7 +43,7 @@ export default function PancPage() {
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
-        <View className="pt-6 px-6">
+        <View className="p-6">
           <View className="flex-row items-start">
             <ButtonThemed
               type="icon"
@@ -93,8 +94,8 @@ export default function PancPage() {
               size="caption"
               color="black"
               font="nunitoRegular"
-              numberOfLines={7}
-              classes="ml-4 pr-6 w-[65%]"
+              numberOfLines={8}
+              classes="ml-4 pr-6 w-[65%] text-justify"
             >
               {panc?.description}
             </TextThemed>
@@ -102,27 +103,25 @@ export default function PancPage() {
 
           <View className="w-full mt-8">
             <ContentSection title="Benefícios">
-              <TextThemed size="caption" color="black" font="nunitoRegular" numberOfLines={100}>
+              <TextThemed
+                size="caption"
+                color="black"
+                font="nunitoRegular"
+                numberOfLines={100}
+                classes="text-justify"
+              >
                 {panc?.benefits}
               </TextThemed>
             </ContentSection>
           </View>
 
-          <View className="w-full mt-8">
-            <ContentSection title="Modo de Cultivo">
-              {panc?.cultivation.map((item, index) => (
-                <TextThemed
-                  key={index}
-                  size="caption"
-                  color="black"
-                  font="nunitoRegular"
-                  numberOfLines={100}
-                >
-                  {item}
-                </TextThemed>
-              ))}
-            </ContentSection>
-          </View>
+          {panc?.cultivation && (
+            <View className="w-full mt-8">
+              <ContentSection title="Modo de Cultivo">
+                <BulletList items={panc.cultivation} />
+              </ContentSection>
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
