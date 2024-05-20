@@ -41,6 +41,13 @@
             "node_modules/@expo-google-fonts/ubuntu/Ubuntu_700Bold.ttf"
           ]
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photoPermission": "É necessário permissão para o $(PRODUCT_NAME) acessar a galeria de fotos.",
+          "cameraPermission": "É necessário permissão para o $(PRODUCT_NAME) acessar a câmera."
+        }
       ]
     ],
     "experiments": {
