@@ -37,13 +37,12 @@ type ERROR_KEYS =
   | "UNAUTHORIZED"
   | "INTERNAL_SERVER_ERROR"
   | "LOGIN_NOT_FOUND"
+  | "ALREADY_REGISTERED"
   | "USER_NOT_FOUND"
   | "PANC_NOT_FOUND"
   | "RECIPE_NOT_FOUND"
 
 export interface AppError {
-  error: {
-    key: ERROR_KEYS
-    msg?: string
-  }
+  key: ERROR_KEYS
+  msg: string
 }

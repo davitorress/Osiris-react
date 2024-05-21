@@ -9,16 +9,19 @@ export const normalizePanc = (response: Panc): NormalizedPanc => {
     switch (error.status) {
       case 401:
         throw {
-          error: { key: "UNAUTHORIZED", msg: error.message },
+          key: "UNAUTHORIZED",
+          msg: "Acesso inválido, faça login novamente.",
         } as AppError
       case 404:
         throw {
-          error: { key: "PANC_NOT_FOUND", msg: error.message },
+          key: "PANC_NOT_FOUND",
+          msg: "PANC não encontrada ou não existe.",
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
         } as AppError
     }
   }
@@ -41,12 +44,14 @@ export const normalizePancs = (response: Panc[]): NormalizedPanc[] => {
     switch (error.status) {
       case 401:
         throw {
-          error: { key: "UNAUTHORIZED", msg: error.message },
+          key: "UNAUTHORIZED",
+          msg: "Acesso inválido, faça login novamente.",
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
         } as AppError
     }
   }

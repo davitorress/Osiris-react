@@ -9,16 +9,19 @@ export const normalizeRecipe = (response: Recipe): NormalizedRecipe => {
     switch (error.status) {
       case 401:
         throw {
-          error: { key: "UNAUTHORIZED", msg: error.message },
+          key: "UNAUTHORIZED",
+          msg: error.message,
         } as AppError
       case 404:
         throw {
-          error: { key: "RECIPE_NOT_FOUND", msg: error.message },
+          key: "RECIPE_NOT_FOUND",
+          msg: error.message,
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: error.message,
         } as AppError
     }
   }
@@ -43,12 +46,14 @@ export const normalizeRecipes = (response: Recipe[]): NormalizedRecipe[] => {
     switch (error.status) {
       case 401:
         throw {
-          error: { key: "UNAUTHORIZED", msg: error.message },
+          key: "UNAUTHORIZED",
+          msg: error.message,
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: error.message,
         } as AppError
     }
   }
@@ -65,12 +70,14 @@ export const normalizeUpdateRecipeImage = (response: any) => {
     switch (error.status) {
       case 401:
         throw {
-          error: { key: "UNAUTHORIZED", msg: error.message },
+          key: "UNAUTHORIZED",
+          msg: error.message,
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: error.message,
         } as AppError
     }
   }

@@ -4,7 +4,10 @@ import { useFonts } from "expo-font"
 import { Ionicons } from "@expo/vector-icons"
 import * as SplashScreen from "expo-splash-screen"
 import { ThemeProvider } from "@react-navigation/native"
+import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
 
+import Sizes from "@/constants/Sizes"
+import Colors from "@/constants/Colors"
 import OsirisTheme from "@/config/Theme"
 
 import {
@@ -60,7 +63,52 @@ export default function RootLayout() {
     return null
   }
 
-  return <RootLayoutNav />
+  return (
+    <>
+      <RootLayoutNav />
+      <Toast
+        topOffset={60}
+        config={{
+          success: (props) => (
+            <BaseToast
+              {...props}
+              text2NumberOfLines={2}
+              style={{ borderLeftColor: Colors.light.green.light }}
+              contentContainerStyle={{ paddingHorizontal: Sizes.small }}
+              text1Style={{
+                fontWeight: 700,
+                fontSize: Sizes.medium,
+                fontFamily: "Ubuntu_700Bold",
+              }}
+              text2Style={{
+                fontSize: 14,
+                fontWeight: 400,
+                fontFamily: "Ubuntu_400Regular",
+              }}
+            />
+          ),
+          error: (props) => (
+            <ErrorToast
+              {...props}
+              text2NumberOfLines={2}
+              style={{ borderLeftColor: Colors.light.wine }}
+              contentContainerStyle={{ paddingHorizontal: Sizes.small }}
+              text1Style={{
+                fontWeight: 700,
+                fontSize: Sizes.medium,
+                fontFamily: "Ubuntu_700Bold",
+              }}
+              text2Style={{
+                fontSize: 14,
+                fontWeight: 500,
+                fontFamily: "Ubuntu_400Regular",
+              }}
+            />
+          ),
+        }}
+      />
+    </>
+  )
 }
 
 function RootLayoutNav() {

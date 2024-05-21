@@ -52,7 +52,8 @@ export const request = async ({
     })
     .catch((error) => {
       throw {
-        error: { key: "INTERNAL_SERVER_ERROR", msg: error.message },
+        key: "INTERNAL_SERVER_ERROR",
+        msg: error.message,
       } as AppError
     })
 }

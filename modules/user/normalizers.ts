@@ -9,16 +9,19 @@ export const normalizeLogin = (response: LoginResponse): LoginResponse => {
     switch (error.status) {
       case 400:
         throw {
-          error: { key: "LOGIN_NOT_FOUND", msg: error.message },
+          key: "LOGIN_NOT_FOUND",
+          msg: "Verifique as informações de login e tente novamente.",
         } as AppError
       case 403:
         throw {
-          error: { key: "LOGIN_NOT_FOUND", msg: error.message },
+          key: "LOGIN_NOT_FOUND",
+          msg: "Verifique as informações de login e tente novamente.",
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
         } as AppError
     }
   }
@@ -31,9 +34,16 @@ export const normalizeRegister = (response: User): User => {
 
   if (error.hasError) {
     switch (error.status) {
+      case 409:
+        throw {
+          key: "ALREADY_REGISTERED",
+          msg: "Este e-mail já está em uso.",
+        } as AppError
+
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
         } as AppError
     }
   }
@@ -48,12 +58,14 @@ export const normalizeUser = (response: User): NormalizedUser => {
     switch (error.status) {
       case 404:
         throw {
-          error: { key: "USER_NOT_FOUND", msg: error.message },
+          key: "USER_NOT_FOUND",
+          msg: "Usuário não encontrado.",
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
         } as AppError
     }
   }
@@ -72,18 +84,20 @@ export const normalizeUser = (response: User): NormalizedUser => {
 export const normalizeUpdateUserImage = (response: string) => {
   const error = normalizeError(response)
 
-  console.log("error image", error, response)
+  console.error("error user image", error, response)
 
   if (error.hasError) {
     switch (error.status) {
       case 401:
         throw {
-          error: { key: "UNAUTHORIZED", msg: error.message },
+          key: "UNAUTHORIZED",
+          msg: error.message,
         } as AppError
 
       default:
         throw {
-          error: { key: "UNIDENTIFIED", msg: error.message },
+          key: "UNIDENTIFIED",
+          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
         } as AppError
     }
   }

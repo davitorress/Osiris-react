@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router"
+import Toast from "react-native-toast-message"
 import { ImagePickerAsset } from "expo-image-picker"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -6,6 +7,7 @@ import useUserStore from "@/storage/user"
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
 
+import { AppError } from "../shared/types"
 import { request } from "../shared/request"
 import { LoginProps, RegisterProps } from "./types"
 import { EditUserData } from "@/components/forms/types"
@@ -16,7 +18,6 @@ import {
   normalizeUser,
 } from "./normalizers"
 
-// TODO: error handling
 const login = async ({ email, password }: LoginProps) => {
   const response = await request({
     url: "/login",
@@ -41,14 +42,16 @@ export const useLogin = () => {
       router.navigate("/(tabs)/")
       // TODO: save token in storage (localStorage/cookie and context)
     },
-    onError: (error) => {
-      console.error(error)
-      // TODO: show snackbar with error message
+    onError: (error: AppError) => {
+      Toast.show({
+        type: "error",
+        text1: "Erro ao logar!",
+        text2: error.msg,
+      })
     },
   })
 }
 
-// TODO: error handling
 const register = async ({ name, email, password }: RegisterProps) => {
   const response = await request({
     url: "/usuarios",
@@ -67,8 +70,12 @@ export const useRegister = () => {
     onSuccess: () => {
       router.navigate("/login")
     },
-    onError: (error) => {
-      console.error(error)
+    onError: (error: AppError) => {
+      Toast.show({
+        type: "error",
+        text1: "Erro no cadastro!",
+        text2: error.msg,
+      })
     },
   })
 }
