@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import useRecipeStore from "@/storage/recipe"
+import { useCurrentUser } from "@/modules/user/queries"
 import {
   useAddRecipeToSaved,
   useGetRecipe,
@@ -20,6 +21,7 @@ import ContentSection from "@/components/blocks/ContentSection"
 
 export default function RecipePage() {
   const router = useRouter()
+  const { data: user } = useCurrentUser()
   const { id } = useLocalSearchParams<{ id: string }>()
 
   if (!id) {
@@ -73,20 +75,35 @@ export default function RecipePage() {
               <Image className="w-32 h-[132px] rounded-md" source={recipe?.image} />
 
               {recipe?.id && (
-                <TouchableOpacity
-                  className="mt-2 flex-row items-center"
-                  onPress={getIsSaved(recipe.id) ? handleRemoveFromSaved : handleAddToSaved}
-                >
-                  <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
-                    {getIsSaved(recipe.id) ? "Salvo" : "Salvar"}
-                  </TextThemed>
+                <View>
+                  {recipe.author === user?.id ? (
+                    <TouchableOpacity
+                      className="mt-2 flex-row items-center"
+                      onPress={() => router.push(`/(tabs)/recipe/${recipe.id}/edit`)}
+                    >
+                      <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
+                        Editar
+                      </TextThemed>
 
-                  <IonIcon
-                    name={getIsSaved(recipe.id) ? "bookmark" : "bookmark-outline"}
-                    size="large"
-                    color="primary"
-                  />
-                </TouchableOpacity>
+                      <IonIcon name="create-outline" size="large" color="primary" />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      className="mt-2 flex-row items-center"
+                      onPress={getIsSaved(recipe.id) ? handleRemoveFromSaved : handleAddToSaved}
+                    >
+                      <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
+                        {getIsSaved(recipe.id) ? "Salvo" : "Salvar"}
+                      </TextThemed>
+
+                      <IonIcon
+                        name={getIsSaved(recipe.id) ? "bookmark" : "bookmark-outline"}
+                        size="large"
+                        color="primary"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
               )}
             </View>
 

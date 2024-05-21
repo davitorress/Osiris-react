@@ -7,6 +7,10 @@ export interface CreateRecipe {
   preparation: string[]
 }
 
+export interface EditRecipe extends CreateRecipe {
+  id: string
+}
+
 export interface Recipe {
   id: string
   nome: string

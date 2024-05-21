@@ -33,7 +33,7 @@ export default function ProductCard({
   const iconName = type === "panc" ? "heart" : "bookmark"
 
   return (
-    <TouchableOpacity onPress={() => router.push(`/(tabs)/${type}/${id}` as `${string}:${string}`)}>
+    <TouchableOpacity onPress={() => router.push(`/(tabs)/${type}/${id}/`)}>
       {mode === "simple" ? (
         <View className="w-32">
           <ImageWithPlaceholder alt={name} className={imgClasses} source={imgUrl} />

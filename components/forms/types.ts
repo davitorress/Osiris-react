@@ -46,7 +46,6 @@ export type RegisterData = z.infer<typeof registerSchema>
 
 export const recipeSchema = z
   .object({
-    id: z.string().optional(),
     name: z
       .string({ required_error: "O nome da receita é obrigatório!" })
       .min(1, "O nome da receita é obrigatório!")

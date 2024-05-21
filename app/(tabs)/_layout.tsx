@@ -29,7 +29,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      backBehavior="order"
+      backBehavior="history"
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.tabBar,

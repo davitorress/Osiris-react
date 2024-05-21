@@ -31,7 +31,8 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<RecipeData>({
-    defaultValues: data ?? {
+    values: data,
+    defaultValues: {
       name: "",
       description: "",
       ingredients: [""],
@@ -150,12 +151,15 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
                 <Controller
                   key={field.id}
                   control={control}
-                  render={({ field: { onChange } }) => (
+                  render={({ field: { onChange, value } }) => (
                     <SelectInput
                       save="value"
                       setSelected={onChange}
                       data={pancs.map((panc) => ({ key: panc.name, value: panc.name }))}
-                      defaultOption={{ key: pancs.at(0)!.name, value: pancs.at(0)!.name }}
+                      defaultOption={{
+                        key: value ?? pancs.at(0)!.name,
+                        value: value ?? pancs.at(0)!.name,
+                      }}
                     />
                   )}
                   {...register(`pancs.${index}`)}

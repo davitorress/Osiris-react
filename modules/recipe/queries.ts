@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import useUserStore from "@/storage/user"
 import useRecipeStore from "@/storage/recipe"
 
-import { CreateRecipe } from "./types"
+import { CreateRecipe, EditRecipe } from "./types"
 import { request } from "../shared/request"
 import { normalizeRecipe, normalizeRecipes, normalizeUpdateRecipeImage } from "./normalizers"
 import { updateUserRecipes, useCurrentUser } from "../user/queries"
@@ -144,6 +144,35 @@ export const useCreateRecipe = () => {
     },
     onError: (error) => {
       console.error(error)
+    },
+  })
+}
+
+export const useUpdateRecipe = () => {
+  const { token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async (data: EditRecipe) => {
+    const response = await request({
+      url: `/receitas/${data.id}`,
+      token,
+      method: "PATCH",
+      body: {
+        nome: data.name,
+        pancs: data.pancs,
+        preparo: data.preparation,
+        descricao: data.description,
+        ingredientes: data.ingredients,
+      },
+    })
+
+    return normalizeRecipe(response)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["recipes"] })
     },
   })
 }
