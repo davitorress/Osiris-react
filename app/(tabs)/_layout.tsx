@@ -64,6 +64,20 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="camera"
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => (
+            <IonIcon name={focused ? "camera" : "camera-outline"} size="huge" color="tertiary" />
+          ),
+          tabBarStyle: {
+            ...styles.tabBar,
+            position: "absolute",
+          },
+        }}
+      />
+
+      <Tabs.Screen
         name="recipes/index"
         options={{
           tabBarShowLabel: false,

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "osiris-react",
+    "name": "Osiris",
     "slug": "osiris-react",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -47,6 +47,13 @@
         {
           "photoPermission": "É necessário permissão para o $(PRODUCT_NAME) acessar a galeria de fotos.",
           "cameraPermission": "É necessário permissão para o $(PRODUCT_NAME) acessar a câmera."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "É necessário permissão para o $(PRODUCT_NAME) acessar a câmera.",
+          "recordAudioAndroid": false
         }
       ]
     ],

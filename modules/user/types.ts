@@ -17,8 +17,8 @@ export interface RegisterProps {
 
 export interface UserSignature {
   ativa: boolean
-  dataInicio: any
-  dataTermino: any
+  dataInicio?: any
+  dataTermino?: any
 }
 
 export interface User {
@@ -26,7 +26,7 @@ export interface User {
   nome: string
   email: string
   imagem: string
-  assinatura?: UserSignature
+  assinatura: UserSignature
   pancsFavoritasId: string[]
   receitasSalvasId: string[]
 }
@@ -36,7 +36,7 @@ export interface NormalizedUser {
   name: string
   email: string
   image: string
-  signature?: UserSignature
+  signature: UserSignature
   favoritePancsId: string[]
   savedRecipesId: string[]
 }

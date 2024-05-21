@@ -37,7 +37,7 @@ export default function NewRecipesPage() {
     createRecipe.mutate(recipeData, {
       onSuccess: (recipe) => {
         console.log("Receita criada com sucesso!", recipe.id)
-        updateRecipeImage.mutate(
+        updateRecipeImage.mutateAsync(
           { id: recipe.id, image },
           {
             onSuccess: () => router.push("/(tabs)/recipes"),
