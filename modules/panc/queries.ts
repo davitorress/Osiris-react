@@ -12,7 +12,7 @@ export const useGetPanc = (id: string) => {
 
   const query = async () => {
     const response = await request({
-      url: "/pancs/batata",
+      url: `/pancs/${id}`,
       token,
     })
 
