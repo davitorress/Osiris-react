@@ -1,6 +1,6 @@
 import Constants from "expo-constants"
 
-import { HttpMethods, RequestProps } from "./types"
+import { AppError, HttpMethods, RequestProps } from "./types"
 
 export const request = async ({
   url,
@@ -8,6 +8,7 @@ export const request = async ({
   token,
   params,
   stringifyBody = true,
+  formDataBody = false,
   headers = new Headers(),
   method = HttpMethods.GET,
 }: RequestProps) => {
@@ -23,7 +24,8 @@ export const request = async ({
     })
   }
 
-  headers.append("Content-Type", "application/json")
+  headers.append("Accept", "application/json")
+  headers.append("Content-Type", formDataBody ? "multipart/form-data" : "application/json")
 
   if (token) {
     headers.append("Authorization", token)
@@ -32,7 +34,7 @@ export const request = async ({
   const options: RequestInit = {
     method,
     headers,
-    body: body && stringifyBody ? JSON.stringify(body) : body,
+    body: body && stringifyBody && !formDataBody ? JSON.stringify(body) : body,
   }
 
   return await fetch(requestUrl.toString(), options)
@@ -49,6 +51,8 @@ export const request = async ({
       return json
     })
     .catch((error) => {
-      console.error(error)
+      throw {
+        error: { key: "INTERNAL_SERVER_ERROR", msg: error.message },
+      } as AppError
     })
 }

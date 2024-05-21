@@ -15,6 +15,7 @@ export interface RequestProps {
   params?: Record<string, any>
   body?: any
   stringifyBody?: boolean
+  formDataBody?: boolean
   token?: string
 }
 
