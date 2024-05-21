@@ -154,8 +154,8 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
                     <SelectInput
                       save="value"
                       setSelected={onChange}
-                      data={pancs.map((panc) => ({ key: panc.id, value: panc.name }))}
-                      defaultOption={{ key: pancs.at(0)!.id, value: pancs.at(0)!.name }}
+                      data={pancs.map((panc) => ({ key: panc.name, value: panc.name }))}
+                      defaultOption={{ key: pancs.at(0)!.name, value: pancs.at(0)!.name }}
                     />
                   )}
                   {...register(`pancs.${index}`)}

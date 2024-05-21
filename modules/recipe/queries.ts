@@ -1,10 +1,12 @@
+import { ImagePickerAsset } from "expo-image-picker"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
 import useRecipeStore from "@/storage/recipe"
 
+import { CreateRecipe } from "./types"
 import { request } from "../shared/request"
-import { normalizeRecipe, normalizeRecipes } from "./normalizers"
+import { normalizeRecipe, normalizeRecipes, normalizeUpdateRecipeImage } from "./normalizers"
 import { updateUserRecipes, useCurrentUser } from "../user/queries"
 
 export const useGetRecipe = (id: string) => {
@@ -106,6 +108,77 @@ export const useRemoveRecipeFromSaved = () => {
         setSaved(data.savedRecipesId)
         void queryClient.invalidateQueries({ queryKey: ["currentUser"] })
       }
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  })
+}
+
+export const useCreateRecipe = () => {
+  const { token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async (data: CreateRecipe) => {
+    const response = await request({
+      url: "/receitas",
+      token,
+      method: "POST",
+      body: {
+        nome: data.name,
+        pancs: data.pancs,
+        usuarioId: data.author,
+        preparo: data.preparation,
+        descricao: data.description,
+        ingredientes: data.ingredients,
+      },
+    })
+
+    return normalizeRecipe(response)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["recipes"] })
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  })
+}
+
+export const useUpdateRecipeImage = () => {
+  const { token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async ({ id, image }: { id: string; image: ImagePickerAsset }) => {
+    const fetchImage = await fetch(image.uri)
+    const blob = await fetchImage.blob()
+    const file = new File([blob], image.fileName as string, {
+      type: image.mimeType,
+      lastModified: new Date().getTime(),
+    })
+
+    const formData = new FormData()
+    formData.append("imagem", file)
+
+    const response = await request({
+      url: `/receitas/${id}/imagem`,
+      token,
+      method: "PATCH",
+      body: formData,
+      formDataBody: true,
+      stringifyBody: false,
+    })
+
+    return normalizeUpdateRecipeImage(response)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["recipes"] })
     },
     onError: (error) => {
       console.error(error)

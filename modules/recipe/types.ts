@@ -1,3 +1,12 @@
+export interface CreateRecipe {
+  name: string
+  author: string
+  pancs: string[]
+  description: string
+  ingredients: string[]
+  preparation: string[]
+}
+
 export interface Recipe {
   id: string
   nome: string

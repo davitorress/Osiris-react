@@ -55,3 +55,23 @@ export const normalizeRecipes = (response: Recipe[]): NormalizedRecipe[] => {
 
   return response.map(normalizeRecipe)
 }
+
+export const normalizeUpdateRecipeImage = (response: any) => {
+  const error = normalizeError(response)
+
+  console.log("error image", error, response)
+
+  if (error.hasError) {
+    switch (error.status) {
+      case 401:
+        throw {
+          error: { key: "UNAUTHORIZED", msg: error.message },
+        } as AppError
+
+      default:
+        throw {
+          error: { key: "UNIDENTIFIED", msg: error.message },
+        } as AppError
+    }
+  }
+}

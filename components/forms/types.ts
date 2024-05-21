@@ -79,11 +79,8 @@ export const recipeSchema = z
 export type RecipeData = z.infer<typeof recipeSchema>
 
 export const editUserSchema = z.object({
-  name: z
-    .string()
-    .transform((name) => name.trim())
-    .optional(),
-  email: z.string().email("Insira um email válido!").optional(),
+  name: z.string().transform((name) => name.trim()),
+  email: z.string().email("Insira um email válido!"),
   newPassword: z
     .string()
     .min(3, "A senha deve ter no mínimo 3 caracteres!")

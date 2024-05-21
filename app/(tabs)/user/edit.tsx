@@ -6,12 +6,38 @@ import IonIcon from "@/components/basic/IonIcon"
 import EditUserForm from "@/components/forms/EditUserForm"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
+import { useCurrentUser, useUpdateUser, useUpdateUserImage } from "@/modules/user/queries"
+import { EditUserData } from "@/components/forms/types"
+import { ImagePickerAsset } from "expo-image-picker"
+import { useState } from "react"
+import ChangeImageModal from "@/components/basic/ChangeImageModal"
 
 export default function EditUserScreen() {
   const router = useRouter()
+  const { data: user } = useCurrentUser()
 
-  const image =
-    "http://res.cloudinary.com/dvxkj7fwq/image/upload/v1699569417/34f93c4d-fc34-4a10-b908-82d67d61d358.png"
+  const updateUser = useUpdateUser()
+  const updateUserImage = useUpdateUserImage()
+
+  const [editImage, setEditImage] = useState(false)
+  const [image, setImage] = useState<ImagePickerAsset | null>(null)
+
+  const handleUpdateUser = (data: EditUserData) => {
+    if (!user?.id) return
+
+    updateUser.mutate(
+      { id: user.id, data },
+      {
+        onSuccess: () => {
+          if (image) updateUserImage.mutate({ id: user.id, image })
+        },
+      }
+    )
+  }
+
+  if (!user) {
+    return null
+  }
 
   return (
     <SafeAreaView className="m-o flex-1">
@@ -27,10 +53,10 @@ export default function EditUserScreen() {
 
           <View className="relative self-center w-fit">
             <View className="items-center justify-center w-40 h-40 rounded-full bg-gray-light overflow-hidden">
-              {image ? (
+              {image || user.image ? (
                 <ImageWithPlaceholder
                   alt="nome"
-                  source={image}
+                  source={image ? { uri: image.uri } : user.image}
                   className="w-40 h-40 rounded-full"
                 />
               ) : (
@@ -39,15 +65,23 @@ export default function EditUserScreen() {
             </View>
 
             <View className="absolute bottom-0 right-0">
-              <ButtonThemed shape="circle" onClick={undefined}>
+              <ButtonThemed shape="circle" onClick={() => setEditImage(true)}>
                 <IonIcon name="pencil-outline" color="white" size="veryHuge" />
               </ButtonThemed>
             </View>
           </View>
 
           <View className="w-full mt-8">
-            <EditUserForm onSubmit={() => {}} />
+            <EditUserForm userData={user} onSubmit={handleUpdateUser} />
           </View>
+
+          <ChangeImageModal
+            image={image?.uri}
+            visible={editImage}
+            iconImageName="person-outline"
+            onClose={() => setEditImage(false)}
+            onConfirm={(image) => setImage(image)}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

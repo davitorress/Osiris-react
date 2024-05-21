@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { ImagePickerAsset } from "expo-image-picker"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
 import usePancStore from "@/storage/panc"
@@ -7,7 +8,13 @@ import useRecipeStore from "@/storage/recipe"
 
 import { request } from "../shared/request"
 import { LoginProps, RegisterProps } from "./types"
-import { normalizeLogin, normalizeRegister, normalizeUser } from "./normalizers"
+import { EditUserData } from "@/components/forms/types"
+import {
+  normalizeLogin,
+  normalizeRegister,
+  normalizeUpdateUserImage,
+  normalizeUser,
+} from "./normalizers"
 
 // TODO: error handling
 const login = async ({ email, password }: LoginProps) => {
@@ -92,6 +99,71 @@ export const useCurrentUser = () => {
     queryKey: ["currentUser", id],
     queryFn: query,
     enabled: !!id && !!token,
+  })
+}
+
+export const useUpdateUser = () => {
+  const { token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async ({ id, data }: { id: string; data: EditUserData }) => {
+    const response = await request({
+      url: `/usuarios/${id}`,
+      token,
+      method: "PATCH",
+      body: {
+        nome: data.name,
+        email: data.email,
+        senha: data.newPassword,
+      },
+    })
+
+    return normalizeUser(response)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+    },
+  })
+}
+
+export const useUpdateUserImage = () => {
+  const { token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async ({ id, image }: { id: string; image: ImagePickerAsset }) => {
+    const fetchImage = await fetch(image.uri)
+    const blob = await fetchImage.blob()
+    const file = new File([blob], image.fileName as string, {
+      type: image.mimeType,
+      lastModified: new Date().getTime(),
+    })
+
+    const formData = new FormData()
+    formData.append("imagem", file)
+
+    const response = await request({
+      url: `/usuarios/${id}/imagem`,
+      token,
+      method: "PATCH",
+      body: formData,
+      stringifyBody: false,
+      formDataBody: true,
+    })
+
+    return normalizeUpdateUserImage(response)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+    },
+    onError: (error) => {
+      console.error(error)
+    },
   })
 }
 

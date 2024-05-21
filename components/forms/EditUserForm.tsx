@@ -3,6 +3,7 @@ import { useRouter } from "expo-router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
+import { NormalizedUser } from "@/modules/user/types"
 import { EditUserData, editUserSchema } from "./types"
 
 import Sizes from "@/constants/Sizes"
@@ -12,10 +13,11 @@ import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
 interface EditUserFormProps {
+  userData: NormalizedUser
   onSubmit: (data: EditUserData) => void
 }
 
-export default function EditUserForm({ onSubmit }: EditUserFormProps) {
+export default function EditUserForm({ userData, onSubmit }: EditUserFormProps) {
   const router = useRouter()
 
   const {
@@ -25,6 +27,10 @@ export default function EditUserForm({ onSubmit }: EditUserFormProps) {
     formState: { errors },
   } = useForm<EditUserData>({
     resolver: zodResolver(editUserSchema),
+    defaultValues: {
+      name: userData.name,
+      email: userData.email,
+    },
   })
 
   return (
@@ -37,8 +43,8 @@ export default function EditUserForm({ onSubmit }: EditUserFormProps) {
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              value={value}
               onBlur={onBlur}
-              value={value ?? ""}
               onChange={onChange}
               font="nunitoSemiBold"
               placeholder="Digite o seu nome completo"
@@ -57,8 +63,8 @@ export default function EditUserForm({ onSubmit }: EditUserFormProps) {
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              value={value}
               onBlur={onBlur}
-              value={value ?? ""}
               onChange={onChange}
               font="nunitoSemiBold"
               placeholder="Digite o seu email"

@@ -68,3 +68,23 @@ export const normalizeUser = (response: User): NormalizedUser => {
     savedRecipesId: response.receitasSalvasId,
   }
 }
+
+export const normalizeUpdateUserImage = (response: string) => {
+  const error = normalizeError(response)
+
+  console.log("error image", error, response)
+
+  if (error.hasError) {
+    switch (error.status) {
+      case 401:
+        throw {
+          error: { key: "UNAUTHORIZED", msg: error.message },
+        } as AppError
+
+      default:
+        throw {
+          error: { key: "UNIDENTIFIED", msg: error.message },
+        } as AppError
+    }
+  }
+}
