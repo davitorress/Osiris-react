@@ -4,10 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import useUserStore from "@/storage/user"
 import useRecipeStore from "@/storage/recipe"
 
-import { CreateRecipe, EditRecipe } from "./types"
 import { request } from "../shared/request"
-import { normalizeRecipe, normalizeRecipes, normalizeUpdateRecipeImage } from "./normalizers"
+import { CreateRecipe, EditRecipe } from "./types"
 import { updateUserRecipes, useCurrentUser } from "../user/queries"
+import { normalizeRecipe, normalizeRecipes, normalizeUpdateRecipeImage } from "./normalizers"
 
 export const useGetRecipe = (id: string) => {
   const { token } = useUserStore()
@@ -182,19 +182,18 @@ export const useUpdateRecipeImage = () => {
   const queryClient = useQueryClient()
 
   const mutation = async ({ id, image }: { id: string; image: ImagePickerAsset }) => {
-    const fetchImage = await fetch(image.uri)
-    const blob = await fetchImage.blob()
-    const file = new File([blob], image.fileName as string, {
+    const formData = new FormData()
+    formData.append("imagem", {
+      uri: image.uri,
+      name: image.fileName,
       type: image.mimeType,
       lastModified: new Date().getTime(),
-    })
-
-    const formData = new FormData()
-    formData.append("imagem", file)
+    } as any)
 
     const response = await request({
       url: `/receitas/${id}/imagem`,
       token,
+      xml: true,
       method: "PATCH",
       body: formData,
       formDataBody: true,
