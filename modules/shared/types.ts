@@ -17,6 +17,7 @@ export interface RequestProps {
   stringifyBody?: boolean
   formDataBody?: boolean
   token?: string
+  xml?: boolean
 }
 
 export interface RequestError {

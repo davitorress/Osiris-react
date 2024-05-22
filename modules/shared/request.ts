@@ -7,6 +7,7 @@ export const request = async ({
   body,
   token,
   params,
+  xml = false,
   stringifyBody = true,
   formDataBody = false,
   headers = new Headers(),
@@ -31,10 +32,65 @@ export const request = async ({
     headers.append("Authorization", token)
   }
 
+  const requestBody = body && stringifyBody && !formDataBody ? JSON.stringify(body) : body
+
+  if (xml) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open(method, requestUrl.toString(), true)
+
+      headers.forEach((value: string, key: string) => {
+        xhr.setRequestHeader(key, value)
+      })
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          const response = {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            responseText: xhr.responseText,
+            json: () => Promise.resolve(JSON.parse(xhr.responseText)),
+          }
+
+          if (xhr.status >= 200 && xhr.status < 300) {
+            response
+              .json()
+              .then((json) => resolve(json))
+              .catch((error) =>
+                reject({
+                  key: "INTERNAL_SERVER_ERROR",
+                  msg: error.message,
+                } as AppError)
+              )
+          } else {
+            response
+              .json()
+              .then((json) => resolve({ ...json, hasError: true }))
+              .catch((error) =>
+                reject({
+                  key: "INTERNAL_SERVER_ERROR",
+                  msg: error.message,
+                } as AppError)
+              )
+          }
+        }
+      }
+
+      xhr.onerror = () => {
+        reject({
+          key: "INTERNAL_SERVER_ERROR",
+          msg: "XML HTTP Request: Network error",
+        } as AppError)
+      }
+
+      xhr.send(requestBody)
+    })
+  }
+
   const options: RequestInit = {
     method,
     headers,
-    body: body && stringifyBody && !formDataBody ? JSON.stringify(body) : body,
+    body: requestBody,
   }
 
   return await fetch(requestUrl.toString(), options)
