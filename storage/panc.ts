@@ -8,6 +8,7 @@ interface PancStoreProps {
 }
 
 interface PancActions {
+  clearPancs: () => void
   setPancs: (pancs: NormalizedPanc[]) => void
   setFavorites: (ids: string[]) => void
 
@@ -26,6 +27,10 @@ const initialState: PancStoreProps = {
 const usePancStore = create<PancStore>((set, get) => ({
   ...initialState,
   actions: {
+    clearPancs: () => {
+      set(initialState)
+    },
+
     setPancs: (pancs) => {
       if (pancs === get().pancs) return
       set({ pancs })

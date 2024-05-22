@@ -1,7 +1,8 @@
 import { View } from "react-native"
-import { useRouter } from "expo-router"
+import { useCallback } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
+import { useFocusEffect, useRouter } from "expo-router"
 
 import { NormalizedUser } from "@/modules/user/types"
 import { EditUserData, editUserSchema } from "./types"
@@ -13,14 +14,15 @@ import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
 interface EditUserFormProps {
-  userData: NormalizedUser
+  data: NormalizedUser
   onSubmit: (data: EditUserData) => void
 }
 
-export default function EditUserForm({ userData, onSubmit }: EditUserFormProps) {
+export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
   const router = useRouter()
 
   const {
+    reset,
     control,
     register,
     handleSubmit,
@@ -28,10 +30,27 @@ export default function EditUserForm({ userData, onSubmit }: EditUserFormProps) 
   } = useForm<EditUserData>({
     resolver: zodResolver(editUserSchema),
     defaultValues: {
-      name: userData.name,
-      email: userData.email,
+      name: data.name,
+      email: data.email,
     },
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      reset({
+        name: data.name,
+        email: data.email,
+        newPassword: "",
+      })
+
+      return () =>
+        reset({
+          name: data.name,
+          email: data.email,
+          newPassword: "",
+        })
+    }, [data, reset])
+  )
 
   return (
     <View className="w-full" style={{ gap: Sizes.veryHuge }}>

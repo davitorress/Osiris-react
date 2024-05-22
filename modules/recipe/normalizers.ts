@@ -82,3 +82,25 @@ export const normalizeUpdateRecipeImage = (response: any) => {
     }
   }
 }
+
+export const normalizeDeleteRecipe = (response: any, id: string): string => {
+  const error = normalizeError(response)
+
+  if (error.hasError) {
+    switch (error.status) {
+      case 401:
+        throw {
+          key: "UNAUTHORIZED",
+          msg: error.message,
+        } as AppError
+
+      default:
+        throw {
+          key: "UNIDENTIFIED",
+          msg: error.message,
+        } as AppError
+    }
+  }
+
+  return id
+}

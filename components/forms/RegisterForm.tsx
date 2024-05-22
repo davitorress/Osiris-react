@@ -1,8 +1,8 @@
-import React from "react"
-import { useRouter } from "expo-router"
+import { useCallback } from "react"
 import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
+import { useFocusEffect, useRouter } from "expo-router"
 
 import { RegisterData, registerSchema } from "./types"
 
@@ -11,10 +11,15 @@ import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
-export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterData) => void }) {
+interface RegisterFormProps {
+  onSubmit: (data: RegisterData) => void
+}
+
+export default function RegisterForm({ onSubmit }: RegisterFormProps) {
   const router = useRouter()
 
   const {
+    reset,
     control,
     register,
     handleSubmit,
@@ -22,6 +27,25 @@ export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterDa
   } = useForm<RegisterData>({
     resolver: zodResolver(registerSchema),
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      reset({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      })
+
+      return () =>
+        reset({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        })
+    }, [reset])
+  )
 
   return (
     <View className="w-full">
@@ -125,7 +149,7 @@ export default function RegisterForm({ onSubmit }: { onSubmit: (data: RegisterDa
       </View>
 
       <View className="w-full mt-3">
-        <Pressable className="flex-row" onPress={() => router.navigate("/login")}>
+        <Pressable className="flex-row" onPress={() => router.push("/login")}>
           <TextThemed color="primary" size="body2" font="nunitoRegular">
             Já possui uma conta?
           </TextThemed>

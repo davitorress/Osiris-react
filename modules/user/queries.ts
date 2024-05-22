@@ -18,14 +18,28 @@ import {
   normalizeUser,
 } from "./normalizers"
 
-const login = async ({ email, password }: LoginProps) => {
-  const response = await request({
-    url: "/login",
-    method: "POST",
-    body: { email, senha: password },
-  })
+export const useLogout = () => {
+  const router = useRouter()
+  const {
+    actions: { clearUser },
+  } = useUserStore()
+  const {
+    actions: { clearPancs },
+  } = usePancStore()
+  const {
+    actions: { clearRecipes },
+  } = useRecipeStore()
 
-  return normalizeLogin(response)
+  const mutation = async () => {
+    clearUser()
+    clearPancs()
+    clearRecipes()
+    router.push("/")
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+  })
 }
 
 export const useLogin = () => {
@@ -34,13 +48,22 @@ export const useLogin = () => {
     actions: { setToken, setId },
   } = useUserStore()
 
+  const mutation = async ({ email, password }: LoginProps) => {
+    const response = await request({
+      url: "/login",
+      method: "POST",
+      body: { email, senha: password },
+    })
+
+    return normalizeLogin(response)
+  }
+
   return useMutation({
-    mutationFn: login,
+    mutationFn: mutation,
     onSuccess: (data) => {
       setToken(data.token)
       setId(data.idUsuario)
-      router.navigate("/(tabs)/")
-      // TODO: save token in storage (localStorage/cookie and context)
+      router.push("/(tabs)/")
     },
     onError: (error: AppError) => {
       Toast.show({
@@ -52,23 +75,23 @@ export const useLogin = () => {
   })
 }
 
-const register = async ({ name, email, password }: RegisterProps) => {
-  const response = await request({
-    url: "/usuarios",
-    method: "POST",
-    body: { nome: name, email, senha: password },
-  })
-
-  return normalizeRegister(response)
-}
-
 export const useRegister = () => {
   const router = useRouter()
 
+  const mutation = async ({ name, email, password }: RegisterProps) => {
+    const response = await request({
+      url: "/usuarios",
+      method: "POST",
+      body: { nome: name, email, senha: password },
+    })
+
+    return normalizeRegister(response)
+  }
+
   return useMutation({
-    mutationFn: register,
+    mutationFn: mutation,
     onSuccess: () => {
-      router.navigate("/login")
+      router.push("/login")
     },
     onError: (error: AppError) => {
       Toast.show({
@@ -141,19 +164,18 @@ export const useUpdateUserImage = () => {
   const queryClient = useQueryClient()
 
   const mutation = async ({ id, image }: { id: string; image: ImagePickerAsset }) => {
-    const fetchImage = await fetch(image.uri)
-    const blob = await fetchImage.blob()
-    const file = new File([blob], image.fileName as string, {
+    const formData = new FormData()
+    formData.append("imagem", {
+      uri: image.uri,
+      name: image.fileName,
       type: image.mimeType,
       lastModified: new Date().getTime(),
-    })
-
-    const formData = new FormData()
-    formData.append("imagem", file)
+    } as any)
 
     const response = await request({
       url: `/usuarios/${id}/imagem`,
       token,
+      xml: true,
       method: "PATCH",
       body: formData,
       stringifyBody: false,

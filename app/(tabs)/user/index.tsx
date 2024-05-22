@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
-import { useCurrentUser } from "@/modules/user/queries"
+import { useCurrentUser, useLogout } from "@/modules/user/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
@@ -18,6 +18,7 @@ export default function UserScreen() {
   const router = useRouter()
   const { data: user } = useCurrentUser()
 
+  const logout = useLogout()
   const { favorites } = usePancStore()
   const { recipes, saved } = useRecipeStore()
   const myRecipes = recipes.filter((recipe) => recipe.author === user?.id)
@@ -27,8 +28,8 @@ export default function UserScreen() {
   }, [router])
 
   const handleLogout = useCallback(() => {
-    router.push("/")
-  }, [router])
+    logout.mutate()
+  }, [logout])
 
   return (
     <SafeAreaView className="m-0 flex-1">

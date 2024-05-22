@@ -1,16 +1,17 @@
-import { useRouter } from "expo-router"
+import { useCallback, useState } from "react"
 import { ScrollView, View } from "react-native"
+import { ImagePickerAsset } from "expo-image-picker"
+import { useFocusEffect, useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
+
+import { EditUserData } from "@/components/forms/types"
+import { useCurrentUser, useUpdateUser, useUpdateUserImage } from "@/modules/user/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
 import EditUserForm from "@/components/forms/EditUserForm"
 import ButtonThemed from "@/components/themed/ButtonThemed"
-import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
-import { useCurrentUser, useUpdateUser, useUpdateUserImage } from "@/modules/user/queries"
-import { EditUserData } from "@/components/forms/types"
-import { ImagePickerAsset } from "expo-image-picker"
-import { useState } from "react"
 import ChangeImageModal from "@/components/basic/ChangeImageModal"
+import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function EditUserScreen() {
   const router = useRouter()
@@ -34,6 +35,18 @@ export default function EditUserScreen() {
       }
     )
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      setImage(null)
+      setEditImage(false)
+
+      return () => {
+        setImage(null)
+        setEditImage(false)
+      }
+    }, [setImage, setEditImage])
+  )
 
   if (!user) {
     return null
@@ -72,7 +85,7 @@ export default function EditUserScreen() {
           </View>
 
           <View className="w-full mt-8">
-            <EditUserForm userData={user} onSubmit={handleUpdateUser} />
+            <EditUserForm data={user} onSubmit={handleUpdateUser} />
           </View>
 
           <ChangeImageModal

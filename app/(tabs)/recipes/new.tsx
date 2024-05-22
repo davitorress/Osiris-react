@@ -1,12 +1,12 @@
-import { useState } from "react"
 import { useRouter } from "expo-router"
+import { useCallback, useState } from "react"
 import { ScrollView, View } from "react-native"
 import { ImagePickerAsset } from "expo-image-picker"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import useUserStore from "@/storage/user"
 import { RecipeData } from "@/components/forms/types"
-import { useCreateRecipe, useUpdateRecipeImage } from "@/modules/recipe/queries"
+import { useCreateRecipe, useDeleteRecipe, useUpdateRecipeImage } from "@/modules/recipe/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
 import RecipeForm from "@/components/forms/RecipeForm"
@@ -16,6 +16,7 @@ import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function NewRecipesPage() {
   const { id } = useUserStore()
+  const deleteRecipe = useDeleteRecipe()
   const createRecipe = useCreateRecipe()
   const updateRecipeImage = useUpdateRecipeImage()
 
@@ -41,11 +42,18 @@ export default function NewRecipesPage() {
           { id: recipe.id, image },
           {
             onSuccess: () => router.push("/(tabs)/recipes"),
+            onError: () => {
+              deleteRecipe.mutate(id)
+            },
           }
         )
       },
     })
   }
+
+  const handleCancel = useCallback(() => {
+    router.push("/(tabs)/recipes")
+  }, [])
 
   return (
     <SafeAreaView className="m-0 flex-1">
@@ -53,11 +61,7 @@ export default function NewRecipesPage() {
         <View className="p-6">
           <View className="w-full">
             <View className="w-fit flex-row absolute top-0 left-0">
-              <ButtonThemed
-                type="icon"
-                shape="circle"
-                onClick={() => router.push("/(tabs)/recipes")}
-              >
+              <ButtonThemed type="icon" shape="circle" onClick={() => router.back()}>
                 <IonIcon name="return-down-back" size="huge" color="white" />
               </ButtonThemed>
             </View>
@@ -84,7 +88,7 @@ export default function NewRecipesPage() {
           </View>
 
           <View className="w-full mt-8">
-            <RecipeForm onSubmit={handleCreateRecipe} />
+            <RecipeForm onSubmit={handleCreateRecipe} onCancel={handleCancel} />
           </View>
 
           <ChangeImageModal

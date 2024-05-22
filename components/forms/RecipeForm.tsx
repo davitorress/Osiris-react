@@ -1,6 +1,6 @@
 import { View } from "react-native"
-import { useRouter } from "expo-router"
-import { useLayoutEffect } from "react"
+import { useFocusEffect } from "expo-router"
+import { useCallback, useLayoutEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 
@@ -17,14 +17,15 @@ import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
 interface RecipeFormProps {
   data?: RecipeData
+  onCancel: () => void
   onSubmit: (data: RecipeData) => void
 }
 
-export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
-  const router = useRouter()
+export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps) {
   const { pancs } = usePancStore()
 
   const {
+    reset,
     control,
     register,
     getValues,
@@ -91,6 +92,32 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
     if (ingredientsFields.length === 0) addNewIngredient()
     if (preparationFields.length === 0) addNewPreparation()
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!data) {
+        reset({
+          name: "",
+          description: "",
+          ingredients: [""],
+          preparation: [""],
+          pancs: [pancs.at(0)!.name],
+        })
+      }
+
+      return () => {
+        if (!data) {
+          reset({
+            name: "",
+            description: "",
+            ingredients: [""],
+            preparation: [""],
+            pancs: [pancs.at(0)!.name],
+          })
+        }
+      }
+    }, [data, reset, pancs])
+  )
 
   return (
     <View className="w-full" style={{ gap: Sizes.veryHuge }}>
@@ -272,7 +299,7 @@ export default function RecipeForm({ data, onSubmit }: RecipeFormProps) {
       </View>
 
       <View className="w-full flex-row justify-between">
-        <ButtonThemed color="alert" onClick={() => router.push("/(tabs)/user")} classes="w-[45%]">
+        <ButtonThemed color="alert" onClick={onCancel} classes="w-[45%]">
           <TextThemed color="white" size="h4" font="nunitoBold">
             {data ? "Excluir" : "Cancelar"}
           </TextThemed>

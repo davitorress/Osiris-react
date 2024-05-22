@@ -1,11 +1,16 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { ScrollView, View } from "react-native"
 import { ImagePickerAsset } from "expo-image-picker"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useLocalSearchParams, useRouter } from "expo-router"
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router"
 
 import { RecipeData } from "@/components/forms/types"
-import { useGetRecipe, useUpdateRecipe, useUpdateRecipeImage } from "@/modules/recipe/queries"
+import {
+  useDeleteRecipe,
+  useGetRecipe,
+  useUpdateRecipe,
+  useUpdateRecipeImage,
+} from "@/modules/recipe/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
 import RecipeForm from "@/components/forms/RecipeForm"
@@ -22,6 +27,7 @@ export default function EditRecipeScreen() {
   }
 
   const { data: recipe } = useGetRecipe(id as string)
+  const deleteRecipe = useDeleteRecipe()
   const updateRecipe = useUpdateRecipe()
   const updateRecipeImage = useUpdateRecipeImage()
 
@@ -39,8 +45,6 @@ export default function EditRecipeScreen() {
       author: recipe.author,
     }
 
-    console.log("teste", id, recipe)
-
     updateRecipe.mutate(recipeData, {
       onSuccess: () => {
         if (image) {
@@ -55,6 +59,26 @@ export default function EditRecipeScreen() {
       },
     })
   }
+
+  const handleCancel = useCallback(() => {
+    deleteRecipe.mutate(id as string, {
+      onSuccess: () => {
+        router.push("/(tabs)/recipes/")
+      },
+    })
+  }, [id])
+
+  useFocusEffect(
+    useCallback(() => {
+      setImage(null)
+      setEditImage(false)
+
+      return () => {
+        setImage(null)
+        setEditImage(false)
+      }
+    }, [setImage, setEditImage])
+  )
 
   return (
     <SafeAreaView className="m-0 flex-1">
@@ -89,7 +113,7 @@ export default function EditRecipeScreen() {
           </View>
 
           <View className="w-full mt-8">
-            <RecipeForm data={recipe} onSubmit={handleUpdateRecipe} />
+            <RecipeForm data={recipe} onSubmit={handleUpdateRecipe} onCancel={handleCancel} />
           </View>
 
           <ChangeImageModal

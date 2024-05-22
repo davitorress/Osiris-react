@@ -6,6 +6,7 @@ interface UserStoreProps {
 }
 
 interface UserActions {
+  clearUser: () => void
   setId: (id?: string) => void
   setToken: (token?: string) => void
 }
@@ -22,6 +23,10 @@ const initialState: UserStoreProps = {
 const useUserStore = create<UserStore>((set, get) => ({
   ...initialState,
   actions: {
+    clearUser: () => {
+      set(initialState)
+    },
+
     setId: (id) => {
       if (id === get().id) return
       set({ id })

@@ -98,7 +98,7 @@ export const request = async ({
       return response
     })
     .then(async (response) => {
-      const json = await response.json()
+      const json = response.status === 204 ? {} : await response.json()
 
       if (!response.ok) {
         return { ...json, hasError: true }

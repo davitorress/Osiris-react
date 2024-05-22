@@ -8,6 +8,7 @@ interface RecipeStoreProps {
 }
 
 interface RecipeActions {
+  clearRecipes: () => void
   setRecipes: (recipes: NormalizedRecipe[]) => void
   setSaved: (ids: string[]) => void
 
@@ -26,6 +27,10 @@ const initialState: RecipeStoreProps = {
 const useRecipeStore = create<RecipeStore>((set, get) => ({
   ...initialState,
   actions: {
+    clearRecipes: () => {
+      set(initialState)
+    },
+
     setRecipes: (recipes) => {
       if (recipes === get().recipes) return
       set({ recipes })

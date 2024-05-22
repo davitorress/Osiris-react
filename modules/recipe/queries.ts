@@ -7,7 +7,12 @@ import useRecipeStore from "@/storage/recipe"
 import { request } from "../shared/request"
 import { CreateRecipe, EditRecipe } from "./types"
 import { updateUserRecipes, useCurrentUser } from "../user/queries"
-import { normalizeRecipe, normalizeRecipes, normalizeUpdateRecipeImage } from "./normalizers"
+import {
+  normalizeDeleteRecipe,
+  normalizeRecipe,
+  normalizeRecipes,
+  normalizeUpdateRecipeImage,
+} from "./normalizers"
 
 export const useGetRecipe = (id: string) => {
   const { token } = useUserStore()
@@ -206,6 +211,32 @@ export const useUpdateRecipeImage = () => {
   return useMutation({
     mutationFn: mutation,
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["recipes"] })
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  })
+}
+
+export const useDeleteRecipe = () => {
+  const { token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async (id: string) => {
+    const response = await request({
+      url: `/receitas/${id}`,
+      token,
+      method: "DELETE",
+    })
+
+    return normalizeDeleteRecipe(response, id)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: (id) => {
+      void queryClient.removeQueries({ queryKey: ["recipe", id] })
       void queryClient.invalidateQueries({ queryKey: ["recipes"] })
     },
     onError: (error) => {
