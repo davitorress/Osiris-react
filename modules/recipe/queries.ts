@@ -176,8 +176,9 @@ export const useUpdateRecipe = () => {
 
   return useMutation({
     mutationFn: mutation,
-    onSuccess: () => {
+    onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["recipes"] })
+      void queryClient.invalidateQueries({ queryKey: ["recipe", data.id] })
     },
   })
 }
