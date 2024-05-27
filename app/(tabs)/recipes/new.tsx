@@ -1,7 +1,8 @@
-import { useRouter } from "expo-router"
 import { useCallback, useState } from "react"
+import Toast from "react-native-toast-message"
 import { ScrollView, View } from "react-native"
 import { ImagePickerAsset } from "expo-image-picker"
+import { useFocusEffect, useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import useUserStore from "@/storage/user"
@@ -26,7 +27,11 @@ export default function NewRecipesPage() {
 
   const handleCreateRecipe = (data: RecipeData) => {
     if (!id || !image) {
-      console.error("Defina uma imagem antes de criar uma receita!")
+      Toast.show({
+        type: "error",
+        text1: "Erro ao criar a receita!",
+        text2: "Por favor, preencha todos os campos e adicione uma imagem.",
+      })
       return
     }
 
@@ -37,7 +42,6 @@ export default function NewRecipesPage() {
 
     createRecipe.mutate(recipeData, {
       onSuccess: (recipe) => {
-        console.log("Receita criada com sucesso!", recipe.id)
         updateRecipeImage.mutateAsync(
           { id: recipe.id, image },
           {
@@ -54,6 +58,18 @@ export default function NewRecipesPage() {
   const handleCancel = useCallback(() => {
     router.push("/(tabs)/recipes")
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      setImage(null)
+      setEditImage(false)
+
+      return () => {
+        setImage(null)
+        setEditImage(false)
+      }
+    }, [setImage, setEditImage])
+  )
 
   return (
     <SafeAreaView className="m-0 flex-1">
