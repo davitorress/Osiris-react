@@ -33,19 +33,31 @@ export default function UserSignatureCard({ signature }: UserSignatureProps) {
         </TextThemed>
       </View>
 
-      <View className="flex-row items-center" style={{ gap: Sizes.micro }}>
-        <TextThemed>Por apenas</TextThemed>
-        <TextThemed color="tertiary" font="nunitoBold">
-          R$29,99
-        </TextThemed>
-        <TextThemed>ao mês</TextThemed>
-      </View>
+      {!signature.ativa && (
+        <View className="flex-row items-center" style={{ gap: Sizes.micro }}>
+          <TextThemed>Por apenas</TextThemed>
+          <TextThemed color="tertiary" font="nunitoBold">
+            R$29,99
+          </TextThemed>
+          <TextThemed>ao mês</TextThemed>
+        </View>
+      )}
 
-      <ButtonThemed size="full" onClick={signature.ativa ? undefined : handleActivateSignature}>
-        <TextThemed color="white" font="nunitoSemiBold">
-          {signature.ativa ? "Assinatura ativa" : "Assinar agora"}
-        </TextThemed>
-      </ButtonThemed>
+      {signature.ativa ? (
+        <ButtonThemed size="full" color="grayPrimary">
+          <TextThemed color="primary" font="nunitoSemiBold" classes="mr-2">
+            Assinatura ativa
+          </TextThemed>
+
+          <IonIcon name="checkmark-circle-outline" size="semi" />
+        </ButtonThemed>
+      ) : (
+        <ButtonThemed size="full" onClick={handleActivateSignature}>
+          <TextThemed color="white" font="nunitoSemiBold">
+            Assinar agora
+          </TextThemed>
+        </ButtonThemed>
+      )}
 
       {!signature.ativa && (
         <TextThemed size="caption" numberOfLines={100} classes="italic">
