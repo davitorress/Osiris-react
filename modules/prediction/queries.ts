@@ -1,12 +1,31 @@
 import Toast from "react-native-toast-message"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
 
 import { AddPrediction } from "./types"
 import { AppError } from "../shared/types"
 import { request } from "../shared/request"
-import { normalizeAddPrediction } from "./normalizers"
+import { normalizeAddPrediction, normalizePredictions } from "./normalizers"
+
+export const useGetUserPredictions = () => {
+  const { id, token } = useUserStore()
+
+  const query = async () => {
+    const response = await request({
+      url: `/predicoes/usuario/${id}`,
+      token,
+      method: "GET",
+    })
+
+    return normalizePredictions(response)
+  }
+
+  return useQuery({
+    queryKey: ["predictions", id],
+    queryFn: query,
+  })
+}
 
 export const useAddPrediction = () => {
   const { id, token } = useUserStore()

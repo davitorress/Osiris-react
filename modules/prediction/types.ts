@@ -18,7 +18,14 @@ export interface Prediction {
   status: PredictionStatus
 }
 
-export type NormalizedPredictionStatus = "pending" | "approved" | "rejected"
+export const PredictionStatusEnum = {
+  CONCLUIDA: "Concluída",
+  PROCESSANDO: "Processando",
+  CANCELADA: "Cancelada",
+} as const
+
+export type NormalizedPredictionStatus =
+  (typeof PredictionStatusEnum)[keyof typeof PredictionStatusEnum]
 
 export interface NormalizedPrediction {
   id: string
