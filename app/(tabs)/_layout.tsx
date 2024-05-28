@@ -132,6 +132,15 @@ export default function TabLayout() {
           tabBarShowLabel: false,
         }}
       />
+
+      <Tabs.Screen
+        name="predictions"
+        options={{
+          href: null,
+          tabBarIcon: undefined,
+          tabBarShowLabel: false,
+        }}
+      />
     </Tabs>
   )
 }

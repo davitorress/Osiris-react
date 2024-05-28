@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useRouter } from "expo-router"
-import { ScrollView, View } from "react-native"
+import { Pressable, ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import usePancStore from "@/storage/panc"
@@ -78,6 +78,20 @@ export default function UserScreen() {
               </ButtonThemed>
             </View>
           </View>
+
+          <Pressable onPress={() => router.push("/(tabs)/predictions")}>
+            <View className="w-full mt-8 py-5 px-6 flex-row items-center justify-between rounded-lg bg-gray-light">
+              <View className="flex-row items-center">
+                <IonIcon name="images-outline" color="black" size="large" />
+
+                <TextThemed size="h3" font="nunitoSemiBold" classes="ml-2">
+                  Suas análises
+                </TextThemed>
+              </View>
+
+              <IonIcon name="chevron-forward" color="primary" size="large" />
+            </View>
+          </Pressable>
 
           {user && (
             <View className="w-full mt-8">
