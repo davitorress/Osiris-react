@@ -10,6 +10,8 @@ const text = tv({
       alert: "text-wine",
       black: "text-black",
       white: "text-white",
+      error: "text-red-500",
+      warning: "text-yellow-400",
       primary: "text-green-medium",
       secondary: "text-green-light",
       tertiary: "text-green-dark",
