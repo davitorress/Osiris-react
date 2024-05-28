@@ -221,3 +221,32 @@ export const updateUserRecipes = async (id: string, token: string, recipes: stri
 
   return normalizeUser(response)
 }
+
+export const useActivateSignature = () => {
+  const { id, token } = useUserStore()
+  const queryClient = useQueryClient()
+
+  const mutation = async () => {
+    const response = await request({
+      url: `/usuarios/${id}/assinatura`,
+      method: "PATCH",
+      token,
+    })
+
+    return normalizeUser(response)
+  }
+
+  return useMutation({
+    mutationFn: mutation,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+    },
+    onError: (error: AppError) => {
+      Toast.show({
+        type: "error",
+        text1: "Erro ao ativar assinatura!",
+        text2: error.msg,
+      })
+    },
+  })
+}

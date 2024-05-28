@@ -1,16 +1,24 @@
 import { View } from "react-native"
+import { useCallback } from "react"
 
 import Sizes from "@/constants/Sizes"
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
 import { UserSignature } from "@/modules/user/types"
+import { useActivateSignature } from "@/modules/user/queries"
 
 interface UserSignatureProps {
   signature: UserSignature
 }
 
 export default function UserSignatureCard({ signature }: UserSignatureProps) {
+  const activateSignature = useActivateSignature()
+
+  const handleActivateSignature = useCallback(() => {
+    activateSignature.mutate()
+  }, [activateSignature])
+
   return (
     <View className="py-5 px-6 rounded-lg bg-gray-light" style={{ gap: Sizes.medium }}>
       <TextThemed size="h3" font="nunitoSemiBold">
@@ -33,15 +41,17 @@ export default function UserSignatureCard({ signature }: UserSignatureProps) {
         <TextThemed>ao mês</TextThemed>
       </View>
 
-      <ButtonThemed size="full">
+      <ButtonThemed size="full" onClick={signature.ativa ? undefined : handleActivateSignature}>
         <TextThemed color="white" font="nunitoSemiBold">
           {signature.ativa ? "Assinatura ativa" : "Assinar agora"}
         </TextThemed>
       </ButtonThemed>
 
-      <TextThemed size="caption" numberOfLines={100} classes="italic">
-        Você será redirecionado para uma plataforma externa de pagamentos.
-      </TextThemed>
+      {!signature.ativa && (
+        <TextThemed size="caption" numberOfLines={100} classes="italic">
+          Você será redirecionado para uma plataforma externa de pagamentos.
+        </TextThemed>
+      )}
     </View>
   )
 }
