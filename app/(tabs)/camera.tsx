@@ -1,13 +1,45 @@
-import { useRef } from "react"
 import { Redirect } from "expo-router"
 import Toast from "react-native-toast-message"
-import { TouchableOpacity, View } from "react-native"
+import { useEffect, useRef, useState } from "react"
+import { Modal, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { CameraView, useCameraPermissions } from "expo-camera"
+import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker"
+
+import { useAddPrediction } from "@/modules/prediction/queries"
+
+import IonIcon from "@/components/basic/IonIcon"
+import TextThemed from "@/components/themed/TextThemed"
 
 export default function CameraScreen() {
   const camera = useRef<CameraView>(null)
+  const [facing, setFacing] = useState<"front" | "back">("back")
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+
+  const addPrediction = useAddPrediction()
   const [permission, requestPermission] = useCameraPermissions()
+
+  const handleFacingChange = () => {
+    setFacing(facing === "back" ? "front" : "back")
+  }
+
+  const pickImage = async () => {
+    const result = await launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    })
+
+    if (!result.canceled) {
+      addPrediction.mutate(
+        { image: result.assets[0] },
+        {
+          onSuccess: () => setShowSuccessModal(true),
+        }
+      )
+    }
+  }
 
   const takePicture = async () => {
     if (!camera.current) {
@@ -17,18 +49,32 @@ export default function CameraScreen() {
     const photo = await camera.current.takePictureAsync({
       quality: 0.7,
     })
-    console.log("Foto tirada!", photo)
+
+    if (photo) {
+      addPrediction.mutate(
+        { photo },
+        {
+          onSuccess: () => setShowSuccessModal(true),
+        }
+      )
+    }
   }
 
-  if (!permission) {
-    return null
-  }
+  useEffect(() => {
+    if (showSuccessModal) {
+      setTimeout(() => {
+        setShowSuccessModal(false)
+      }, 5000)
+    }
+  }, [showSuccessModal])
 
-  if (permission?.canAskAgain && !permission?.granted) {
+  if ((permission?.canAskAgain && !permission?.granted) || !permission) {
     requestPermission()
   }
 
-  if (!permission?.granted) {
+  if (permission && !permission.granted) {
+    requestPermission()
+
     Toast.show({
       type: "error",
       text1: "Permissão de câmera negada!",
@@ -42,7 +88,7 @@ export default function CameraScreen() {
     <SafeAreaView className="m-0 flex-1">
       <CameraView
         ref={camera}
-        facing="back"
+        facing={facing}
         autofocus="on"
         mode="picture"
         className="flex-1 relative items-center"
@@ -53,13 +99,56 @@ export default function CameraScreen() {
             backgroundColor: "rgba(255,255,255,0.3)",
           }}
         />
-        <TouchableOpacity
-          onPress={takePicture}
-          className="rounded-full p-0.5 border border-green-medium w-14 h-14 z-20 absolute bottom-24"
-        >
-          <View className="rounded-full bg-white w-full h-full" />
-        </TouchableOpacity>
+
+        <View className="w-full flex-row items-center justify-around z-20 absolute bottom-24">
+          <TouchableOpacity
+            onPress={pickImage}
+            className="items-center justify-center rounded-full bg-white w-14 h-14"
+          >
+            <IonIcon name="image" color="primary" size="veryHuge" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={takePicture}
+            className="rounded-full p-0.5 border-2 border-green-medium w-20 h-20"
+          ></TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleFacingChange}
+            className="items-center justify-center rounded-full bg-white w-14 h-14"
+          >
+            <IonIcon name="camera-reverse" color="primary" size="veryHuge" />
+          </TouchableOpacity>
+        </View>
       </CameraView>
+
+      <Modal
+        visible={showSuccessModal}
+        onDismiss={() => setShowSuccessModal(false)}
+        animationType="fade"
+        presentationStyle="overFullScreen"
+        transparent
+      >
+        <View
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          className="w-full h-full items-center"
+        >
+          <View className="p-6 w-[90%] bg-white h-fit relative top-[30%] rounded">
+            <TextThemed font="ubuntuBold" size="h3" numberOfLines={100}>
+              A sua análise está em processamento!
+            </TextThemed>
+            <TextThemed
+              size="h4"
+              numberOfLines={100}
+              font="ubuntuRegular"
+              classes="mt-3 text-justify"
+            >
+              Você poderá visualizar o resultado na tela de perfil dentro da seção de "Análises
+              realizadas"
+            </TextThemed>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
