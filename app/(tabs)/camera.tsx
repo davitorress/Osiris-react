@@ -111,7 +111,9 @@ export default function CameraScreen() {
           <TouchableOpacity
             onPress={takePicture}
             className="rounded-full p-0.5 border-2 border-green-medium w-20 h-20"
-          ></TouchableOpacity>
+          >
+            <View className="w-full h-full bg-white rounded-full" />
+          </TouchableOpacity>
 
           <TouchableOpacity
             onPress={handleFacingChange}
