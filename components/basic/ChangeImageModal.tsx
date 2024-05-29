@@ -41,7 +41,10 @@ export default function ChangeImageModal({
   return (
     <Modal
       visible={visible}
-      onDismiss={onClose}
+      onDismiss={() => {
+        setImageAsset(null)
+        onClose()
+      }}
       animationType="fade"
       presentationStyle="overFullScreen"
       transparent
@@ -56,8 +59,8 @@ export default function ChangeImageModal({
               {image || imageAsset ? (
                 <ImageWithPlaceholder
                   alt="nome"
-                  source={image ? image : { uri: imageAsset?.uri }}
                   className="w-40 h-40 rounded-full"
+                  source={imageAsset ? { uri: imageAsset.uri } : image}
                 />
               ) : (
                 <IonIcon name={iconImageName} color="primary" size="massive" />
@@ -85,7 +88,14 @@ export default function ChangeImageModal({
               </TextThemed>
             </ButtonThemed>
 
-            <ButtonThemed color="alert" onClick={onClose} classes="w-[45%]">
+            <ButtonThemed
+              color="alert"
+              classes="w-[45%]"
+              onClick={() => {
+                setImageAsset(null)
+                onClose()
+              }}
+            >
               <TextThemed color="white" size="h4" font="nunitoBold">
                 Cancelar
               </TextThemed>
