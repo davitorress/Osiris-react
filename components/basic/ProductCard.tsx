@@ -72,7 +72,7 @@ export default function ProductCard({
             </View>
 
             {description && (
-              <TextThemed size="caption" classes="mt-2 w-8/12" numberOfLines={3}>
+              <TextThemed size="caption" classes="mt-2 w-8/12 text-justify" numberOfLines={3}>
                 {description}
               </TextThemed>
             )}
