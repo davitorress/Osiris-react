@@ -11,10 +11,11 @@ import {
 } from "@/modules/panc/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
+import BulletList from "@/components/lists/BulletList"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ContentSection from "@/components/blocks/ContentSection"
-import BulletList from "@/components/lists/BulletList"
 
 export default function PancPage() {
   const router = useRouter()
@@ -24,9 +25,9 @@ export default function PancPage() {
     router.back()
   }
 
-  const { data: panc } = useGetPanc(id as string)
   const addToFavorites = useAddPancToFavorites()
   const removeFromFavorites = useRemovePancFromFavorites()
+  const { data: panc, isLoading } = useGetPanc(id as string)
 
   const {
     actions: { getIsFavorite },
@@ -38,6 +39,14 @@ export default function PancPage() {
 
   const handleRemoveFromFavorites = () => {
     removeFromFavorites.mutate(id as string)
+  }
+
+  if (!panc && !isLoading) {
+    router.back()
+  }
+
+  if (isLoading || !panc) {
+    return <LoadingScreen />
   }
 
   return (
@@ -62,32 +71,28 @@ export default function PancPage() {
               numberOfLines={100}
               classes="ml-4"
             >
-              {panc?.name}
+              {panc.name}
             </TextThemed>
           </View>
 
           <View className="w-full mt-8 flex-row">
             <View>
-              <Image className="w-32 h-[132px] rounded-md" source={panc?.image} />
+              <Image className="w-32 h-[132px] rounded-md" source={panc.image} />
 
-              {panc?.id && (
-                <TouchableOpacity
-                  className="mt-2 flex-row items-center"
-                  onPress={
-                    getIsFavorite(panc.id) ? handleRemoveFromFavorites : handleAddToFavorites
-                  }
-                >
-                  <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
-                    {getIsFavorite(panc.id) ? "Favorito" : "Favoritar"}
-                  </TextThemed>
+              <TouchableOpacity
+                className="mt-2 flex-row items-center"
+                onPress={getIsFavorite(panc.id) ? handleRemoveFromFavorites : handleAddToFavorites}
+              >
+                <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
+                  {getIsFavorite(panc.id) ? "Favorito" : "Favoritar"}
+                </TextThemed>
 
-                  <IonIcon
-                    name={getIsFavorite(panc.id) ? "heart" : "heart-outline"}
-                    size="large"
-                    color="primary"
-                  />
-                </TouchableOpacity>
-              )}
+                <IonIcon
+                  name={getIsFavorite(panc.id) ? "heart" : "heart-outline"}
+                  size="large"
+                  color="primary"
+                />
+              </TouchableOpacity>
             </View>
 
             <TextThemed
@@ -97,7 +102,7 @@ export default function PancPage() {
               numberOfLines={8}
               classes="ml-4 pr-6 w-[65%] text-justify"
             >
-              {panc?.description}
+              {panc.description}
             </TextThemed>
           </View>
 
@@ -110,18 +115,16 @@ export default function PancPage() {
                 numberOfLines={100}
                 classes="text-justify"
               >
-                {panc?.benefits}
+                {panc.benefits}
               </TextThemed>
             </ContentSection>
           </View>
 
-          {panc?.cultivation && (
-            <View className="w-full mt-8">
-              <ContentSection title="Modo de Cultivo">
-                <BulletList items={panc.cultivation} />
-              </ContentSection>
-            </View>
-          )}
+          <View className="w-full mt-8">
+            <ContentSection title="Modo de Cultivo">
+              <BulletList items={panc.cultivation} />
+            </ContentSection>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

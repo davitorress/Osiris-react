@@ -9,6 +9,7 @@ import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
 import Sizes from "@/constants/Sizes"
 import Colors from "@/constants/Colors"
 import OsirisTheme from "@/config/Theme"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 
 import {
   useFonts as useUbuntuFonts,
@@ -60,7 +61,7 @@ export default function RootLayout() {
   }, [loaded, loadedUbuntu, loadedNunito])
 
   if (!loaded || !loadedUbuntu || !loadedNunito) {
-    return null
+    return <LoadingScreen />
   }
 
   return (

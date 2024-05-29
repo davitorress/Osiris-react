@@ -7,11 +7,16 @@ import { useGetUserPredictions } from "@/modules/prediction/queries"
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import PredictionCard from "@/components/basic/PredictionCard"
 
 export default function PredictionsScreen() {
   const router = useRouter()
-  const { data } = useGetUserPredictions()
+  const { data, isLoading } = useGetUserPredictions()
+
+  if (isLoading) {
+    return <LoadingScreen />
+  }
 
   return (
     <SafeAreaView className="m-0 flex-1">

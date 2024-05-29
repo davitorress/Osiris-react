@@ -1,6 +1,6 @@
-import { useRouter } from "expo-router"
-import { useMemo, useState } from "react"
 import { ScrollView, View } from "react-native"
+import { useCallback, useMemo, useState } from "react"
+import { useFocusEffect, useRouter } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { useListRecipes } from "@/modules/recipe/queries"
@@ -9,12 +9,13 @@ import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import SearchInput from "@/components/basic/SearchInput"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ProductShowcase from "@/components/blocks/ProductShowcase"
 
 export default function RecipesScreen() {
   const router = useRouter()
   const [search, setSearch] = useState("")
-  const { data: recipes } = useListRecipes()
+  const { data: recipes, isLoading } = useListRecipes()
 
   const searchRecipes = useMemo(() => {
     if (!search || !recipes) return []
@@ -23,6 +24,20 @@ export default function RecipesScreen() {
       .filter((recipe) => recipe.name.toLowerCase().includes(search.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
   }, [search, recipes])
+
+  useFocusEffect(
+    useCallback(() => {
+      setSearch("")
+
+      return () => {
+        setSearch("")
+      }
+    }, [setSearch])
+  )
+
+  if (!recipes || isLoading) {
+    return <LoadingScreen />
+  }
 
   return (
     <SafeAreaView className="m-0 flex-1">
@@ -46,7 +61,7 @@ export default function RecipesScreen() {
             </View>
           )}
 
-          {recipes && recipes.length > 0 && (
+          {recipes.length > 0 && (
             <View className="w-full mt-8">
               <ProductShowcase title="Receitas" products={recipes} />
             </View>

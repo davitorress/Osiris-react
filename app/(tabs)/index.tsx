@@ -1,11 +1,13 @@
-import { useMemo, useState } from "react"
+import { useFocusEffect } from "expo-router"
 import { ScrollView, View } from "react-native"
+import { useCallback, useMemo, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { useListPancs } from "@/modules/panc/queries"
 import { useListRecipes } from "@/modules/recipe/queries"
 
 import SearchInput from "@/components/basic/SearchInput"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ProductShowcase from "@/components/blocks/ProductShowcase"
 
 export default function HomeScreen() {
@@ -31,8 +33,18 @@ export default function HomeScreen() {
 
   const isDataReady = isFetchedPancs && isFetchedRecipes && !!pancs && !!recipes
 
+  useFocusEffect(
+    useCallback(() => {
+      setSearch("")
+
+      return () => {
+        setSearch("")
+      }
+    }, [setSearch])
+  )
+
   if (!isDataReady) {
-    return null
+    return <LoadingScreen />
   }
 
   return (

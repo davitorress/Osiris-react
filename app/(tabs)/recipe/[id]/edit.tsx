@@ -15,6 +15,7 @@ import {
 import IonIcon from "@/components/basic/IonIcon"
 import RecipeForm from "@/components/forms/RecipeForm"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ChangeImageModal from "@/components/basic/ChangeImageModal"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
@@ -26,10 +27,10 @@ export default function EditRecipeScreen() {
     router.back()
   }
 
-  const { data: recipe } = useGetRecipe(id as string)
   const deleteRecipe = useDeleteRecipe()
   const updateRecipe = useUpdateRecipe()
   const updateRecipeImage = useUpdateRecipeImage()
+  const { data: recipe, isLoading } = useGetRecipe(id as string)
 
   const [editImage, setEditImage] = useState(false)
   const [image, setImage] = useState<ImagePickerAsset | null>(null)
@@ -80,6 +81,14 @@ export default function EditRecipeScreen() {
     }, [setImage, setEditImage])
   )
 
+  if (!recipe && !isLoading) {
+    router.back()
+  }
+
+  if (!recipe || isLoading) {
+    return <LoadingScreen />
+  }
+
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
@@ -94,10 +103,10 @@ export default function EditRecipeScreen() {
 
           <View className="relative self-center w-fit">
             <View className="items-center justify-center w-40 h-40 rounded-full bg-gray-light overflow-hidden">
-              {image || recipe?.image ? (
+              {image || recipe.image ? (
                 <ImageWithPlaceholder
                   alt="nome"
-                  source={image ? { uri: image.uri } : recipe?.image}
+                  source={image ? { uri: image.uri } : recipe.image}
                   className="w-40 h-40 rounded-full"
                 />
               ) : (
@@ -118,7 +127,7 @@ export default function EditRecipeScreen() {
 
           <ChangeImageModal
             visible={editImage}
-            image={recipe?.image ?? image?.uri}
+            image={image?.uri ?? recipe.image}
             iconImageName="restaurant-outline"
             onClose={() => setEditImage(false)}
             onConfirm={(image) => setImage(image)}

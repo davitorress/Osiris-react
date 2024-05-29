@@ -17,20 +17,21 @@ import BulletList from "@/components/lists/BulletList"
 import NumberList from "@/components/lists/NumberList"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ContentSection from "@/components/blocks/ContentSection"
 
 export default function RecipePage() {
   const router = useRouter()
-  const { data: user } = useCurrentUser()
   const { id } = useLocalSearchParams<{ id: string }>()
+  const { data: user, isLoading: isLoadingUser } = useCurrentUser()
 
   if (!id) {
     router.back()
   }
 
-  const { data: recipe } = useGetRecipe(id as string)
   const addToSaved = useAddRecipeToSaved()
   const removeFromSaved = useRemoveRecipeFromSaved()
+  const { data: recipe, isLoading: isLoadingRecipe } = useGetRecipe(id as string)
 
   const {
     actions: { getIsSaved },
@@ -42,6 +43,14 @@ export default function RecipePage() {
 
   const handleRemoveFromSaved = () => {
     removeFromSaved.mutate(id as string)
+  }
+
+  if (!recipe && !isLoadingRecipe) {
+    router.back()
+  }
+
+  if (isLoadingUser || isLoadingRecipe || !user || !recipe) {
+    return <LoadingScreen />
   }
 
   return (
@@ -66,45 +75,43 @@ export default function RecipePage() {
               numberOfLines={100}
               classes="ml-4"
             >
-              {recipe?.name}
+              {recipe.name}
             </TextThemed>
           </View>
 
           <View className="w-full mt-8 flex-row">
             <View>
-              <Image className="w-32 h-[132px] rounded-md" source={recipe?.image} />
+              <Image className="w-32 h-[132px] rounded-md" source={recipe.image} />
 
-              {recipe?.id && (
-                <View>
-                  {recipe.author === user?.id ? (
-                    <TouchableOpacity
-                      className="mt-2 flex-row items-center"
-                      onPress={() => router.push(`/(tabs)/recipe/${recipe.id}/edit`)}
-                    >
-                      <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
-                        Editar
-                      </TextThemed>
+              <View>
+                {recipe.author === user.id ? (
+                  <TouchableOpacity
+                    className="mt-2 flex-row items-center"
+                    onPress={() => router.push(`/(tabs)/recipe/${recipe.id}/edit`)}
+                  >
+                    <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
+                      Editar
+                    </TextThemed>
 
-                      <IonIcon name="create-outline" size="large" color="primary" />
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      className="mt-2 flex-row items-center"
-                      onPress={getIsSaved(recipe.id) ? handleRemoveFromSaved : handleAddToSaved}
-                    >
-                      <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
-                        {getIsSaved(recipe.id) ? "Salvo" : "Salvar"}
-                      </TextThemed>
+                    <IonIcon name="create-outline" size="large" color="primary" />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    className="mt-2 flex-row items-center"
+                    onPress={getIsSaved(recipe.id) ? handleRemoveFromSaved : handleAddToSaved}
+                  >
+                    <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
+                      {getIsSaved(recipe.id) ? "Salvo" : "Salvar"}
+                    </TextThemed>
 
-                      <IonIcon
-                        name={getIsSaved(recipe.id) ? "bookmark" : "bookmark-outline"}
-                        size="large"
-                        color="primary"
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-              )}
+                    <IonIcon
+                      name={getIsSaved(recipe.id) ? "bookmark" : "bookmark-outline"}
+                      size="large"
+                      color="primary"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
 
             <TextThemed
@@ -114,13 +121,13 @@ export default function RecipePage() {
               numberOfLines={8}
               classes="ml-4 pr-6 w-[65%] text-justify"
             >
-              {recipe?.description}
+              {recipe.description}
             </TextThemed>
           </View>
 
           <View className="w-full mt-8">
             <View className="flex-row flex-wrap" style={{ gap: Sizes.tiny }}>
-              {recipe?.pancs.map((panc, index) => (
+              {recipe.pancs.map((panc, index) => (
                 <View key={index} className="flex-row">
                   <IonIcon name="leaf" size="large" color="primary" />
 
@@ -132,21 +139,17 @@ export default function RecipePage() {
             </View>
           </View>
 
-          {recipe?.ingredients && (
-            <View className="w-full mt-8">
-              <ContentSection title="Ingredientes">
-                <BulletList items={recipe.ingredients} />
-              </ContentSection>
-            </View>
-          )}
+          <View className="w-full mt-8">
+            <ContentSection title="Ingredientes">
+              <BulletList items={recipe.ingredients} />
+            </ContentSection>
+          </View>
 
-          {recipe?.preparation && (
-            <View className="w-full mt-8">
-              <ContentSection title="Modo de Preparo">
-                <NumberList items={recipe.preparation} />
-              </ContentSection>
-            </View>
-          )}
+          <View className="w-full mt-8">
+            <ContentSection title="Modo de Preparo">
+              <NumberList items={recipe.preparation} />
+            </ContentSection>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

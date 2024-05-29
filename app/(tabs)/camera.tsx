@@ -6,18 +6,31 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { CameraView, useCameraPermissions } from "expo-camera"
 import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker"
 
-import { useAddPrediction } from "@/modules/prediction/queries"
+import { useCurrentUser } from "@/modules/user/queries"
+import { useAddPrediction, useGetUserPredictions } from "@/modules/prediction/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 
 export default function CameraScreen() {
   const camera = useRef<CameraView>(null)
+  const [blockAnalysis, setBlockAnalysis] = useState(false)
   const [facing, setFacing] = useState<"front" | "back">("back")
   const [showSuccessModal, setShowSuccessModal] = useState(false)
 
   const addPrediction = useAddPrediction()
   const [permission, requestPermission] = useCameraPermissions()
+  const { data: user, isLoading: isLoadingUser } = useCurrentUser()
+  const { data: predictions, isLoading: isLoadingPredictions } = useGetUserPredictions()
+
+  const handleBlockAnalysis = () => {
+    Toast.show({
+      type: "error",
+      text1: "Limite de análises atingido!",
+      text2: "Ative a sua assinatura para ter análises ilimitadas!",
+    })
+  }
 
   const handleFacingChange = () => {
     setFacing(facing === "back" ? "front" : "back")
@@ -84,6 +97,18 @@ export default function CameraScreen() {
     return <Redirect href="/(tabs)/" />
   }
 
+  useEffect(() => {
+    if (predictions && predictions.length >= 3) {
+      setBlockAnalysis(true)
+    } else {
+      setBlockAnalysis(false)
+    }
+  }, [predictions])
+
+  if (isLoadingUser || isLoadingPredictions || !user || !predictions) {
+    return <LoadingScreen />
+  }
+
   return (
     <SafeAreaView className="m-0 flex-1">
       <CameraView
@@ -100,16 +125,40 @@ export default function CameraScreen() {
           }}
         />
 
+        <View className="w-[90%] rounded-lg z-20 absolute top-8 bg-white p-2">
+          {user.signature.ativa ? (
+            <View className="flex-row items-center justify-center">
+              <IonIcon name="star" color="primary" size="huge" />
+
+              <TextThemed color="primary" font="ubuntuBold" numberOfLines={100} classes="ml-2">
+                Você possui análises ilimitadas!
+              </TextThemed>
+            </View>
+          ) : (
+            <View className="flex-row items-center justify-center">
+              {predictions.length < 3 ? (
+                <TextThemed color="tertiary" font="ubuntuBold" numberOfLines={100}>
+                  Análises disponíveis: {3 - predictions.length}
+                </TextThemed>
+              ) : (
+                <TextThemed color="error" font="ubuntuBold" numberOfLines={100}>
+                  Você atingiu o limite de análises!
+                </TextThemed>
+              )}
+            </View>
+          )}
+        </View>
+
         <View className="w-full flex-row items-center justify-around z-20 absolute bottom-24">
           <TouchableOpacity
-            onPress={pickImage}
+            onPress={blockAnalysis ? handleBlockAnalysis : pickImage}
             className="items-center justify-center rounded-full bg-white w-14 h-14"
           >
             <IonIcon name="image" color="primary" size="veryHuge" />
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={takePicture}
+            onPress={blockAnalysis ? handleBlockAnalysis : takePicture}
             className="rounded-full p-0.5 border-2 border-green-medium w-20 h-20"
           >
             <View className="w-full h-full bg-white rounded-full" />
@@ -145,8 +194,7 @@ export default function CameraScreen() {
               font="ubuntuRegular"
               classes="mt-3 text-justify"
             >
-              Você poderá visualizar o resultado na tela de perfil dentro da seção de "Análises
-              realizadas"
+              Você poderá visualizar o resultado na tela de perfil dentro da seção "Suas análises"
             </TextThemed>
           </View>
         </View>

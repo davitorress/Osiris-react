@@ -20,6 +20,7 @@ import {
 
 export const useLogout = () => {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const {
     actions: { clearUser },
   } = useUserStore()
@@ -34,6 +35,7 @@ export const useLogout = () => {
     clearUser()
     clearPancs()
     clearRecipes()
+    queryClient.clear()
     router.push("/")
   }
 

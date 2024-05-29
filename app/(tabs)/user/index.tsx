@@ -10,13 +10,14 @@ import { useCurrentUser, useLogout } from "@/modules/user/queries"
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ProductShowcase from "@/components/blocks/ProductShowcase"
 import UserSignatureCard from "@/components/basic/UserSignatureCard"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function UserScreen() {
   const router = useRouter()
-  const { data: user } = useCurrentUser()
+  const { data: user, isLoading } = useCurrentUser()
 
   const logout = useLogout()
   const { favorites } = usePancStore()
@@ -31,13 +32,17 @@ export default function UserScreen() {
     logout.mutate()
   }, [logout])
 
+  if (!user || isLoading) {
+    return <LoadingScreen />
+  }
+
   return (
     <SafeAreaView className="m-0 flex-1">
       <ScrollView>
         <View className="p-6">
           <View className="relative self-center w-fit">
             <View className="items-center justify-center w-40 h-40 rounded-full bg-gray-light overflow-hidden">
-              {user?.image ? (
+              {user.image ? (
                 <ImageWithPlaceholder
                   alt="nome"
                   source={user.image}
@@ -57,7 +62,7 @@ export default function UserScreen() {
 
           <View className="w-full mt-8">
             <TextThemed size="h1" color="black" font="nunitoBold">
-              {user?.name}
+              {user.name}
             </TextThemed>
 
             <View className="mt-1 flex-row items-center justify-between">
@@ -65,7 +70,7 @@ export default function UserScreen() {
                 <IonIcon name="mail-outline" color="primary" size="large" />
 
                 <TextThemed size="body1" color="black" font="nunitoRegular" classes="ml-2">
-                  {user?.email}
+                  {user.email}
                 </TextThemed>
               </View>
 
@@ -93,11 +98,9 @@ export default function UserScreen() {
             </View>
           </Pressable>
 
-          {user && (
-            <View className="w-full mt-8">
-              <UserSignatureCard signature={user.signature} />
-            </View>
-          )}
+          <View className="w-full mt-8">
+            <UserSignatureCard signature={user.signature} />
+          </View>
 
           {favorites.length > 0 && (
             <View className="w-full mt-8">

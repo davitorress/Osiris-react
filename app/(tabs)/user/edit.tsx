@@ -10,12 +10,13 @@ import { useCurrentUser, useUpdateUser, useUpdateUserImage } from "@/modules/use
 import IonIcon from "@/components/basic/IonIcon"
 import EditUserForm from "@/components/forms/EditUserForm"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 import ChangeImageModal from "@/components/basic/ChangeImageModal"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
 
 export default function EditUserScreen() {
   const router = useRouter()
-  const { data: user } = useCurrentUser()
+  const { data: user, isLoading } = useCurrentUser()
 
   const updateUser = useUpdateUser()
   const updateUserImage = useUpdateUserImage()
@@ -48,8 +49,8 @@ export default function EditUserScreen() {
     }, [setImage, setEditImage])
   )
 
-  if (!user) {
-    return null
+  if (!user || isLoading) {
+    return <LoadingScreen />
   }
 
   return (
