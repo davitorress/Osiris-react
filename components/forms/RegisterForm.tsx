@@ -1,44 +1,25 @@
-import { z } from "zod"
-import React from "react"
-import { useRouter } from "expo-router"
+import { useCallback } from "react"
 import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
+import { useFocusEffect, useRouter } from "expo-router"
+
+import { RegisterData, registerSchema } from "./types"
 
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
-const registerSchema = z
-  .object({
-    name: z
-      .string({ required_error: "O nome é obrigatório!" })
-      .min(1, "O nome é obrigatório!")
-      .transform((name) => name.trim()),
-    email: z
-      .string({ required_error: "O email é obrigatório!" })
-      .min(1, "O email é obrigatório!")
-      .email("Insira um email válido!"),
-    password: z
-      .string({ required_error: "A senha é obrigatória!" })
-      .min(1, "A senha é obrigatória!")
-      .min(3, "A senha deve ter no mínimo 3 caracteres!"),
-    confirmPassword: z
-      .string({ required_error: "A confirmação de senha é obrigatória!" })
-      .min(1, "A confirmação de senha é obrigatória!")
-      .min(3, "A confirmação de senha deve ter no mínimo 3 caracteres!"),
-  })
-  .refine(({ password, confirmPassword }) => password === confirmPassword, {
-    message: "As senhas não coincidem!",
-    path: ["confirmPassword"],
-  })
+interface RegisterFormProps {
+  onSubmit: (data: RegisterData) => void
+}
 
-type RegisterData = z.infer<typeof registerSchema>
-
-export default function RegisterForm() {
+export default function RegisterForm({ onSubmit }: RegisterFormProps) {
   const router = useRouter()
 
   const {
+    reset,
     control,
     register,
     handleSubmit,
@@ -47,10 +28,24 @@ export default function RegisterForm() {
     resolver: zodResolver(registerSchema),
   })
 
-  const onSubmit = (data: RegisterData) => {
-    console.log(data)
-    router.navigate("/(tabs)/")
-  }
+  useFocusEffect(
+    useCallback(() => {
+      reset({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      })
+
+      return () =>
+        reset({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        })
+    }, [reset])
+  )
 
   return (
     <View className="w-full">
@@ -71,11 +66,7 @@ export default function RegisterForm() {
           )}
           {...register("name")}
         />
-        {errors.name && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.name.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.name?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -96,11 +87,7 @@ export default function RegisterForm() {
           )}
           {...register("email")}
         />
-        {errors.email && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.email.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.email?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -122,11 +109,7 @@ export default function RegisterForm() {
           )}
           {...register("password")}
         />
-        {errors.password && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.password.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.password?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -148,11 +131,7 @@ export default function RegisterForm() {
           )}
           {...register("confirmPassword")}
         />
-        {errors.confirmPassword && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.confirmPassword.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.confirmPassword?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -170,7 +149,7 @@ export default function RegisterForm() {
       </View>
 
       <View className="w-full mt-3">
-        <Pressable className="flex-row" onPress={() => router.navigate("/login")}>
+        <Pressable className="flex-row" onPress={() => router.push("/login")}>
           <TextThemed color="primary" size="body2" font="nunitoRegular">
             Já possui uma conta?
           </TextThemed>

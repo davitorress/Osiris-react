@@ -1,31 +1,25 @@
-import { z } from "zod"
-import React from "react"
-import { useRouter } from "expo-router"
+import { useCallback } from "react"
 import { Pressable, View } from "react-native"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
+import { useFocusEffect, useRouter } from "expo-router"
+
+import { LoginData, loginSchema } from "./types"
 
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
+import InputErrorMessage from "@/components/basic/InputErrorMessage"
 
-const loginSchema = z.object({
-  email: z
-    .string({ required_error: "O email é obrigatório!" })
-    .min(1, "O email é obrigatório!")
-    .email("Insira um email válido!"),
-  password: z
-    .string({ required_error: "A senha é obrigatória!" })
-    .min(1, "A senha é obrigatória!")
-    .min(3, "A senha deve ter no mínimo 3 caracteres!"),
-})
+interface LoginFormProps {
+  onSubmit: (data: LoginData) => void
+}
 
-type LoginData = z.infer<typeof loginSchema>
-
-const LoginForm = React.forwardRef(() => {
+export default function LoginForm({ onSubmit }: LoginFormProps) {
   const router = useRouter()
 
   const {
+    reset,
     control,
     register,
     handleSubmit,
@@ -34,10 +28,20 @@ const LoginForm = React.forwardRef(() => {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = (data: LoginData) => {
-    console.log(data)
-    router.navigate("/(tabs)/")
-  }
+  useFocusEffect(
+    useCallback(() => {
+      reset({
+        email: "",
+        password: "",
+      })
+
+      return () =>
+        reset({
+          email: "",
+          password: "",
+        })
+    }, [reset])
+  )
 
   return (
     <View className="w-full">
@@ -59,11 +63,7 @@ const LoginForm = React.forwardRef(() => {
           )}
           {...register("email")}
         />
-        {errors.email && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.email.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.email?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -85,11 +85,7 @@ const LoginForm = React.forwardRef(() => {
           )}
           {...register("password")}
         />
-        {errors.password && (
-          <TextThemed color="alert" size="body2" font="ubuntuRegular" classes="mt-1">
-            {errors.password.message}
-          </TextThemed>
-        )}
+        <InputErrorMessage message={errors.password?.message} />
       </View>
 
       <View className="w-full mt-7">
@@ -107,7 +103,7 @@ const LoginForm = React.forwardRef(() => {
       </View>
 
       <View className="w-full mt-3">
-        <Pressable className="flex-row" onPress={() => router.navigate("/register")}>
+        <Pressable className="flex-row" onPress={() => router.push("/register")}>
           <TextThemed color="primary" size="body2" font="nunitoRegular">
             Não possui uma conta?
           </TextThemed>
@@ -118,6 +114,4 @@ const LoginForm = React.forwardRef(() => {
       </View>
     </View>
   )
-})
-
-export default LoginForm
+}

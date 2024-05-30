@@ -4,8 +4,12 @@ import { useFonts } from "expo-font"
 import { Ionicons } from "@expo/vector-icons"
 import * as SplashScreen from "expo-splash-screen"
 import { ThemeProvider } from "@react-navigation/native"
+import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
 
+import Sizes from "@/constants/Sizes"
+import Colors from "@/constants/Colors"
 import OsirisTheme from "@/config/Theme"
+import LoadingScreen from "@/components/basic/LoadingScreen"
 
 import {
   useFonts as useUbuntuFonts,
@@ -18,6 +22,7 @@ import {
   Nunito_600SemiBold,
   Nunito_700Bold,
 } from "@expo-google-fonts/nunito"
+import QueryClientProvider from "@/providers/queryClient"
 
 export { ErrorBoundary } from "expo-router"
 
@@ -56,42 +61,89 @@ export default function RootLayout() {
   }, [loaded, loadedUbuntu, loadedNunito])
 
   if (!loaded || !loadedUbuntu || !loadedNunito) {
-    return null
+    return <LoadingScreen />
   }
 
-  return <RootLayoutNav />
+  return (
+    <>
+      <RootLayoutNav />
+      <Toast
+        topOffset={60}
+        config={{
+          success: (props) => (
+            <BaseToast
+              {...props}
+              text2NumberOfLines={2}
+              style={{ borderLeftColor: Colors.light.green.light }}
+              contentContainerStyle={{ paddingHorizontal: Sizes.small }}
+              text1Style={{
+                fontWeight: 700,
+                fontSize: Sizes.medium,
+                fontFamily: "Ubuntu_700Bold",
+              }}
+              text2Style={{
+                fontSize: 14,
+                fontWeight: 400,
+                fontFamily: "Ubuntu_400Regular",
+              }}
+            />
+          ),
+          error: (props) => (
+            <ErrorToast
+              {...props}
+              text2NumberOfLines={2}
+              style={{ borderLeftColor: Colors.light.wine }}
+              contentContainerStyle={{ paddingHorizontal: Sizes.small }}
+              text1Style={{
+                fontWeight: 700,
+                fontSize: Sizes.medium,
+                fontFamily: "Ubuntu_700Bold",
+              }}
+              text2Style={{
+                fontSize: 14,
+                fontWeight: 500,
+                fontFamily: "Ubuntu_400Regular",
+              }}
+            />
+          ),
+        }}
+      />
+    </>
+  )
 }
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={OsirisTheme}>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-            navigationBarHidden: true,
-            presentation: "fullScreenModal",
-          }}
-        />
-        <Stack.Screen
-          name="login"
-          options={{
-            headerShown: false,
-            navigationBarHidden: true,
-            presentation: "fullScreenModal",
-          }}
-        />
-        <Stack.Screen
-          name="register"
-          options={{
-            headerShown: false,
-            navigationBarHidden: true,
-            presentation: "fullScreenModal",
-          }}
-        />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <QueryClientProvider>
+      <ThemeProvider value={OsirisTheme}>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+              navigationBarHidden: true,
+              presentation: "fullScreenModal",
+            }}
+          />
+          <Stack.Screen
+            name="login"
+            options={{
+              headerShown: false,
+              navigationBarHidden: true,
+              presentation: "fullScreenModal",
+            }}
+          />
+          <Stack.Screen
+            name="register"
+            options={{
+              headerShown: false,
+              navigationBarHidden: true,
+              presentation: "fullScreenModal",
+            }}
+          />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }

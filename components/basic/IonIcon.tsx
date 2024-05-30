@@ -1,15 +1,7 @@
 import { Ionicons } from "@expo/vector-icons"
 
+import Sizes from "@/constants/Sizes"
 import Colors from "@/constants/Colors"
-
-const sizes = {
-  micro: 12,
-  tiny: 16,
-  small: 18,
-  medium: 20,
-  large: 24,
-  huge: 28,
-}
 
 const colors = {
   alert: Colors.light.wine,
@@ -29,7 +21,7 @@ interface IonIconProps {
   name: React.ComponentProps<typeof Ionicons>["name"]
   onPress?: React.ComponentProps<typeof Ionicons>["onPress"]
   classes?: string
-  size?: keyof typeof sizes
+  size?: keyof typeof Sizes
   color?: keyof typeof colors
 }
 
@@ -43,7 +35,7 @@ export default function IonIcon({
   return (
     <Ionicons
       name={name}
-      size={sizes[size]}
+      size={Sizes[size]}
       color={colors[color]}
       onPress={onPress}
       className={classes}
