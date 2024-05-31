@@ -53,7 +53,7 @@ export const recipeSchema = z
     description: z
       .string({ required_error: "A descrição da receita é obrigatória!" })
       .min(1, "A descrição da receita é obrigatória!")
-      .max(120, "A descrição da receita deve ter no máximo 120 caracteres!")
+      .max(250, "A descrição da receita deve ter no máximo 250 caracteres!")
       .transform((description) => description.trim()),
     pancs: z.array(z.string()).min(1, "A receita deve ter pelo menos uma panc!"),
     ingredients: z.array(z.string()).min(1, "A receita deve ter pelo menos um ingrediente!"),

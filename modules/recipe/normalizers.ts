@@ -61,10 +61,8 @@ export const normalizeRecipes = (response: Recipe[]): NormalizedRecipe[] => {
   return response.map(normalizeRecipe)
 }
 
-export const normalizeUpdateRecipeImage = (response: any) => {
+export const normalizeUpdateRecipeImage = (response: Recipe): NormalizedRecipe => {
   const error = normalizeError(response)
-
-  console.log("error image", error, response)
 
   if (error.hasError) {
     switch (error.status) {
@@ -81,6 +79,8 @@ export const normalizeUpdateRecipeImage = (response: any) => {
         } as AppError
     }
   }
+
+  return normalizeRecipe(response)
 }
 
 export const normalizeDeleteRecipe = (response: any, id: string): string => {

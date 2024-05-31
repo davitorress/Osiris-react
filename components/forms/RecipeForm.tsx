@@ -33,7 +33,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
     formState: { errors },
   } = useForm<RecipeData>({
     values: data,
-    defaultValues: {
+    defaultValues: data ?? {
       name: "",
       description: "",
       ingredients: [""],
@@ -47,6 +47,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
     append: appendPanc,
     remove: removePanc,
     fields: pancsFields,
+    replace: replacePancs,
   } = useFieldArray({
     control,
     name: "pancs" as never,
@@ -62,6 +63,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
     append: appendIngredient,
     remove: removeIngredient,
     fields: ingredientsFields,
+    replace: replaceIngredients,
   } = useFieldArray({
     control,
     name: "ingredients" as never,
@@ -77,6 +79,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
     append: appendPreparation,
     remove: removePreparation,
     fields: preparationFields,
+    replace: replacePreparation,
   } = useFieldArray({
     control,
     name: "preparation" as never,
@@ -91,6 +94,10 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
   useLayoutEffect(() => {
     if (ingredientsFields.length === 0) addNewIngredient()
     if (preparationFields.length === 0) addNewPreparation()
+
+    if (data?.pancs) replacePancs(data.pancs)
+    if (data?.ingredients) replaceIngredients(data.ingredients)
+    if (data?.preparation) replacePreparation(data.preparation)
   }, [])
 
   useFocusEffect(
@@ -161,7 +168,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
           {...register("description")}
         />
         <TextThemed size="body2" color="tertiary" font="nunitoSemiBold" classes="mt-1 text-right">
-          {getValues("description")?.length ?? 0}/120 caracteres
+          {getValues("description")?.length ?? 0}/250 caracteres
         </TextThemed>
         <InputErrorMessage message={errors.description?.message} />
       </View>
