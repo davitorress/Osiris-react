@@ -81,6 +81,14 @@ export default function CameraScreen() {
     }
   }, [showSuccessModal])
 
+  useEffect(() => {
+    if (predictions && predictions.length >= 3) {
+      setBlockAnalysis(true)
+    } else {
+      setBlockAnalysis(false)
+    }
+  }, [predictions])
+
   if ((permission?.canAskAgain && !permission?.granted) || !permission) {
     requestPermission()
   }
@@ -96,14 +104,6 @@ export default function CameraScreen() {
 
     return <Redirect href="/(tabs)/" />
   }
-
-  useEffect(() => {
-    if (predictions && predictions.length >= 3) {
-      setBlockAnalysis(true)
-    } else {
-      setBlockAnalysis(false)
-    }
-  }, [predictions])
 
   if (isLoadingUser || isLoadingPredictions || !user || !predictions) {
     return <LoadingScreen />
@@ -151,14 +151,14 @@ export default function CameraScreen() {
 
         <View className="w-full flex-row items-center justify-around z-20 absolute bottom-24">
           <TouchableOpacity
-            onPress={blockAnalysis ? handleBlockAnalysis : pickImage}
+            onPress={blockAnalysis && !user.signature.ativa ? handleBlockAnalysis : pickImage}
             className="items-center justify-center rounded-full bg-white w-14 h-14"
           >
             <IonIcon name="image" color="primary" size="veryHuge" />
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={blockAnalysis ? handleBlockAnalysis : takePicture}
+            onPress={blockAnalysis && !user.signature.ativa ? handleBlockAnalysis : takePicture}
             className="rounded-full p-0.5 border-2 border-green-medium w-20 h-20"
           >
             <View className="w-full h-full bg-white rounded-full" />
