@@ -38,7 +38,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
       }
     } else if (prediction.accuracy >= 50) {
       return {
-        border: "border-yellow-400",
+        border: "border-yellow-600",
         text: "warning",
       }
     } else {
