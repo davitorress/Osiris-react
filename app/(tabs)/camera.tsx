@@ -41,16 +41,12 @@ export default function CameraScreen() {
       mediaTypes: MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.7,
+      quality: 1,
     })
 
     if (!result.canceled) {
-      addPrediction.mutate(
-        { image: result.assets[0] },
-        {
-          onSuccess: () => setShowSuccessModal(true),
-        }
-      )
+      setShowSuccessModal(true)
+      addPrediction.mutate({ image: result.assets[0] })
     }
   }
 
@@ -64,12 +60,8 @@ export default function CameraScreen() {
     })
 
     if (photo) {
-      addPrediction.mutate(
-        { photo },
-        {
-          onSuccess: () => setShowSuccessModal(true),
-        }
-      )
+      setShowSuccessModal(true)
+      addPrediction.mutate({ photo })
     }
   }
 
