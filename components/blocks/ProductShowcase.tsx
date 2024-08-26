@@ -54,6 +54,10 @@ export default function ProductShowcase({
       <ScrollView className="w-full pb-2" horizontal={horizontal}>
         {normalizedProducts.map(({ id, name, image, isFavorite, description, type }, index) => (
           <View key={id} className={index === 0 ? "" : horizontal ? "ml-5" : "mt-5"}>
+            {index !== 0 && !horizontal && (
+              <View className="w-full border border-gray-medium/50 mt-2 mb-7" />
+            )}
+
             <ProductCard
               id={id}
               name={name}
