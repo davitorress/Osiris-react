@@ -32,6 +32,10 @@ export default function UserScreen() {
     logout.mutate()
   }, [logout])
 
+  const handlePredictions = useCallback(() => {
+    router.push("/(tabs)/predictions")
+  }, [router])
+
   if (!user || isLoading) {
     return <LoadingScreen />
   }
@@ -84,7 +88,7 @@ export default function UserScreen() {
             </View>
           </View>
 
-          <Pressable onPress={() => router.push("/(tabs)/predictions")}>
+          <Pressable onPress={handlePredictions}>
             <View className="w-full mt-8 py-5 px-6 flex-row items-center justify-between rounded-lg bg-gray-light">
               <View className="flex-row items-center">
                 <IonIcon name="images-outline" color="black" size="large" />

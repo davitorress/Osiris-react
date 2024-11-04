@@ -13,33 +13,20 @@ interface PredictionCardProps {
 }
 
 export default function PredictionCard({ prediction }: PredictionCardProps) {
-  const accuracy = useMemo(() => {
-    const acc = String(prediction.accuracy)
-    const [integer, decimal] = acc.split(".")
-
-    return `${integer},${decimal?.slice(0, 2) ?? "00"}%`
-  }, [prediction])
-
   const formattedDate = useMemo(() => {
-    const date = prediction.date.toLocaleDateString("pt-br")
-    const time = prediction.date.toLocaleTimeString("pt-br", {
-      hour: "2-digit",
-      minute: "2-digit",
+    const formatted = prediction.date.toLocaleString("pt-br", {
+      dateStyle: "short",
+      timeStyle: "short",
     })
 
-    return `${date} ${time}`
-  }, [prediction])
+    return formatted
+  }, [prediction.date])
 
   const cardColor = useMemo(() => {
-    if (prediction.accuracy >= 75) {
+    if (prediction.accuracy >= 70) {
       return {
         border: "border-green-medium",
         text: "primary",
-      }
-    } else if (prediction.accuracy >= 50) {
-      return {
-        border: "border-yellow-600",
-        text: "warning",
       }
     } else {
       return {
@@ -65,7 +52,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
         </TextThemed>
 
         <TextThemed color={cardColor.text as any} font="ubuntuRegular">
-          Acurácia: {accuracy}
+          Resultado: {prediction.accuracy >= 70 ? "Provável" : "Improvável"}
         </TextThemed>
 
         <TextThemed>Data: {formattedDate}</TextThemed>

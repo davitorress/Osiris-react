@@ -24,6 +24,7 @@ const useUserStore = create<UserStore>((set, get) => ({
   ...initialState,
   actions: {
     clearUser: () => {
+      if (get().id === undefined && get().token === undefined) return
       set(initialState)
     },
 

@@ -28,6 +28,7 @@ const useRecipeStore = create<RecipeStore>((set, get) => ({
   ...initialState,
   actions: {
     clearRecipes: () => {
+      if (get().recipes.length === 0 && get().saved.length === 0) return
       set(initialState)
     },
 

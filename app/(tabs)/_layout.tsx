@@ -2,10 +2,11 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { Tabs, Redirect } from "expo-router"
 
+import useUserStore from "@/storage/user"
+
 import Sizes from "@/constants/Sizes"
 import Colors from "@/constants/Colors"
 import IonIcon from "@/components/basic/IonIcon"
-import { useCurrentUser } from "@/modules/user/queries"
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -21,10 +22,11 @@ const styles = StyleSheet.create({
 })
 
 export default function TabLayout() {
-  const { data: currentUser, isLoading } = useCurrentUser()
+  const userId = useUserStore((state) => state.id)
+  const userToken = useUserStore((state) => state.token)
 
-  if (!currentUser && !isLoading) {
-    return <Redirect href="/" />
+  if (!userId && !userToken) {
+    return <Redirect href="/welcome" />
   }
 
   return (

@@ -20,23 +20,15 @@ import {
 
 export const useLogout = () => {
   const router = useRouter()
-  const queryClient = useQueryClient()
-  const {
-    actions: { clearUser },
-  } = useUserStore()
-  const {
-    actions: { clearPancs },
-  } = usePancStore()
-  const {
-    actions: { clearRecipes },
-  } = useRecipeStore()
+  const clearUser = useUserStore((state) => state.actions.clearUser)
+  const clearPancs = usePancStore((state) => state.actions.clearPancs)
+  const clearRecipes = useRecipeStore((state) => state.actions.clearRecipes)
 
   const mutation = async () => {
     clearUser()
     clearPancs()
     clearRecipes()
-    queryClient.clear()
-    router.push("/")
+    router.push("/welcome")
   }
 
   return useMutation({
@@ -107,12 +99,8 @@ export const useRegister = () => {
 
 export const useCurrentUser = () => {
   const { id, token } = useUserStore()
-  const {
-    actions: { setFavorites },
-  } = usePancStore()
-  const {
-    actions: { setSaved },
-  } = useRecipeStore()
+  const setFavorites = usePancStore((state) => state.actions.setFavorites)
+  const setSaved = useRecipeStore((state) => state.actions.setSaved)
 
   const query = async () => {
     const response = await request({
