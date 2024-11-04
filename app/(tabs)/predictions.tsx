@@ -1,8 +1,11 @@
 import { useRouter } from "expo-router"
-import { ScrollView, View } from "react-native"
+import { useCallback, useMemo, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { useGetUserPredictions } from "@/modules/prediction/queries"
+
+import mergeSort from "@/utils/mergeSort"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
@@ -13,6 +16,19 @@ import PredictionCard from "@/components/basic/PredictionCard"
 export default function PredictionsScreen() {
   const router = useRouter()
   const { data, isLoading } = useGetUserPredictions()
+  const [ascendingDate, setAscendingDate] = useState<boolean>(false)
+
+  const sortedData = useMemo(() => {
+    if (!data) {
+      return []
+    }
+
+    return mergeSort(data, "date", ascendingDate)
+  }, [data, ascendingDate])
+
+  const handleSortByDate = useCallback(() => {
+    setAscendingDate(!ascendingDate)
+  }, [ascendingDate])
 
   if (isLoading) {
     return <LoadingScreen />
@@ -44,8 +60,24 @@ export default function PredictionsScreen() {
             </TextThemed>
           </View>
 
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleSortByDate}
+            className="w-full mt-8 flex-row items-center justify-start py-2 px-4 bg-gray-100 rounded-lg"
+          >
+            <TextThemed size="body1" color="black" font="nunitoSemiBold" classes="mr-2">
+              Ordenar por: Data ({ascendingDate ? "crescente" : "decrescente"})
+            </TextThemed>
+
+            <IonIcon
+              name={ascendingDate ? "trending-up-outline" : "trending-down-outline"}
+              size="medium"
+              color="black"
+            />
+          </TouchableOpacity>
+
           <View className="w-full mt-8">
-            {data?.map((prediction, index) => (
+            {sortedData?.map((prediction, index) => (
               <View key={prediction.id} className={index !== 0 ? "mt-4" : ""}>
                 <PredictionCard prediction={prediction} />
               </View>
