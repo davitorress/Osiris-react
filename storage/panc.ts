@@ -28,6 +28,7 @@ const usePancStore = create<PancStore>((set, get) => ({
   ...initialState,
   actions: {
     clearPancs: () => {
+      if (get().pancs.length === 0 && get().favorites.length === 0) return
       set(initialState)
     },
 

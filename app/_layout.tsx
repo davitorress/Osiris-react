@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 import { Stack } from "expo-router"
 import { useFonts } from "expo-font"
 import { Ionicons } from "@expo/vector-icons"
 import * as SplashScreen from "expo-splash-screen"
 import { ThemeProvider } from "@react-navigation/native"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
 
 import Sizes from "@/constants/Sizes"
@@ -24,13 +25,15 @@ import {
 } from "@expo-google-fonts/nunito"
 import QueryClientProvider from "@/providers/queryClient"
 
+import { LogBox } from "react-native"
 export { ErrorBoundary } from "expo-router"
 
 export const unstable_settings = {
-  initialRouteName: "(tabs)",
+  initialRouteName: "welcome",
 }
 
 SplashScreen.preventAutoHideAsync()
+LogBox.ignoreAllLogs(true)
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -114,36 +117,38 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <QueryClientProvider>
-      <ThemeProvider value={OsirisTheme}>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              headerShown: false,
-              navigationBarHidden: true,
-              presentation: "fullScreenModal",
-            }}
-          />
-          <Stack.Screen
-            name="login"
-            options={{
-              headerShown: false,
-              navigationBarHidden: true,
-              presentation: "fullScreenModal",
-            }}
-          />
-          <Stack.Screen
-            name="register"
-            options={{
-              headerShown: false,
-              navigationBarHidden: true,
-              presentation: "fullScreenModal",
-            }}
-          />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView>
+      <QueryClientProvider>
+        <ThemeProvider value={OsirisTheme}>
+          <Stack>
+            <Stack.Screen
+              name="welcome"
+              options={{
+                headerShown: false,
+                navigationBarHidden: true,
+                presentation: "fullScreenModal",
+              }}
+            />
+            <Stack.Screen
+              name="login"
+              options={{
+                headerShown: false,
+                navigationBarHidden: true,
+                presentation: "fullScreenModal",
+              }}
+            />
+            <Stack.Screen
+              name="register"
+              options={{
+                headerShown: false,
+                navigationBarHidden: true,
+                presentation: "fullScreenModal",
+              }}
+            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   )
 }
