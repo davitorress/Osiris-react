@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
+import useTranslationStore from "@/storage/translation"
 import { useCurrentUser, useLogout } from "@/modules/user/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
@@ -23,6 +24,7 @@ export default function UserScreen() {
   const { favorites } = usePancStore()
   const { recipes, saved } = useRecipeStore()
   const myRecipes = recipes.filter((recipe) => recipe.author === user?.id)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const editProfile = useCallback(() => {
     router.push("/(tabs)/user/edit")
@@ -80,7 +82,7 @@ export default function UserScreen() {
 
               <ButtonThemed onClick={handleLogout}>
                 <TextThemed size="body1" color="white" font="nunitoSemiBold" classes="mr-2">
-                  Sair
+                  {translate("actions.logout")}
                 </TextThemed>
 
                 <IonIcon name="exit-outline" color="white" size="large" />
@@ -94,7 +96,7 @@ export default function UserScreen() {
                 <IonIcon name="images-outline" color="black" size="large" />
 
                 <TextThemed size="h3" font="nunitoSemiBold" classes="ml-2">
-                  Suas análises
+                  {translate("general.yourAnalysis")}
                 </TextThemed>
               </View>
 
@@ -108,19 +110,31 @@ export default function UserScreen() {
 
           {favorites.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="PANCs favoritas" products={favorites} horizontal />
+              <ProductShowcase
+                title={translate("general.favoritePancs")}
+                products={favorites}
+                horizontal
+              />
             </View>
           )}
 
           {saved.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="Receitas salvas" products={saved} horizontal />
+              <ProductShowcase
+                title={translate("general.savedRecipes")}
+                products={saved}
+                horizontal
+              />
             </View>
           )}
 
           {myRecipes.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="Suas receitas" products={myRecipes} horizontal />
+              <ProductShowcase
+                title={translate("general.yourRecipes")}
+                products={myRecipes}
+                horizontal
+              />
             </View>
           )}
         </View>

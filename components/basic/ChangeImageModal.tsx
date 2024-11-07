@@ -3,6 +3,8 @@ import { Modal, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { ImagePickerAsset, launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker"
 
+import useTranslationStore from "@/storage/translation"
+
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ButtonThemed from "@/components/themed/ButtonThemed"
@@ -23,6 +25,7 @@ export default function ChangeImageModal({
   onConfirm,
   iconImageName,
 }: ChangeImageModalProps) {
+  const translate = useTranslationStore((state) => state.actions.translate)
   const [imageAsset, setImageAsset] = useState<ImagePickerAsset | null>(null)
 
   const pickImage = async () => {
@@ -84,7 +87,7 @@ export default function ChangeImageModal({
               classes="w-[45%]"
             >
               <TextThemed color="white" size="h4" font="nunitoBold">
-                Salvar
+                {translate("actions.save")}
               </TextThemed>
             </ButtonThemed>
 
@@ -97,7 +100,7 @@ export default function ChangeImageModal({
               }}
             >
               <TextThemed color="white" size="h4" font="nunitoBold">
-                Cancelar
+                {translate("actions.cancel")}
               </TextThemed>
             </ButtonThemed>
           </View>

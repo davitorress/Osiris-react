@@ -2,6 +2,7 @@ import Toast from "react-native-toast-message"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
+import useTranslationStore from "@/storage/translation"
 
 import { AddPrediction } from "./types"
 import { AppError } from "../shared/types"
@@ -10,6 +11,7 @@ import { normalizeAddPrediction, normalizePredictions } from "./normalizers"
 
 export const useGetUserPredictions = () => {
   const { id, token } = useUserStore()
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const query = async () => {
     const response = await request({
@@ -18,7 +20,7 @@ export const useGetUserPredictions = () => {
       method: "GET",
     })
 
-    return normalizePredictions(response)
+    return normalizePredictions(response, translate)
   }
 
   return useQuery({
@@ -30,6 +32,7 @@ export const useGetUserPredictions = () => {
 export const useAddPrediction = () => {
   const { id, token } = useUserStore()
   const queryClient = useQueryClient()
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async ({ image, photo }: AddPrediction) => {
     const formData = new FormData()
@@ -50,7 +53,7 @@ export const useAddPrediction = () => {
       stringifyBody: false,
     })
 
-    return normalizeAddPrediction(response)
+    return normalizeAddPrediction(response, translate)
   }
 
   return useMutation({
@@ -61,7 +64,7 @@ export const useAddPrediction = () => {
     onError: (error: AppError) => {
       Toast.show({
         type: "error",
-        text1: "Erro na análise!",
+        text1: translate("requests.analysisError"),
         text2: error.msg,
       })
     },

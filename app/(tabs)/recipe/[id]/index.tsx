@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import useRecipeStore from "@/storage/recipe"
+import useTranslationStore from "@/storage/translation"
 import { useCurrentUser } from "@/modules/user/queries"
 import {
   useAddRecipeToSaved,
@@ -31,11 +32,9 @@ export default function RecipePage() {
 
   const addToSaved = useAddRecipeToSaved()
   const removeFromSaved = useRemoveRecipeFromSaved()
+  const getIsSaved = useRecipeStore((state) => state.actions.getIsSaved)
+  const translate = useTranslationStore((state) => state.actions.translate)
   const { data: recipe, isLoading: isLoadingRecipe } = useGetRecipe(id as string)
-
-  const {
-    actions: { getIsSaved },
-  } = useRecipeStore()
 
   const handleAddToSaved = () => {
     addToSaved.mutate(id as string)
@@ -90,7 +89,7 @@ export default function RecipePage() {
                     onPress={() => router.push(`/(tabs)/recipe/${recipe.id}/edit`)}
                   >
                     <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
-                      Editar
+                      {translate("actions.edit")}
                     </TextThemed>
 
                     <IonIcon name="create-outline" size="large" color="primary" />
@@ -101,7 +100,9 @@ export default function RecipePage() {
                     onPress={getIsSaved(recipe.id) ? handleRemoveFromSaved : handleAddToSaved}
                   >
                     <TextThemed size="body2" color="primary" font="nunitoSemiBold" classes="mr-2">
-                      {getIsSaved(recipe.id) ? "Salvo" : "Salvar"}
+                      {getIsSaved(recipe.id)
+                        ? translate("general.saved")
+                        : translate("actions.save")}
                     </TextThemed>
 
                     <IonIcon
@@ -140,13 +141,13 @@ export default function RecipePage() {
           </View>
 
           <View className="w-full mt-8">
-            <ContentSection title="Ingredientes">
+            <ContentSection title={translate("general.ingredients")}>
               <BulletList items={recipe.ingredients} />
             </ContentSection>
           </View>
 
           <View className="w-full mt-8">
-            <ContentSection title="Modo de Preparo">
+            <ContentSection title={translate("general.preparation")}>
               <NumberList items={recipe.preparation} />
             </ContentSection>
           </View>

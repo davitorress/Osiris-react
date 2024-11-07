@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router"
+import { Href, useRouter } from "expo-router"
 import { GestureResponderEvent, TouchableOpacity, View } from "react-native"
 
 import IonIcon from "@/components/basic/IonIcon"
@@ -33,7 +33,7 @@ export default function ProductCard({
   const iconName = type === "panc" ? "heart" : "bookmark"
 
   return (
-    <TouchableOpacity onPress={() => router.push(`/(tabs)/${type}/${id}/`)}>
+    <TouchableOpacity onPress={() => router.push(`/(tabs)/${type}/${id}/` as Href)}>
       {mode === "simple" ? (
         <View className="w-32">
           <ImageWithPlaceholder alt={name} className={imgClasses} source={imgUrl} />

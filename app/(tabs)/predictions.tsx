@@ -6,6 +6,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native"
 import { useGetUserPredictions } from "@/modules/prediction/queries"
 
 import mergeSort from "@/utils/mergeSort"
+import useTranslationStore from "@/storage/translation"
 
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
@@ -17,6 +18,7 @@ export default function PredictionsScreen() {
   const router = useRouter()
   const { data, isLoading } = useGetUserPredictions()
   const [ascendingDate, setAscendingDate] = useState<boolean>(false)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const sortedData = useMemo(() => {
     if (!data) {
@@ -56,7 +58,7 @@ export default function PredictionsScreen() {
               numberOfLines={100}
               classes="ml-4"
             >
-              Suas análises
+              {translate("general.yourAnalysis")}
             </TextThemed>
           </View>
 
@@ -66,7 +68,9 @@ export default function PredictionsScreen() {
             className="w-full mt-8 flex-row items-center justify-start py-2 px-4 bg-gray-100 rounded-lg"
           >
             <TextThemed size="body1" color="black" font="nunitoSemiBold" classes="mr-2">
-              Ordenar por: Data ({ascendingDate ? "crescente" : "decrescente"})
+              {ascendingDate
+                ? translate("actions.sortByDateAscending")
+                : translate("actions.sortByDateDescending")}
             </TextThemed>
 
             <IonIcon

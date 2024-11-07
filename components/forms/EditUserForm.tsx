@@ -6,6 +6,7 @@ import { useFocusEffect, useRouter } from "expo-router"
 
 import { NormalizedUser } from "@/modules/user/types"
 import { EditUserData, editUserSchema } from "./types"
+import useTranslationStore from "@/storage/translation"
 
 import Sizes from "@/constants/Sizes"
 import Input from "@/components/basic/Input"
@@ -20,6 +21,7 @@ interface EditUserFormProps {
 
 export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
   const router = useRouter()
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const {
     reset,
@@ -56,7 +58,7 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
     <View className="w-full" style={{ gap: Sizes.veryHuge }}>
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
-          Nome completo:
+          {translate("form.name")}:
         </TextThemed>
         <Controller
           control={control}
@@ -66,7 +68,7 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
               onBlur={onBlur}
               onChange={onChange}
               font="nunitoSemiBold"
-              placeholder="Digite o seu nome completo"
+              placeholder={translate("form.placeholder.name")}
             />
           )}
           {...register("name")}
@@ -76,7 +78,7 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
 
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
-          Email:
+          {translate("form.email")}:
         </TextThemed>
         <Controller
           control={control}
@@ -86,7 +88,7 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
               onBlur={onBlur}
               onChange={onChange}
               font="nunitoSemiBold"
-              placeholder="Digite o seu email"
+              placeholder={translate("form.placeholder.email")}
             />
           )}
           {...register("email")}
@@ -96,7 +98,7 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
 
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
-          Nova senha:
+          {translate("form.newPassword")}:
         </TextThemed>
         <Controller
           control={control}
@@ -106,7 +108,7 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
               value={value ?? ""}
               onChange={onChange}
               font="nunitoSemiBold"
-              placeholder="Digite caso deseje alterar"
+              placeholder={translate("form.placeholder.newPassword")}
               secureTextEntry
             />
           )}
@@ -118,13 +120,13 @@ export default function EditUserForm({ data, onSubmit }: EditUserFormProps) {
       <View className="w-full flex-row justify-between">
         <ButtonThemed color="alert" onClick={() => router.push("/(tabs)/user")} classes="w-[45%]">
           <TextThemed color="white" size="h4" font="nunitoBold">
-            Cancelar
+            {translate("actions.cancel")}
           </TextThemed>
         </ButtonThemed>
 
         <ButtonThemed color="secondary" onClick={handleSubmit(onSubmit)} classes="w-[45%]">
           <TextThemed color="white" size="h4" font="nunitoBold">
-            Salvar
+            {translate("actions.save")}
           </TextThemed>
         </ButtonThemed>
       </View>

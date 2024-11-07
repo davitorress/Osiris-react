@@ -2,7 +2,7 @@ import { useCallback, useState } from "react"
 import { ScrollView, View } from "react-native"
 import { ImagePickerAsset } from "expo-image-picker"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router"
+import { Href, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router"
 
 import { RecipeData } from "@/components/forms/types"
 import {
@@ -52,11 +52,11 @@ export default function EditRecipeScreen() {
           updateRecipeImage.mutateAsync(
             { id, image },
             {
-              onSuccess: () => router.push(`/(tabs)/recipe/${id}/`),
+              onSuccess: () => router.push(`/(tabs)/recipe/${id}/` as Href),
             }
           )
         }
-        router.push(`/(tabs)/recipe/${id}/`)
+        router.push(`/(tabs)/recipe/${id}/` as Href)
       },
     })
   }
@@ -64,7 +64,7 @@ export default function EditRecipeScreen() {
   const handleCancel = useCallback(() => {
     deleteRecipe.mutate(id as string, {
       onSuccess: () => {
-        router.push("/(tabs)/recipes/")
+        router.push("/(tabs)/recipes")
       },
     })
   }, [id])

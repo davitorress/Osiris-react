@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form"
 import { useFocusEffect, useRouter } from "expo-router"
 
 import { RegisterData, registerSchema } from "./types"
+import useTranslationStore from "@/storage/translation"
 
 import Input from "@/components/basic/Input"
 import TextThemed from "@/components/themed/TextThemed"
@@ -17,6 +18,7 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ onSubmit }: RegisterFormProps) {
   const router = useRouter()
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const {
     reset,
@@ -51,7 +53,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
     <View className="w-full">
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          Nome completo:
+          {translate("form.name")}
         </TextThemed>
         <Controller
           control={control}
@@ -61,7 +63,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
               onBlur={onBlur}
               onChange={onChange}
               font="nunitoSemiBold"
-              placeholder="Digite o seu nome completo"
+              placeholder={translate("form.placeholder.name")}
             />
           )}
           {...register("name")}
@@ -71,7 +73,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
       <View className="w-full mt-7">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          E-mail:
+          {translate("form.email")}
         </TextThemed>
         <Controller
           control={control}
@@ -82,7 +84,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
               onChange={onChange}
               autoComplete="email"
               font="nunitoSemiBold"
-              placeholder="Digite o seu e-mail"
+              placeholder={translate("form.placeholder.email")}
             />
           )}
           {...register("email")}
@@ -92,7 +94,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
       <View className="w-full mt-7">
         <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
-          Senha:
+          {translate("form.password")}
         </TextThemed>
         <Controller
           control={control}
@@ -104,7 +106,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
               secureTextEntry
               font="nunitoSemiBold"
               autoComplete="password"
-              placeholder="Digite a sua senha"
+              placeholder={translate("form.placeholder.password")}
             />
           )}
           {...register("password")}
@@ -114,7 +116,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
       <View className="w-full mt-7">
         <TextThemed color="primary" size="h4" font="nunitoSemiBold" classes="mb-2">
-          Confirmar senha:
+          {translate("form.confirmPassword")}
         </TextThemed>
         <Controller
           control={control}
@@ -126,7 +128,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
               secureTextEntry
               font="nunitoSemiBold"
               autoComplete="password"
-              placeholder="Digite novamente a sua senha"
+              placeholder={translate("form.placeholder.confirmPassword")}
             />
           )}
           {...register("confirmPassword")}
@@ -143,7 +145,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
           onClick={handleSubmit(onSubmit)}
         >
           <TextThemed color="white" size="h4" font="nunitoBold">
-            Cadastrar
+            {translate("actions.register")}
           </TextThemed>
         </ButtonThemed>
       </View>
@@ -151,10 +153,10 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
       <View className="w-full mt-3">
         <Pressable className="flex-row" onPress={() => router.push("/login")}>
           <TextThemed color="primary" size="body2" font="nunitoRegular">
-            Já possui uma conta?
+            {translate("actions.registered")}
           </TextThemed>
           <TextThemed color="alert" size="body2" font="nunitoBold" classes="underline ml-1">
-            Entre aqui!
+            {translate("actions.signIn")}
           </TextThemed>
         </Pressable>
       </View>

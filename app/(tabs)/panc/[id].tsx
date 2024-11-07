@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import usePancStore from "@/storage/panc"
+import useTranslationStore from "@/storage/translation"
 import {
   useAddPancToFavorites,
   useGetPanc,
@@ -28,10 +29,8 @@ export default function PancPage() {
   const addToFavorites = useAddPancToFavorites()
   const removeFromFavorites = useRemovePancFromFavorites()
   const { data: panc, isLoading } = useGetPanc(id as string)
-
-  const {
-    actions: { getIsFavorite },
-  } = usePancStore()
+  const translate = useTranslationStore((state) => state.actions.translate)
+  const getIsFavorite = usePancStore((state) => state.actions.getIsFavorite)
 
   const handleAddToFavorites = () => {
     addToFavorites.mutate(id as string)
@@ -107,7 +106,7 @@ export default function PancPage() {
           </View>
 
           <View className="w-full mt-8">
-            <ContentSection title="Benefícios">
+            <ContentSection title={translate("general.benefits")}>
               <TextThemed
                 size="caption"
                 color="black"
@@ -121,7 +120,7 @@ export default function PancPage() {
           </View>
 
           <View className="w-full mt-8">
-            <ContentSection title="Modo de Cultivo">
+            <ContentSection title={translate("general.cultivation")}>
               <BulletList items={panc.cultivation} />
             </ContentSection>
           </View>

@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import useUserStore from "@/storage/user"
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
+import useTranslationStore from "@/storage/translation"
 
 import { AppError } from "../shared/types"
 import { request } from "../shared/request"
@@ -38,9 +39,9 @@ export const useLogout = () => {
 
 export const useLogin = () => {
   const router = useRouter()
-  const {
-    actions: { setToken, setId },
-  } = useUserStore()
+  const setId = useUserStore((state) => state.actions.setId)
+  const setToken = useUserStore((state) => state.actions.setToken)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async ({ email, password }: LoginProps) => {
     const response = await request({
@@ -49,7 +50,7 @@ export const useLogin = () => {
       body: { email, senha: password },
     })
 
-    return normalizeLogin(response)
+    return normalizeLogin(response, translate)
   }
 
   return useMutation({
@@ -62,7 +63,7 @@ export const useLogin = () => {
     onError: (error: AppError) => {
       Toast.show({
         type: "error",
-        text1: "Erro ao logar!",
+        text1: translate("requests.loginError"),
         text2: error.msg,
       })
     },
@@ -71,6 +72,7 @@ export const useLogin = () => {
 
 export const useRegister = () => {
   const router = useRouter()
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async ({ name, email, password }: RegisterProps) => {
     const response = await request({
@@ -79,7 +81,7 @@ export const useRegister = () => {
       body: { nome: name, email, senha: password },
     })
 
-    return normalizeRegister(response)
+    return normalizeRegister(response, translate)
   }
 
   return useMutation({
@@ -90,7 +92,7 @@ export const useRegister = () => {
     onError: (error: AppError) => {
       Toast.show({
         type: "error",
-        text1: "Erro no cadastro!",
+        text1: translate("requests.loginError"),
         text2: error.msg,
       })
     },
@@ -98,9 +100,11 @@ export const useRegister = () => {
 }
 
 export const useCurrentUser = () => {
-  const { id, token } = useUserStore()
-  const setFavorites = usePancStore((state) => state.actions.setFavorites)
+  const id = useUserStore((state) => state.id)
+  const token = useUserStore((state) => state.token)
   const setSaved = useRecipeStore((state) => state.actions.setSaved)
+  const setFavorites = usePancStore((state) => state.actions.setFavorites)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const query = async () => {
     const response = await request({
@@ -108,7 +112,7 @@ export const useCurrentUser = () => {
       token,
     })
 
-    const user = normalizeUser(response)
+    const user = normalizeUser(response, translate)
     setFavorites(user.favoritePancsId)
     setSaved(user.savedRecipesId)
 
@@ -123,7 +127,8 @@ export const useCurrentUser = () => {
 }
 
 export const useUpdateUser = () => {
-  const { token } = useUserStore()
+  const translate = useTranslationStore((state) => state.actions.translate)
+  const token = useUserStore((state) => state.token)
   const queryClient = useQueryClient()
 
   const mutation = async ({ id, data }: { id: string; data: EditUserData }) => {
@@ -138,7 +143,7 @@ export const useUpdateUser = () => {
       },
     })
 
-    return normalizeUser(response)
+    return normalizeUser(response, translate)
   }
 
   return useMutation({
@@ -150,7 +155,8 @@ export const useUpdateUser = () => {
 }
 
 export const useUpdateUserImage = () => {
-  const { token } = useUserStore()
+  const translate = useTranslationStore((state) => state.actions.translate)
+  const token = useUserStore((state) => state.token)
   const queryClient = useQueryClient()
 
   const mutation = async ({ id, image }: { id: string; image: ImagePickerAsset }) => {
@@ -172,7 +178,7 @@ export const useUpdateUserImage = () => {
       formDataBody: true,
     })
 
-    return normalizeUpdateUserImage(response)
+    return normalizeUpdateUserImage(response, translate)
   }
 
   return useMutation({
@@ -187,6 +193,8 @@ export const useUpdateUserImage = () => {
 }
 
 export const updateUserPancs = async (id: string, token: string, pancs: string[]) => {
+  const translate = useTranslationStore((state) => state.actions.translate)
+
   const response = await request({
     url: `/usuarios/${id}`,
     method: "PATCH",
@@ -196,10 +204,12 @@ export const updateUserPancs = async (id: string, token: string, pancs: string[]
     },
   })
 
-  return normalizeUser(response)
+  return normalizeUser(response, translate)
 }
 
 export const updateUserRecipes = async (id: string, token: string, recipes: string[]) => {
+  const translate = useTranslationStore((state) => state.actions.translate)
+
   const response = await request({
     url: `/usuarios/${id}`,
     method: "PATCH",
@@ -209,11 +219,13 @@ export const updateUserRecipes = async (id: string, token: string, recipes: stri
     },
   })
 
-  return normalizeUser(response)
+  return normalizeUser(response, translate)
 }
 
 export const useActivateSignature = () => {
-  const { id, token } = useUserStore()
+  const translate = useTranslationStore((state) => state.actions.translate)
+  const token = useUserStore((state) => state.token)
+  const id = useUserStore((state) => state.id)
   const queryClient = useQueryClient()
 
   const mutation = async () => {
@@ -223,7 +235,7 @@ export const useActivateSignature = () => {
       token,
     })
 
-    return normalizeUser(response)
+    return normalizeUser(response, translate)
   }
 
   return useMutation({
@@ -234,7 +246,7 @@ export const useActivateSignature = () => {
     onError: (error: AppError) => {
       Toast.show({
         type: "error",
-        text1: "Erro ao ativar assinatura!",
+        text1: translate("requests.signatureError"),
         text2: error.msg,
       })
     },
