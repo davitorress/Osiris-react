@@ -1,4 +1,3 @@
-import React from "react"
 import { StyleSheet } from "react-native"
 import { Tabs, Redirect } from "expo-router"
 
@@ -10,6 +9,8 @@ import IonIcon from "@/components/basic/IonIcon"
 
 const styles = StyleSheet.create({
   tabBar: {
+    bottom: 0,
+    position: "absolute",
     borderTopWidth: 1.5,
     borderLeftWidth: 1.5,
     borderRightWidth: 1.5,

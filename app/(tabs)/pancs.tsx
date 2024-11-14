@@ -18,13 +18,18 @@ export default function PancsScreen() {
   const { data: pancs, isLoading } = useListPancs()
   const [search, setSearch] = useState("")
 
-  const searchPancs = useMemo(() => {
-    if (!search || !pancs) return []
+  const filteredPancs = useMemo(
+    () => (pancs ? pancs.filter((p) => p.locale === locale) : []),
+    [pancs, locale]
+  )
 
-    return pancs
+  const searchPancs = useMemo(() => {
+    if (!search || !filteredPancs) return []
+
+    return filteredPancs
       .filter((panc) => panc.name.toLowerCase().includes(search.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [search, pancs])
+  }, [search, filteredPancs])
 
   useFocusEffect(
     useCallback(() => {
@@ -36,12 +41,12 @@ export default function PancsScreen() {
     }, [setSearch])
   )
 
-  if (!pancs || isLoading) {
+  if (!filteredPancs || isLoading) {
     return <LoadingScreen />
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View
@@ -63,9 +68,9 @@ export default function PancsScreen() {
             </View>
           )}
 
-          {pancs.length > 0 && (
+          {filteredPancs.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title={translate("general.pancs")} products={pancs} />
+              <ProductShowcase title={translate("general.pancs")} products={filteredPancs} />
             </View>
           )}
         </View>

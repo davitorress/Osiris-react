@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
 import useRecipeStore from "@/storage/recipe"
+import useTranslationStore from "@/storage/translation"
 
 import { request } from "../shared/request"
 import { CreateRecipe, EditRecipe } from "./types"
@@ -15,7 +16,7 @@ import {
 } from "./normalizers"
 
 export const useGetRecipe = (id: string) => {
-  const { token } = useUserStore()
+  const token = useUserStore((state) => state.token)
 
   const query = async () => {
     const response = await request({
@@ -34,10 +35,8 @@ export const useGetRecipe = (id: string) => {
 }
 
 export const useListRecipes = () => {
-  const { token } = useUserStore()
-  const {
-    actions: { setRecipes },
-  } = useRecipeStore()
+  const token = useUserStore((state) => state.token)
+  const setRecipes = useRecipeStore((state) => state.actions.setRecipes)
 
   const query = async () => {
     const response = await request({
@@ -60,15 +59,15 @@ export const useListRecipes = () => {
 
 export const useAddRecipeToSaved = () => {
   const queryClient = useQueryClient()
-  const {
-    actions: { getIsSaved, setSaved },
-  } = useRecipeStore()
-  const { token } = useUserStore()
   const { data: user } = useCurrentUser()
+  const token = useUserStore((state) => state.token)
+  const setSaved = useRecipeStore((state) => state.actions.setSaved)
+  const getIsSaved = useRecipeStore((state) => state.actions.getIsSaved)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async (id: string) => {
     if (user && token && !getIsSaved(id)) {
-      return updateUserRecipes(user.id, token, [...user.savedRecipesId, id])
+      return updateUserRecipes(user.id, token, [...user.savedRecipesId, id], translate)
     }
     return
   }
@@ -89,18 +88,19 @@ export const useAddRecipeToSaved = () => {
 
 export const useRemoveRecipeFromSaved = () => {
   const queryClient = useQueryClient()
-  const {
-    actions: { getIsSaved, setSaved },
-  } = useRecipeStore()
-  const { token } = useUserStore()
   const { data: user } = useCurrentUser()
+  const token = useUserStore((state) => state.token)
+  const setSaved = useRecipeStore((state) => state.actions.setSaved)
+  const getIsSaved = useRecipeStore((state) => state.actions.getIsSaved)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async (id: string) => {
     if (user && token && getIsSaved(id)) {
       return updateUserRecipes(
         user.id,
         token,
-        user.savedRecipesId.filter((savedId) => savedId !== id)
+        user.savedRecipesId.filter((savedId) => savedId !== id),
+        translate
       )
     }
     return
@@ -121,7 +121,7 @@ export const useRemoveRecipeFromSaved = () => {
 }
 
 export const useCreateRecipe = () => {
-  const { token } = useUserStore()
+  const token = useUserStore((state) => state.token)
   const queryClient = useQueryClient()
 
   const mutation = async (data: CreateRecipe) => {
@@ -154,7 +154,7 @@ export const useCreateRecipe = () => {
 }
 
 export const useUpdateRecipe = () => {
-  const { token } = useUserStore()
+  const token = useUserStore((state) => state.token)
   const queryClient = useQueryClient()
 
   const mutation = async (data: EditRecipe) => {
@@ -184,7 +184,7 @@ export const useUpdateRecipe = () => {
 }
 
 export const useUpdateRecipeImage = () => {
-  const { token } = useUserStore()
+  const token = useUserStore((state) => state.token)
   const queryClient = useQueryClient()
 
   const mutation = async ({ id, image }: { id: string; image: ImagePickerAsset }) => {
@@ -222,7 +222,7 @@ export const useUpdateRecipeImage = () => {
 }
 
 export const useDeleteRecipe = () => {
-  const { token } = useUserStore()
+  const token = useUserStore((state) => state.token)
   const queryClient = useQueryClient()
 
   const mutation = async (id: string) => {

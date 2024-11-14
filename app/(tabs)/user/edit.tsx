@@ -54,7 +54,7 @@ export default function EditUserScreen() {
   }
 
   return (
-    <SafeAreaView className="m-o flex-1">
+    <SafeAreaView className="m-o pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="pt-6 px-6">
           <View className="w-full">

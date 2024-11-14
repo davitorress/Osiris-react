@@ -36,6 +36,7 @@ export const normalizeRecipe = (response: Recipe): NormalizedRecipe => {
     preparation: response.preparo,
     description: response.descricao,
     ingredients: response.ingredientes,
+    locale: response.locale,
   }
 }
 

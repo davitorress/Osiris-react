@@ -58,10 +58,11 @@ export const useAddPancToFavorites = () => {
   const token = useUserStore((state) => state.token)
   const setFavorites = usePancStore((state) => state.actions.setFavorites)
   const getIsFavorite = usePancStore((state) => state.actions.getIsFavorite)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async (id: string) => {
     if (user && token && !getIsFavorite(id)) {
-      return updateUserPancs(user.id, token, [...user.favoritePancsId, id])
+      return updateUserPancs(user.id, token, [...user.favoritePancsId, id], translate)
     }
     return
   }
@@ -86,13 +87,15 @@ export const useRemovePancFromFavorites = () => {
   const token = useUserStore((state) => state.token)
   const setFavorites = usePancStore((state) => state.actions.setFavorites)
   const getIsFavorite = usePancStore((state) => state.actions.getIsFavorite)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async (id: string) => {
     if (user && token && getIsFavorite(id)) {
       return updateUserPancs(
         user.id,
         token,
-        user.favoritePancsId.filter((pancId) => pancId !== id)
+        user.favoritePancsId.filter((pancId) => pancId !== id),
+        translate
       )
     }
     return

@@ -43,6 +43,7 @@ export default function EditRecipeScreen() {
     const recipeData = {
       ...data,
       id: id as string,
+      locale: recipe.locale,
       author: recipe.author,
     }
 
@@ -90,7 +91,7 @@ export default function EditRecipeScreen() {
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="w-full">

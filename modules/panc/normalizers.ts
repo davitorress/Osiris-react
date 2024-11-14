@@ -35,6 +35,7 @@ export const normalizePanc = (response: Panc, translate: TranslateFunction): Nor
     benefits: response.beneficios,
     description: response.descricao,
     cultivation: response.cultivo,
+    locale: response.locale,
   }
 }
 

@@ -21,8 +21,14 @@ export default function HomeScreen() {
   const { data: pancs, isFetched: isFetchedPancs } = useListPancs()
   const { data: recipes, isFetched: isFetchedRecipes } = useListRecipes()
 
-  const pancsSliced = useMemo(() => (pancs ? pancs.slice(0, 5) : []), [pancs])
-  const recipesSliced = useMemo(() => (recipes ? recipes.slice(0, 5) : []), [recipes])
+  const pancsSliced = useMemo(
+    () => (pancs ? pancs.filter((p) => p.locale === locale).slice(0, 5) : []),
+    [pancs, locale]
+  )
+  const recipesSliced = useMemo(
+    () => (recipes ? recipes.filter((r) => r.locale === locale).slice(0, 5) : []),
+    [recipes, locale]
+  )
 
   const searchProducts = useMemo(() => {
     if (!search) return []

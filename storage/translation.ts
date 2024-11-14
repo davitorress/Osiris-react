@@ -25,13 +25,15 @@ const i18n = new I18n(
 
 export type TranslateFunction = typeof i18n.t
 
+export type LocalesName = "pt" | "en"
+
 interface SupportedLocales {
   flag: string
   image: string
   currency: string
 }
 
-export const SUPPORTED_LOCALES: Record<string, SupportedLocales> = {
+export const SUPPORTED_LOCALES: Record<LocalesName, SupportedLocales> = {
   pt: {
     flag: "pt-br",
     currency: "BRL",

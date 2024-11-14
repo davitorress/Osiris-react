@@ -8,6 +8,7 @@
     "scheme": "osiris",
     "userInterfaceStyle": "light",
     "jsEngine": "hermes",
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/images/osiris_splash.png",
       "resizeMode": "contain",

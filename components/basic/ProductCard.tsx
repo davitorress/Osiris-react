@@ -4,7 +4,6 @@ import { GestureResponderEvent, TouchableOpacity, View } from "react-native"
 import IonIcon from "@/components/basic/IonIcon"
 import TextThemed from "@/components/themed/TextThemed"
 import ImageWithPlaceholder from "@/components/basic/ImageWithPlaceholder"
-
 interface ProductCardProps {
   id: string
   name: string

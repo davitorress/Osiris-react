@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import useUserStore from "@/storage/user"
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
-import useTranslationStore from "@/storage/translation"
+import useTranslationStore, { TranslateFunction } from "@/storage/translation"
 
 import { AppError } from "../shared/types"
 import { request } from "../shared/request"
@@ -58,7 +58,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       setToken(data.token)
       setId(data.idUsuario)
-      router.push("/(tabs)/")
+      router.push("/(tabs)")
     },
     onError: (error: AppError) => {
       Toast.show({
@@ -192,9 +192,12 @@ export const useUpdateUserImage = () => {
   })
 }
 
-export const updateUserPancs = async (id: string, token: string, pancs: string[]) => {
-  const translate = useTranslationStore((state) => state.actions.translate)
-
+export const updateUserPancs = async (
+  id: string,
+  token: string,
+  pancs: string[],
+  translate: TranslateFunction
+) => {
   const response = await request({
     url: `/usuarios/${id}`,
     method: "PATCH",
@@ -207,9 +210,12 @@ export const updateUserPancs = async (id: string, token: string, pancs: string[]
   return normalizeUser(response, translate)
 }
 
-export const updateUserRecipes = async (id: string, token: string, recipes: string[]) => {
-  const translate = useTranslationStore((state) => state.actions.translate)
-
+export const updateUserRecipes = async (
+  id: string,
+  token: string,
+  recipes: string[],
+  translate: TranslateFunction
+) => {
   const response = await request({
     url: `/usuarios/${id}`,
     method: "PATCH",

@@ -153,7 +153,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
       <View className="w-full mt-3">
         <Pressable className="flex-row" onPress={() => router.push("/login")}>
           <TextThemed color="primary" size="body2" font="nunitoRegular">
-            {translate("actions.registered")}
+            {translate("general.registered")}
           </TextThemed>
           <TextThemed color="alert" size="body2" font="nunitoBold" classes="underline ml-1">
             {translate("actions.signIn")}

@@ -22,13 +22,18 @@ export default function RecipesScreen() {
   const locale = useTranslationStore((state) => state.locale)
   const translate = useTranslationStore((state) => state.actions.translate)
 
-  const searchRecipes = useMemo(() => {
-    if (!search || !recipes) return []
+  const filteredRecipes = useMemo(
+    () => (recipes ? recipes.filter((r) => r.locale === locale) : []),
+    [recipes, locale]
+  )
 
-    return recipes
+  const searchRecipes = useMemo(() => {
+    if (!search || !filteredRecipes) return []
+
+    return filteredRecipes
       .filter((recipe) => recipe.name.toLowerCase().includes(search.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [search, recipes])
+  }, [search, filteredRecipes])
 
   useFocusEffect(
     useCallback(() => {
@@ -40,12 +45,12 @@ export default function RecipesScreen() {
     }, [setSearch])
   )
 
-  if (!recipes || isLoading) {
+  if (!filteredRecipes || isLoading) {
     return <LoadingScreen />
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View
@@ -77,9 +82,9 @@ export default function RecipesScreen() {
             </View>
           )}
 
-          {recipes.length > 0 && (
+          {filteredRecipes.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title={translate("general.recipes")} products={recipes} />
+              <ProductShowcase title={translate("general.recipes")} products={filteredRecipes} />
             </View>
           )}
         </View>

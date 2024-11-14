@@ -53,7 +53,7 @@ export default function RecipePage() {
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="flex-row items-start">

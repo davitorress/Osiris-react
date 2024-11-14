@@ -49,7 +49,7 @@ export default function PancPage() {
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="flex-row items-start">
@@ -120,7 +120,7 @@ export default function PancPage() {
           </View>
 
           <View className="w-full mt-8">
-            <ContentSection title={translate("general.cultivation")}>
+            <ContentSection title={translate("general.cultivations")}>
               <BulletList items={panc.cultivation} />
             </ContentSection>
           </View>

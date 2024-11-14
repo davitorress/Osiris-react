@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { useRouter } from "expo-router"
 import { Pressable, ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -24,7 +24,15 @@ export default function UserScreen() {
   const { favorites } = usePancStore()
   const { recipes, saved } = useRecipeStore()
   const myRecipes = recipes.filter((recipe) => recipe.author === user?.id)
+
+  const locale = useTranslationStore((state) => state.locale)
   const translate = useTranslationStore((state) => state.actions.translate)
+
+  const savedFiltered = useMemo(() => saved.filter((s) => s.locale === locale), [saved, locale])
+  const favoritesFiltered = useMemo(
+    () => favorites.filter((f) => f.locale === locale),
+    [favorites, locale]
+  )
 
   const editProfile = useCallback(() => {
     router.push("/(tabs)/user/edit")
@@ -43,7 +51,7 @@ export default function UserScreen() {
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="relative self-center w-fit">
@@ -108,21 +116,21 @@ export default function UserScreen() {
             <UserSignatureCard signature={user.signature} />
           </View>
 
-          {favorites.length > 0 && (
+          {favoritesFiltered.length > 0 && (
             <View className="w-full mt-8">
               <ProductShowcase
                 title={translate("general.favoritePancs")}
-                products={favorites}
+                products={favoritesFiltered}
                 horizontal
               />
             </View>
           )}
 
-          {saved.length > 0 && (
+          {savedFiltered.length > 0 && (
             <View className="w-full mt-8">
               <ProductShowcase
                 title={translate("general.savedRecipes")}
-                products={saved}
+                products={savedFiltered}
                 horizontal
               />
             </View>

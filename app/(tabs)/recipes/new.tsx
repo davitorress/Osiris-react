@@ -21,6 +21,7 @@ export default function NewRecipesPage() {
   const deleteRecipe = useDeleteRecipe()
   const createRecipe = useCreateRecipe()
   const updateRecipeImage = useUpdateRecipeImage()
+  const locale = useTranslationStore((state) => state.locale)
   const translate = useTranslationStore((state) => state.actions.translate)
 
   const router = useRouter()
@@ -39,6 +40,7 @@ export default function NewRecipesPage() {
 
     const recipeData = {
       ...data,
+      locale,
       author: id as string,
     }
 
@@ -74,7 +76,7 @@ export default function NewRecipesPage() {
   )
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="w-full">
