@@ -1,3 +1,5 @@
+import { LocalesName } from "@/storage/translation"
+
 export interface Panc {
   id: string
   nome: string
@@ -5,6 +7,7 @@ export interface Panc {
   descricao: string
   beneficios: string
   cultivo: string[]
+  locale: LocalesName
 }
 
 export interface NormalizedPanc {
@@ -15,4 +18,5 @@ export interface NormalizedPanc {
   benefits: string
   description: string
   cultivation: string[]
+  locale: LocalesName
 }

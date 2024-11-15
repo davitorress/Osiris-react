@@ -4,22 +4,32 @@ import { useCallback, useMemo, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { useListPancs } from "@/modules/panc/queries"
+import useTranslationStore from "@/storage/translation"
 
+import Sizes from "@/constants/Sizes"
 import SearchInput from "@/components/basic/SearchInput"
 import LoadingScreen from "@/components/basic/LoadingScreen"
 import ProductShowcase from "@/components/blocks/ProductShowcase"
+import LanguageFlag from "@/components/basic/LanguageFlag"
 
 export default function PancsScreen() {
+  const translate = useTranslationStore((state) => state.actions.translate)
+  const locale = useTranslationStore((state) => state.locale)
   const { data: pancs, isLoading } = useListPancs()
   const [search, setSearch] = useState("")
 
-  const searchPancs = useMemo(() => {
-    if (!search || !pancs) return []
+  const filteredPancs = useMemo(
+    () => (pancs ? pancs.filter((p) => p.locale === locale) : []),
+    [pancs, locale]
+  )
 
-    return pancs
+  const searchPancs = useMemo(() => {
+    if (!search || !filteredPancs) return []
+
+    return filteredPancs
       .filter((panc) => panc.name.toLowerCase().includes(search.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [search, pancs])
+  }, [search, filteredPancs])
 
   useFocusEffect(
     useCallback(() => {
@@ -31,25 +41,36 @@ export default function PancsScreen() {
     }, [setSearch])
   )
 
-  if (!pancs || isLoading) {
+  if (!filteredPancs || isLoading) {
     return <LoadingScreen />
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
-          <SearchInput value={search} onChange={setSearch} placeholder="Pesquise por PANCs" />
+          <View
+            style={{ gap: Sizes.small }}
+            className="w-full flex-row items-center justify-between"
+          >
+            <SearchInput
+              value={search}
+              onChange={setSearch}
+              placeholder={translate("form.placeholder.searchPancs")}
+            />
+
+            <LanguageFlag locale={locale} />
+          </View>
 
           {searchPancs && searchPancs.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="PANCs encontradas" products={searchPancs} />
+              <ProductShowcase title={translate("general.pancsFound")} products={searchPancs} />
             </View>
           )}
 
-          {pancs.length > 0 && (
+          {filteredPancs.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="PANCs" products={pancs} />
+              <ProductShowcase title={translate("general.pancs")} products={filteredPancs} />
             </View>
           )}
         </View>

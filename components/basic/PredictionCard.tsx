@@ -7,20 +7,24 @@ import { NormalizedPrediction } from "@/modules/prediction/types"
 
 import Sizes from "@/constants/Sizes"
 import TextThemed from "@/components/themed/TextThemed"
+import useTranslationStore, { SUPPORTED_LOCALES } from "@/storage/translation"
 
 interface PredictionCardProps {
   prediction: NormalizedPrediction
 }
 
 export default function PredictionCard({ prediction }: PredictionCardProps) {
+  const locale = useTranslationStore((state) => state.locale)
+  const translate = useTranslationStore((state) => state.actions.translate)
+
   const formattedDate = useMemo(() => {
-    const formatted = prediction.date.toLocaleString("pt-br", {
+    const formatted = prediction.date.toLocaleString(SUPPORTED_LOCALES[locale].flag, {
       dateStyle: "short",
       timeStyle: "short",
     })
 
     return formatted
-  }, [prediction.date])
+  }, [prediction.date, locale])
 
   const cardColor = useMemo(() => {
     if (prediction.accuracy >= 70) {
@@ -52,12 +56,14 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
         </TextThemed>
 
         <TextThemed color={cardColor.text as any} font="ubuntuRegular">
-          Resultado: {prediction.accuracy >= 70 ? "Provável" : "Improvável"}
+          {prediction.accuracy >= 70
+            ? translate("general.predictionResultRight")
+            : translate("general.predictionResultWrong")}
         </TextThemed>
 
-        <TextThemed>Data: {formattedDate}</TextThemed>
+        <TextThemed>{translate("general.predictionDate", { date: formattedDate })}</TextThemed>
 
-        <TextThemed>Status: {prediction.status}</TextThemed>
+        <TextThemed>{translate("general.predictionStatus")}</TextThemed>
       </View>
     </View>
   )

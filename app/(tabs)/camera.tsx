@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { CameraView, useCameraPermissions } from "expo-camera"
 import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker"
 
+import useTranslationStore from "@/storage/translation"
 import { useCurrentUser } from "@/modules/user/queries"
 import { useAddPrediction, useGetUserPredictions } from "@/modules/prediction/queries"
 
@@ -18,6 +19,7 @@ export default function CameraScreen() {
   const [blockAnalysis, setBlockAnalysis] = useState(false)
   const [facing, setFacing] = useState<"front" | "back">("back")
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const addPrediction = useAddPrediction()
   const [permission, requestPermission] = useCameraPermissions()
@@ -27,8 +29,8 @@ export default function CameraScreen() {
   const handleBlockAnalysis = () => {
     Toast.show({
       type: "error",
-      text1: "Limite de análises atingido!",
-      text2: "Ative a sua assinatura para ter análises ilimitadas!",
+      text1: translate("error.analysisLimit"),
+      text2: translate("error.analysisLimitDescription"),
     })
   }
 
@@ -90,8 +92,8 @@ export default function CameraScreen() {
 
     Toast.show({
       type: "error",
-      text1: "Permissão de câmera negada!",
-      text2: "Você precisa permitir o acesso à câmera para usar esta funcionalidade.",
+      text1: translate("error.cameraPermission"),
+      text2: translate("error.cameraPermissionDescription"),
     })
 
     return <Redirect href="/(tabs)/" />
@@ -123,18 +125,18 @@ export default function CameraScreen() {
               <IonIcon name="star" color="primary" size="huge" />
 
               <TextThemed color="primary" font="ubuntuBold" numberOfLines={100} classes="ml-2">
-                Você possui análises ilimitadas!
+                {translate("general.unlimitedAnalysis")}
               </TextThemed>
             </View>
           ) : (
             <View className="flex-row items-center justify-center">
               {predictions.length < 3 ? (
                 <TextThemed color="tertiary" font="ubuntuBold" numberOfLines={100}>
-                  Análises disponíveis: {3 - predictions.length}
+                  {translate("general.limitedAnalysis", { count: 3 - predictions.length })}
                 </TextThemed>
               ) : (
                 <TextThemed color="error" font="ubuntuBold" numberOfLines={100}>
-                  Você atingiu o limite de análises!
+                  {translate("general.noAnalysis")}
                 </TextThemed>
               )}
             </View>
@@ -178,7 +180,7 @@ export default function CameraScreen() {
         >
           <View className="p-6 w-[90%] bg-white h-fit relative top-[30%] rounded">
             <TextThemed font="ubuntuBold" size="h3" numberOfLines={100}>
-              A sua análise está em processamento!
+              {translate("general.processingAnalysis")}
             </TextThemed>
             <TextThemed
               size="h4"
@@ -186,7 +188,7 @@ export default function CameraScreen() {
               font="ubuntuRegular"
               classes="mt-3 text-justify"
             >
-              Você poderá visualizar o resultado na tela de perfil dentro da seção "Suas análises"
+              {translate("general.processingAnalysisDescription")}
             </TextThemed>
           </View>
         </View>

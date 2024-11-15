@@ -1,3 +1,5 @@
+import { LocalesName } from "@/storage/translation"
+
 export interface CreateRecipe {
   name: string
   author: string
@@ -5,6 +7,7 @@ export interface CreateRecipe {
   description: string
   ingredients: string[]
   preparation: string[]
+  locale: string
 }
 
 export interface EditRecipe extends CreateRecipe {
@@ -20,6 +23,7 @@ export interface Recipe {
   pancs: string[]
   preparo: string[]
   ingredientes: string[]
+  locale: LocalesName
 }
 
 export interface NormalizedRecipe {
@@ -32,4 +36,5 @@ export interface NormalizedRecipe {
   pancs: string[]
   preparation: string[]
   ingredients: string[]
+  locale: LocalesName
 }

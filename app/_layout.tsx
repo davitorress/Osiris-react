@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { Fragment, useEffect } from "react"
 import { Stack } from "expo-router"
 import { useFonts } from "expo-font"
 import { Ionicons } from "@expo/vector-icons"
@@ -68,7 +68,7 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <Fragment>
       <RootLayoutNav />
       <Toast
         topOffset={60}
@@ -111,7 +111,7 @@ export default function RootLayout() {
           ),
         }}
       />
-    </>
+    </Fragment>
   )
 }
 

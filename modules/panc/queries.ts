@@ -2,13 +2,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import useUserStore from "@/storage/user"
 import usePancStore from "@/storage/panc"
+import useTranslationStore from "@/storage/translation"
 
 import { request } from "../shared/request"
 import { normalizePancs, normalizePanc } from "./normalizers"
 import { updateUserPancs, useCurrentUser } from "../user/queries"
 
 export const useGetPanc = (id: string) => {
-  const { token } = useUserStore()
+  const token = useUserStore((state) => state.token)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const query = async () => {
     const response = await request({
@@ -16,7 +18,7 @@ export const useGetPanc = (id: string) => {
       token,
     })
 
-    return normalizePanc(response)
+    return normalizePanc(response, translate)
   }
 
   return useQuery({
@@ -27,10 +29,9 @@ export const useGetPanc = (id: string) => {
 }
 
 export const useListPancs = () => {
-  const { token } = useUserStore()
-  const {
-    actions: { setPancs },
-  } = usePancStore()
+  const token = useUserStore((state) => state.token)
+  const setPancs = usePancStore((state) => state.actions.setPancs)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const query = async () => {
     const response = await request({
@@ -38,7 +39,7 @@ export const useListPancs = () => {
       token,
     })
 
-    const pancs = normalizePancs(response)
+    const pancs = normalizePancs(response, translate)
     setPancs(pancs)
 
     return pancs
@@ -53,15 +54,15 @@ export const useListPancs = () => {
 
 export const useAddPancToFavorites = () => {
   const queryClient = useQueryClient()
-  const {
-    actions: { getIsFavorite, setFavorites },
-  } = usePancStore()
-  const { token } = useUserStore()
   const { data: user } = useCurrentUser()
+  const token = useUserStore((state) => state.token)
+  const setFavorites = usePancStore((state) => state.actions.setFavorites)
+  const getIsFavorite = usePancStore((state) => state.actions.getIsFavorite)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async (id: string) => {
     if (user && token && !getIsFavorite(id)) {
-      return updateUserPancs(user.id, token, [...user.favoritePancsId, id])
+      return updateUserPancs(user.id, token, [...user.favoritePancsId, id], translate)
     }
     return
   }
@@ -82,18 +83,19 @@ export const useAddPancToFavorites = () => {
 
 export const useRemovePancFromFavorites = () => {
   const queryClient = useQueryClient()
-  const {
-    actions: { getIsFavorite, setFavorites },
-  } = usePancStore()
-  const { token } = useUserStore()
   const { data: user } = useCurrentUser()
+  const token = useUserStore((state) => state.token)
+  const setFavorites = usePancStore((state) => state.actions.setFavorites)
+  const getIsFavorite = usePancStore((state) => state.actions.getIsFavorite)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const mutation = async (id: string) => {
     if (user && token && getIsFavorite(id)) {
       return updateUserPancs(
         user.id,
         token,
-        user.favoritePancsId.filter((pancId) => pancId !== id)
+        user.favoritePancsId.filter((pancId) => pancId !== id),
+        translate
       )
     }
     return

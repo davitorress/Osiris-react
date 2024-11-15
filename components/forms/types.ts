@@ -2,14 +2,14 @@ import { z } from "zod"
 
 export const loginSchema = z.object({
   email: z
-    .string({ required_error: "O email é obrigatório!" })
-    .min(1, "O email é obrigatório!")
-    .email("Insira um email válido!")
+    .string({ required_error: "errors.email" })
+    .min(1, "errors.email")
+    .email("errors.invalidEmail")
     .transform((email) => email.trim()),
   password: z
-    .string({ required_error: "A senha é obrigatória!" })
-    .min(1, "A senha é obrigatória!")
-    .min(3, "A senha deve ter no mínimo 3 caracteres!")
+    .string({ required_error: "errors.password" })
+    .min(1, "errors.password")
+    .min(3, "errors.passwordLength")
     .transform((password) => password.trim()),
 })
 
@@ -18,27 +18,27 @@ export type LoginData = z.infer<typeof loginSchema>
 export const registerSchema = z
   .object({
     name: z
-      .string({ required_error: "O nome é obrigatório!" })
-      .min(1, "O nome é obrigatório!")
+      .string({ required_error: "errors.name" })
+      .min(1, "erros.name")
       .transform((name) => name.trim()),
     email: z
-      .string({ required_error: "O email é obrigatório!" })
-      .min(1, "O email é obrigatório!")
-      .email("Insira um email válido!")
+      .string({ required_error: "errors.email" })
+      .min(1, "errors.email")
+      .email("errors.invalidEmail")
       .transform((email) => email.trim()),
     password: z
-      .string({ required_error: "A senha é obrigatória!" })
-      .min(1, "A senha é obrigatória!")
-      .min(3, "A senha deve ter no mínimo 3 caracteres!")
+      .string({ required_error: "errors.password" })
+      .min(1, "errors.password")
+      .min(3, "errors.passwordLength")
       .transform((password) => password.trim()),
     confirmPassword: z
-      .string({ required_error: "A confirmação de senha é obrigatória!" })
-      .min(1, "A confirmação de senha é obrigatória!")
-      .min(3, "A confirmação de senha deve ter no mínimo 3 caracteres!")
+      .string({ required_error: "erros.confirmPassword" })
+      .min(1, "errors.password")
+      .min(3, "errors.passwordLength")
       .transform((confirmPassword) => confirmPassword.trim()),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
-    message: "As senhas não coincidem!",
+    message: "errors.passwordMatch",
     path: ["confirmPassword"],
   })
 
@@ -47,24 +47,24 @@ export type RegisterData = z.infer<typeof registerSchema>
 export const recipeSchema = z
   .object({
     name: z
-      .string({ required_error: "O nome da receita é obrigatório!" })
-      .min(1, "O nome da receita é obrigatório!")
+      .string({ required_error: "errors.recipeName" })
+      .min(1, "errors.recipeName")
       .transform((name) => name.trim()),
     description: z
-      .string({ required_error: "A descrição da receita é obrigatória!" })
-      .min(1, "A descrição da receita é obrigatória!")
-      .max(250, "A descrição da receita deve ter no máximo 250 caracteres!")
+      .string({ required_error: "errors.recipeDescription" })
+      .min(1, "errors.recipeDescription")
+      .max(250, "errors.recipeDescriptionLength")
       .transform((description) => description.trim()),
-    pancs: z.array(z.string()).min(1, "A receita deve ter pelo menos uma panc!"),
-    ingredients: z.array(z.string()).min(1, "A receita deve ter pelo menos um ingrediente!"),
-    preparation: z.array(z.string()).min(1, "A receita deve ter pelo menos um modo de preparo!"),
+    pancs: z.array(z.string()).min(1, "errors.recipePancs"),
+    ingredients: z.array(z.string()).min(1, "errors.recipeIngredients"),
+    preparation: z.array(z.string()).min(1, "errors.recipePreparation"),
   })
   .refine(({ ingredients }) => ingredients[0].length > 0, {
-    message: "A receita deve ter pelo menos um ingrediente!",
+    message: "errors.recipeIngredients",
     path: ["ingredients"],
   })
   .refine(({ preparation }) => preparation[0].length > 0, {
-    message: "A receita deve ter pelo menos um modo de preparo!",
+    message: "errors.recipePreparation",
     path: ["preparation"],
   })
   .transform(({ ingredients, preparation, ...rest }) => {
@@ -79,10 +79,10 @@ export type RecipeData = z.infer<typeof recipeSchema>
 
 export const editUserSchema = z.object({
   name: z.string().transform((name) => name.trim()),
-  email: z.string().email("Insira um email válido!"),
+  email: z.string().email("errors.invalidEmail"),
   newPassword: z
     .string()
-    .min(3, "A senha deve ter no mínimo 3 caracteres!")
+    .min(3, "errors.passwordLength")
     .transform((password) => password.trim())
     .optional(),
 })

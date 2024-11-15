@@ -1,11 +1,12 @@
 import { View } from "react-native"
 import { useFocusEffect } from "expo-router"
-import { useCallback, useLayoutEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useCallback, useLayoutEffect, useMemo } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 
 import usePancStore from "@/storage/panc"
 import { RecipeData, recipeSchema } from "./types"
+import useTranslationStore from "@/storage/translation"
 
 import Sizes from "@/constants/Sizes"
 import Input from "@/components/basic/Input"
@@ -23,12 +24,13 @@ interface RecipeFormProps {
 
 export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps) {
   const { pancs } = usePancStore()
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const {
+    watch,
     reset,
     control,
     register,
-    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm<RecipeData>({
@@ -91,6 +93,14 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
     if (preparationFields.length > 1) removePreparation(preparationFields.length - 1)
   }
 
+  const [description] = watch(["description"])
+  const descriptionCounter = useMemo(() => {
+    const characters = description?.length ?? 0
+    const limit = 250
+
+    return translate("form.recipeDescriptionLength", { count: characters, limit })
+  }, [description])
+
   useLayoutEffect(() => {
     if (ingredientsFields.length === 0) addNewIngredient()
     if (preparationFields.length === 0) addNewPreparation()
@@ -130,7 +140,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
     <View className="w-full" style={{ gap: Sizes.veryHuge }}>
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          Nome da receita:
+          {translate("form.recipeName")}
         </TextThemed>
         <Controller
           control={control}
@@ -140,7 +150,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
               onBlur={onBlur}
               onChange={onChange}
               font="nunitoSemiBold"
-              placeholder="Digite o nome da receita"
+              placeholder={translate("form.placeholder.recipeName")}
             />
           )}
           {...register("name")}
@@ -150,7 +160,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
 
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          Descrição curta:
+          {translate("form.recipeDescription")}
         </TextThemed>
         <Controller
           control={control}
@@ -160,7 +170,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
               onBlur={onBlur}
               onChange={onChange}
               font="nunitoSemiBold"
-              placeholder="Digite a descrição da receita"
+              placeholder={translate("form.placeholder.recipeDescription")}
               numberOfLines={4}
               multiline
             />
@@ -168,14 +178,14 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
           {...register("description")}
         />
         <TextThemed size="body2" color="tertiary" font="nunitoSemiBold" classes="mt-1 text-right">
-          {getValues("description")?.length ?? 0}/250 caracteres
+          {descriptionCounter}
         </TextThemed>
         <InputErrorMessage message={errors.description?.message} />
       </View>
 
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          PANCs:
+          {translate("form.recipePancs")}
         </TextThemed>
         <Controller
           control={control}
@@ -218,7 +228,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
 
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          Ingredientes:
+          {translate("form.recipeIngredients")}
         </TextThemed>
         <Controller
           control={control}
@@ -234,7 +244,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
                       onBlur={onBlur}
                       onChange={onChange}
                       font="nunitoSemiBold"
-                      placeholder="Exemplo: 1 colher de sal"
+                      placeholder={translate("form.placeholder.recipeIngredients")}
                     />
                   )}
                   {...register(`ingredients.${index}`)}
@@ -259,7 +269,7 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
 
       <View className="w-full">
         <TextThemed color="primary" size="h4" font="nunitoRegular" classes="mb-2">
-          Modo de preparo:
+          {translate("form.recipePreparation")}
         </TextThemed>
         <Controller
           control={control}
@@ -272,14 +282,14 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="w-full" style={{ gap: Sizes.micro }}>
                       <TextThemed color="primary" font="nunitoRegular">
-                        {index + 1}° Passo
+                        {translate("form.recipePreparationStep", { count: index + 1 })}
                       </TextThemed>
                       <Input
                         value={value}
                         onBlur={onBlur}
                         onChange={onChange}
                         font="nunitoSemiBold"
-                        placeholder="Exemplo: Misture todos os ingredientes secos"
+                        placeholder={translate("form.placeholder.recipePreparation")}
                         numberOfLines={4}
                         multiline
                       />
@@ -308,13 +318,13 @@ export default function RecipeForm({ data, onCancel, onSubmit }: RecipeFormProps
       <View className="w-full flex-row justify-between">
         <ButtonThemed color="alert" onClick={onCancel} classes="w-[45%]">
           <TextThemed color="white" size="h4" font="nunitoBold">
-            {data ? "Excluir" : "Cancelar"}
+            {data ? translate("actions.delete") : translate("actions.cancel")}
           </TextThemed>
         </ButtonThemed>
 
         <ButtonThemed color="secondary" onClick={handleSubmit(onSubmit)} classes="w-[45%]">
           <TextThemed color="white" size="h4" font="nunitoBold">
-            Salvar
+            {translate("actions.save")}
           </TextThemed>
         </ButtonThemed>
       </View>

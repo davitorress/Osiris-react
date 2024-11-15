@@ -1,8 +1,9 @@
 import { AppError } from "../shared/types"
 import { NormalizedPanc, Panc } from "./types"
 import { normalizeError } from "../shared/normalizers"
+import { TranslateFunction } from "@/storage/translation"
 
-export const normalizePanc = (response: Panc): NormalizedPanc => {
+export const normalizePanc = (response: Panc, translate: TranslateFunction): NormalizedPanc => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -10,18 +11,18 @@ export const normalizePanc = (response: Panc): NormalizedPanc => {
       case 401:
         throw {
           key: "UNAUTHORIZED",
-          msg: "Acesso inválido, faça login novamente.",
+          msg: translate("requests.unauthorized"),
         } as AppError
       case 404:
         throw {
           key: "PANC_NOT_FOUND",
-          msg: "PANC não encontrada ou não existe.",
+          msg: translate("requests.pancNotFound"),
         } as AppError
 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
+          msg: translate("requests.unidentified"),
         } as AppError
     }
   }
@@ -34,10 +35,14 @@ export const normalizePanc = (response: Panc): NormalizedPanc => {
     benefits: response.beneficios,
     description: response.descricao,
     cultivation: response.cultivo,
+    locale: response.locale,
   }
 }
 
-export const normalizePancs = (response: Panc[]): NormalizedPanc[] => {
+export const normalizePancs = (
+  response: Panc[],
+  translate: TranslateFunction
+): NormalizedPanc[] => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -45,16 +50,16 @@ export const normalizePancs = (response: Panc[]): NormalizedPanc[] => {
       case 401:
         throw {
           key: "UNAUTHORIZED",
-          msg: "Acesso inválido, faça login novamente.",
+          msg: translate("requests.unauthorized"),
         } as AppError
 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
+          msg: translate("requests.unidentified"),
         } as AppError
     }
   }
 
-  return response.map(normalizePanc)
+  return response.map((panc) => normalizePanc(panc, translate))
 }

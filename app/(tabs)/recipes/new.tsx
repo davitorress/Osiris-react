@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import useUserStore from "@/storage/user"
 import { RecipeData } from "@/components/forms/types"
+import useTranslationStore from "@/storage/translation"
 import { useCreateRecipe, useDeleteRecipe, useUpdateRecipeImage } from "@/modules/recipe/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
@@ -20,6 +21,8 @@ export default function NewRecipesPage() {
   const deleteRecipe = useDeleteRecipe()
   const createRecipe = useCreateRecipe()
   const updateRecipeImage = useUpdateRecipeImage()
+  const locale = useTranslationStore((state) => state.locale)
+  const translate = useTranslationStore((state) => state.actions.translate)
 
   const router = useRouter()
   const [editImage, setEditImage] = useState(false)
@@ -29,14 +32,15 @@ export default function NewRecipesPage() {
     if (!id || !image) {
       Toast.show({
         type: "error",
-        text1: "Erro ao criar a receita!",
-        text2: "Por favor, preencha todos os campos e adicione uma imagem.",
+        text1: translate("error.createRecipe"),
+        text2: translate("error.createRecipeDescription"),
       })
       return
     }
 
     const recipeData = {
       ...data,
+      locale,
       author: id as string,
     }
 
@@ -72,7 +76,7 @@ export default function NewRecipesPage() {
   )
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="w-full">

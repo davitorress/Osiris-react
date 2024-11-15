@@ -1,8 +1,12 @@
 import { AppError } from "../shared/types"
 import { normalizeError } from "../shared/normalizers"
+import { TranslateFunction } from "@/storage/translation"
 import { NormalizedPrediction, Prediction, PredictionStatusEnum } from "./types"
 
-export const normalizePrediction = (response: Prediction): NormalizedPrediction => {
+export const normalizePrediction = (
+  response: Prediction,
+  translate: TranslateFunction
+): NormalizedPrediction => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -10,7 +14,7 @@ export const normalizePrediction = (response: Prediction): NormalizedPrediction 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro ao buscar as análises, tente novamente mais tarde.",
+          msg: translate("requests.analysesNotFound"),
         } as AppError
     }
   }
@@ -26,7 +30,10 @@ export const normalizePrediction = (response: Prediction): NormalizedPrediction 
   }
 }
 
-export const normalizePredictions = (response: Prediction[]): NormalizedPrediction[] => {
+export const normalizePredictions = (
+  response: Prediction[],
+  translate: TranslateFunction
+): NormalizedPrediction[] => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -34,15 +41,17 @@ export const normalizePredictions = (response: Prediction[]): NormalizedPredicti
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro ao buscar as análises, tente novamente mais tarde.",
+          msg: translate("requests.analysesNotFound"),
         } as AppError
     }
   }
 
-  return response.map(normalizePrediction).sort((a, b) => b.date.getTime() - a.date.getTime())
+  return response
+    .map((prediction) => normalizePrediction(prediction, translate))
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
 }
 
-export const normalizeAddPrediction = (response: any) => {
+export const normalizeAddPrediction = (response: any, translate: TranslateFunction) => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -50,13 +59,13 @@ export const normalizeAddPrediction = (response: any) => {
       case 500:
         throw {
           key: "INTERNAL_SERVER_ERROR",
-          msg: "Ocorreu um erro ao processar a análise, tente novamente mais tarde.",
+          msg: translate("requests.processingAnalysis"),
         } as AppError
 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro ao processar a análise, tente novamente mais tarde.",
+          msg: translate("requests.processingAnalysis"),
         } as AppError
     }
   }

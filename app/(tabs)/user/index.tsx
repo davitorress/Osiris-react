@@ -1,10 +1,11 @@
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { useRouter } from "expo-router"
 import { Pressable, ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import usePancStore from "@/storage/panc"
 import useRecipeStore from "@/storage/recipe"
+import useTranslationStore from "@/storage/translation"
 import { useCurrentUser, useLogout } from "@/modules/user/queries"
 
 import IonIcon from "@/components/basic/IonIcon"
@@ -24,6 +25,15 @@ export default function UserScreen() {
   const { recipes, saved } = useRecipeStore()
   const myRecipes = recipes.filter((recipe) => recipe.author === user?.id)
 
+  const locale = useTranslationStore((state) => state.locale)
+  const translate = useTranslationStore((state) => state.actions.translate)
+
+  const savedFiltered = useMemo(() => saved.filter((s) => s.locale === locale), [saved, locale])
+  const favoritesFiltered = useMemo(
+    () => favorites.filter((f) => f.locale === locale),
+    [favorites, locale]
+  )
+
   const editProfile = useCallback(() => {
     router.push("/(tabs)/user/edit")
   }, [router])
@@ -41,7 +51,7 @@ export default function UserScreen() {
   }
 
   return (
-    <SafeAreaView className="m-0 flex-1">
+    <SafeAreaView className="m-0 pb-10 flex-1 bg-white">
       <ScrollView>
         <View className="p-6">
           <View className="relative self-center w-fit">
@@ -80,7 +90,7 @@ export default function UserScreen() {
 
               <ButtonThemed onClick={handleLogout}>
                 <TextThemed size="body1" color="white" font="nunitoSemiBold" classes="mr-2">
-                  Sair
+                  {translate("actions.logout")}
                 </TextThemed>
 
                 <IonIcon name="exit-outline" color="white" size="large" />
@@ -94,7 +104,7 @@ export default function UserScreen() {
                 <IonIcon name="images-outline" color="black" size="large" />
 
                 <TextThemed size="h3" font="nunitoSemiBold" classes="ml-2">
-                  Suas análises
+                  {translate("general.yourAnalysis")}
                 </TextThemed>
               </View>
 
@@ -106,21 +116,33 @@ export default function UserScreen() {
             <UserSignatureCard signature={user.signature} />
           </View>
 
-          {favorites.length > 0 && (
+          {favoritesFiltered.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="PANCs favoritas" products={favorites} horizontal />
+              <ProductShowcase
+                title={translate("general.favoritePancs")}
+                products={favoritesFiltered}
+                horizontal
+              />
             </View>
           )}
 
-          {saved.length > 0 && (
+          {savedFiltered.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="Receitas salvas" products={saved} horizontal />
+              <ProductShowcase
+                title={translate("general.savedRecipes")}
+                products={savedFiltered}
+                horizontal
+              />
             </View>
           )}
 
           {myRecipes.length > 0 && (
             <View className="w-full mt-8">
-              <ProductShowcase title="Suas receitas" products={myRecipes} horizontal />
+              <ProductShowcase
+                title={translate("general.yourRecipes")}
+                products={myRecipes}
+                horizontal
+              />
             </View>
           )}
         </View>

@@ -8,6 +8,7 @@
     "scheme": "osiris",
     "userInterfaceStyle": "light",
     "jsEngine": "hermes",
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/images/osiris_splash.png",
       "resizeMode": "contain",
@@ -55,7 +56,8 @@
           "cameraPermission": "É necessário permissão para o $(PRODUCT_NAME) acessar a câmera.",
           "recordAudioAndroid": false
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

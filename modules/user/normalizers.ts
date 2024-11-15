@@ -1,8 +1,12 @@
 import { AppError } from "../shared/types"
 import { normalizeError } from "../shared/normalizers"
+import { TranslateFunction } from "@/storage/translation"
 import { LoginResponse, NormalizedUser, User } from "./types"
 
-export const normalizeLogin = (response: LoginResponse): LoginResponse => {
+export const normalizeLogin = (
+  response: LoginResponse,
+  translate: TranslateFunction
+): LoginResponse => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -10,18 +14,18 @@ export const normalizeLogin = (response: LoginResponse): LoginResponse => {
       case 400:
         throw {
           key: "LOGIN_NOT_FOUND",
-          msg: "Verifique as informações de login e tente novamente.",
+          msg: translate("requests.loginNotFound"),
         } as AppError
       case 403:
         throw {
           key: "LOGIN_NOT_FOUND",
-          msg: "Verifique as informações de login e tente novamente.",
+          msg: translate("requests.loginNotFound"),
         } as AppError
 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
+          msg: translate("requests.unidentified"),
         } as AppError
     }
   }
@@ -29,7 +33,7 @@ export const normalizeLogin = (response: LoginResponse): LoginResponse => {
   return response
 }
 
-export const normalizeRegister = (response: User): User => {
+export const normalizeRegister = (response: User, translate: TranslateFunction): User => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -37,13 +41,13 @@ export const normalizeRegister = (response: User): User => {
       case 409:
         throw {
           key: "ALREADY_REGISTERED",
-          msg: "Este e-mail já está em uso.",
+          msg: translate("requests.alreadyRegistered"),
         } as AppError
 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
+          msg: translate("requests.unidentified"),
         } as AppError
     }
   }
@@ -51,7 +55,7 @@ export const normalizeRegister = (response: User): User => {
   return response
 }
 
-export const normalizeUser = (response: User): NormalizedUser => {
+export const normalizeUser = (response: User, translate: TranslateFunction): NormalizedUser => {
   const error = normalizeError(response)
 
   if (error.hasError) {
@@ -59,13 +63,13 @@ export const normalizeUser = (response: User): NormalizedUser => {
       case 404:
         throw {
           key: "USER_NOT_FOUND",
-          msg: "Usuário não encontrado.",
+          msg: translate("requests.userNotFound"),
         } as AppError
 
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
+          msg: translate("requests.unidentified"),
         } as AppError
     }
   }
@@ -81,10 +85,8 @@ export const normalizeUser = (response: User): NormalizedUser => {
   }
 }
 
-export const normalizeUpdateUserImage = (response: string) => {
+export const normalizeUpdateUserImage = (response: string, translate: TranslateFunction) => {
   const error = normalizeError(response)
-
-  console.error("error user image", error, response)
 
   if (error.hasError) {
     switch (error.status) {
@@ -97,7 +99,7 @@ export const normalizeUpdateUserImage = (response: string) => {
       default:
         throw {
           key: "UNIDENTIFIED",
-          msg: "Ocorreu um erro inesperado, tente novamente mais tarde.",
+          msg: translate("requests.unidentified"),
         } as AppError
     }
   }
