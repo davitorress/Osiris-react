@@ -4,7 +4,10 @@
 
 <div align="center">
    
-   ![GitHub](https://img.shields.io/github/license/davitorress/Osiris-react) ![GitHub language count](https://img.shields.io/github/languages/count/davitorress/Osiris-react) ![GitHub last commit](https://img.shields.io/github/last-commit/davitorress/Osiris-react)
+   ![GitHub language count](https://img.shields.io/github/languages/count/davitorress/Osiris-react) 
+   ![GitHub last commit](https://img.shields.io/github/last-commit/davitorress/Osiris-react)
+   ![GitHub Release](https://img.shields.io/github/v/release/davitorress/Osiris-react)
+   ![Tests](https://github.com/davitorress/Osiris-react/actions/workflows/unittest.yml/badge.svg)
 
 </div>
 
