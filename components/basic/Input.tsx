@@ -104,6 +104,7 @@ export default function Input({
       autoComplete={autoComplete}
       numberOfLines={numberOfLines}
       secureTextEntry={secureTextEntry}
+      cursorColor={Colors.light.green.medium}
       placeholderTextColor={placeholderColors[placeholderColor]}
       style={{
         verticalAlign: multiline ? "top" : "middle",

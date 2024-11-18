@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1.5,
     borderTopLeftRadius: Sizes.semi,
     borderTopRightRadius: Sizes.semi,
+    borderColor: Colors.light.green.dark,
     borderTopColor: Colors.light.green.dark,
     borderLeftColor: Colors.light.green.dark,
     borderRightColor: Colors.light.green.dark,
