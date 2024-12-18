@@ -38,6 +38,7 @@ export default function HomeScreen() {
     const products = [...pancsArray, ...recipesArray]
 
     return products
+      .filter((p) => p.locale === locale)
       .filter((product) => product.name.toLowerCase().includes(search.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
   }, [search, pancs, recipes])
